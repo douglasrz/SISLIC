@@ -18,11 +18,18 @@ public class PedidoController extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		PedidoDAO pedidoDAO = new PedidoDAO();
-		ArrayList<Pedido> pedidos = pedidoDAO.buscarTodosPedidos();
-		//FornecedorDAO
-		req.getSession().setAttribute("pedidos", pedidos);
-		req.getRequestDispatcher("WEB-INF/fornPedidos.jsp").forward(req, resp);
+		String acao = req.getParameter("acao");
+		
+		if(acao.equals("pedido")) {
+			req.getRequestDispatcher("WEB-INF/pedido.jsp").forward(req, resp);
+		}else {
+			PedidoDAO pedidoDAO = new PedidoDAO();
+			ArrayList<Pedido> pedidos = pedidoDAO.buscarTodosPedidos();
+			//FornecedorDAO
+			req.getSession().setAttribute("pedidos", pedidos);
+			req.getRequestDispatcher("WEB-INF/fornPedidos.jsp").forward(req, resp);
+		}
+		
 	}
 	
 	@Override

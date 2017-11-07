@@ -39,7 +39,7 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    
+
 </head>
 
 <body>
@@ -109,14 +109,15 @@
 					out.print(p.getNome()+"</div>");
 					//DESCRIÇÃO
 					out.print("<div class=\"panel-body\">");
-					out.print("<p> "+p.getDescricao()+"</p></div>");
+					out.print("<p> "+p.getDescricao()+"</p> <br>");
+					out.print("Expira em "+p.getDataLimite()+"</div>");
 					//out.print("<button type=\"button\" class=\"btn btn-primary btn-lg btn-block\"> Confira </button> </div>");
 					
 					//PRAZO E LINK
 					out.print("<div class=\"panel-footer\">");
-					out.print("<button type=\"button\" class=\"btn btn-success btn-block\"> Confira </button> </div>");
+					int id = p.getId();
+					out.print("<a type=\"submit\" href=\"pedidocontroller.do?acao=pedido&id="+id+"\" class=\"btn btn-success btn-block\"> Confira </a> </div>");
 					//out.print("Expira em "+p.getDataLimite());
-					//out.print("<a href=index.jsp type=button> Confira</a> </div>");
 					out.print("</div> </div>");
                 }
 				%> 
@@ -139,6 +140,7 @@
     <script src="sbAdmin/dist/js/sb-admin-2.js"></script>
 
     <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+ 
     <script>
     $(document).ready(function() {
         $('#dataTables-example').DataTable({

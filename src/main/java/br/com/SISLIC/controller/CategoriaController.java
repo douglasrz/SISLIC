@@ -22,8 +22,7 @@ public class CategoriaController extends HttpServlet{
 		String acao = req.getParameter("acao");
 		int idCategoria = Integer.parseInt(req.getParameter("id"));
 		int idFornecedor = ((Fornecedor) req.getSession().getAttribute("forAutenticado")).getId();
-		
-		System.out.println("chou");
+	
 		if(acao.equals("excluir")) {
 				CategoriaDAO catDAO = new CategoriaDAO();
 				if(catDAO.excluir(idCategoria)) {
@@ -35,7 +34,6 @@ public class CategoriaController extends HttpServlet{
 				}else {
 					resp.getWriter().print("<script> window.alert('Erro ao excluir, tente novamente.'); location.href='cadastrocontroller.do';</script>");
 				}
-			
 		}
 	}
 	
