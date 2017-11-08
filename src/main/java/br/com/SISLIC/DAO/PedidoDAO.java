@@ -55,7 +55,6 @@ public class PedidoDAO {
 				pedidoRetorno.setDataLimite(resultado.getString("data_limite"));
 				pedidoRetorno.setId_funcionario(resultado.getInt("id_funcionario"));
 				pedidoRetorno.setDescricao(resultado.getString("descricao"));
-				System.out.println(resultado.getString("descricao"));
 				//PEGAR OS Itens
 				ArrayList<ItemPedido> lista = buscaItemPedido(id);
 				ArrayList<Produto> produtos = new ArrayList<Produto>();

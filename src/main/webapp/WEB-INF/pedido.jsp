@@ -1,4 +1,6 @@
 <%@ page import="br.com.SISLIC.model.Fornecedor"%>
+<%@ page import="br.com.SISLIC.model.Pedido"%>
+<%@ page import="br.com.SISLIC.model.Produto"%>
 <%@ page import="java.util.ArrayList"%>
 <%@	page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -53,8 +55,10 @@
                 <!-- ícone do Usuario (cabeçalho)-->
                 <ul class="nav navbar-top-links navbar-right">
                 <li class="dropdown">
-                	<% //Fornecedor forn = ((Fornecedor) request.getSession().getAttribute("forAutenticado"));            	
-					//out.print("<a href=cadastrocontroller.do >"+forn.getrSocial()+"</a>");%>
+                	<% Fornecedor forn = ((Fornecedor) request.getSession().getAttribute("forAutenticado"));            	
+					out.print("<a href=cadastrocontroller.do >"+forn.getrSocial()+"</a>");
+					Pedido pedido = ((Pedido) request.getSession().getAttribute("pedido"));
+					%>
                     <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                 </li>
                 </ul>
@@ -89,8 +93,8 @@
             <div class="row">
             <div class="col-lg-12">
                     <h2 class="page-header">
-                                <i class="fa fa-globe"></i> Pedido tal
-                                <small class="pull-right">Date: 2/10/2014</small>
+                                <i class="fa fa-shopping-cart fa-fw"></i> <%=pedido.getNome() %>
+                                <small class="pull-right"><%=pedido.getProdutos().get(0).getCategoria().getNome() %></small>
                             </h2>                            
                         </div><!-- /.col -->
                     </div>
@@ -99,19 +103,17 @@
                         <div class="col-sm-6 invoice-col">                            
                             <address>
                                 <strong>Descrição</strong><br>
-                                795 Folsom Ave, Suite 600<br>
-                                San Francisco, CA 94107<br>
-                                Phone: (804) 123-5432<br/>
-                                Email: info@almasaeedstudio.com
+                                <%
+                                out.print(pedido.getDescricao());
+                                %>
                             </address>
                         </div><!-- /.col -->
                         <div class="col-sm-6 invoice-col">
                             <address>
                                 <strong>Informações gerais</strong><br>
-                                795 Folsom Ave, Suite 600<br>
-                                San Francisco, CA 94107<br>
-                                Phone: (555) 539-1037<br/>
-                                Email: john.doe@example.com
+                                Lançado em <%=pedido.getDataLancamento() %><br>
+                                Expira em <%=pedido.getDataLimite() %>
+                               
                             </address>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -129,30 +131,18 @@
                                     </tr>                                    
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Call of Duty</td>
-                                        <td>El snort testosterone trophy driving gloves handsome</td>
-                                        <td><input class="form-control" placeholder="Valor" type="text" name="valor1" required></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Need for Speed IV</td>
-                                        <td>Wes Anderson umami biodiesel</td>
-                                        <td><input class="form-control" placeholder="Valor" type="text" name="valor2" required></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Monsters DVD</td>
-                                        <td>Terry Richardson helvetica tousled street art master</td>
-                                        <td><input class="form-control" placeholder="Valor" type="text" name="valor3" required></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Grown Ups Blue Ray</td>
-                                        <td>Tousled lomo letterpress</td>
-                                        <td><input class="form-control" placeholder="Valor" type="text" name="valor4" required></td>
-                                    </tr>
+                                	<%
+                                		int i = 0;
+                                		for(Produto p: pedido.getProdutos()){
+                                			out.print("<tr>");
+                                			out.print("<td>"+p.getQuantidade()+"</td>");
+                                			out.print("<td>"+p.getNome()+"</td>");
+                                			out.print("<td>"+p.getDescricao()+"</td>");
+                                			out.print("<td><input onchange=\"totalProdutos("+p.getId()+")\" class=\"form-control\" placeholder=\"Valor\" type=\"text\" id="+p.getId()+" required></td>");
+                                			out.print("</tr>");
+                                			i++;
+                                		}
+                                	%>
                                 </tbody>
                             </table>                            
                         </div><!-- /.col -->
@@ -167,24 +157,20 @@
                             </p>
                         </div><!-- /.col -->
                         <div class="col-xs-6">
-                            <p class="lead">Amount Due 2/22/2014</p>
+                            <p class="lead">Valor do lance</p>
                             <div class="table-responsive">
                                 <table class="table">
+                                	<tr>
+                                        <th>Taxa de entrega:</th>
+                                        <td><input class="form-control" onchange="calculaTotal()" placeholder="Valor da entrega" type="text" id="taxaentrega" required></td>
+                                    </tr>
                                     <tr>
                                         <th style="width:50%">Subtotal:</th>
-                                        <td>$250.30</td>
-                                    </tr>
+                                        <td><input id= "subtotal" class="form-control" disabled></td>
+                                    </tr>                                    
                                     <tr>
-                                        <th>Tax (9.3%)</th>
-                                        <td>$10.34</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Shipping:</th>
-                                        <td>$5.80</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Total:</th>
-                                        <td>$265.24</td>
+                                       <th style="width:50%">Total:</th>
+                                        <td><input id= "total" class="form-control" disabled></td>
                                     </tr>
                                 </table>
                             </div>
@@ -194,7 +180,7 @@
                     <!-- this row will not appear when printing -->
                     <div class="row no-print">
                         <div class="col-xs-12">
-                            <button class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment</button>  
+                            <button class="btn btn-success pull-right" type="submit" method="POST" action="pedidocontroller.do"><i class="fa fa-credit-card"></i> Efetuar lance</button>  
                             <button class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-download"></i> Generate PDF</button>
                         </div>
                 </div>
@@ -223,6 +209,25 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="sbAdmin/dist/js/sb-admin-2.js"></script>
+    
+    <script type="text/javascript">				
+			var valorTotalProdutos = 0;	
+			var taxaEntrega = 0;
+			function calculaTotal(){	
+				taxaEntrega = parseFloat(document.getElementById("taxaentrega").value);
+				var total = valorTotalProdutos + taxaEntrega;
+    			//valorTotalProdutos += totalProdutos(id);
+    			console.log(total);
+    			document.getElementById("total").value = total;
+				//console.log(totalProdutos(id));
+				//console.log(valorTotalProdutos);
+			}
+			
+    		function totalProdutos(id){
+    			valorTotalProdutos += parseFloat(document.getElementById(id).value);
+    			document.getElementById("subtotal").value = valorTotalProdutos;     			
+    		}
+		</script>
 </div>
 </body>
 
