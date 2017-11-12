@@ -55,14 +55,20 @@ public class PedidoDAO {
 				pedidoRetorno.setDataLimite(resultado.getString("data_limite"));
 				pedidoRetorno.setId_funcionario(resultado.getInt("id_funcionario"));
 				pedidoRetorno.setDescricao(resultado.getString("descricao"));
+				pedidoRetorno.setAutorizado(resultado.getBoolean("autorizado"));
+				
 				//PEGAR OS Itens
 				ArrayList<ItemPedido> lista = buscaItemPedido(id);
 				ArrayList<Produto> produtos = new ArrayList<Produto>();
 				for(ItemPedido p: lista) {
 					produtos.add(buscarProduto(p));
 				}
+				
+				//RETORNO SOMENTE SE ESTIVER AUTORIZADO PELO GERENTE				
 				pedidoRetorno.setProdutos(produtos);
-				return pedidoRetorno;
+				if(pedidoRetorno.isAutorizado()) {
+					return pedidoRetorno;
+				}else return null;
 			}				
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -85,6 +91,8 @@ public class PedidoDAO {
 					pedidoRetorno.setDataLimite(resultado.getString("data_limite"));
 					pedidoRetorno.setId_funcionario(resultado.getInt("id_funcionario"));
 					pedidoRetorno.setDescricao(resultado.getString("descricao"));
+					pedidoRetorno.setAutorizado(resultado.getBoolean("autorizado"));
+					
 					//PEGAR OS Itens
 					ArrayList<ItemPedido> lista = buscaItemPedido(resultado.getInt("id_pedido"));
 					//PEGAR OS PRODUTOS PELA LISTA DE ITENS
@@ -93,7 +101,10 @@ public class PedidoDAO {
 						produtos.add(buscarProduto(p));						
 					}
 					pedidoRetorno.setProdutos(produtos);
-					pedidos.add(pedidoRetorno);
+					
+					//PEGAR SOMENTE O QUE FORAM AUTORIZADOS PELO GERENTE
+					if(pedidoRetorno.isAutorizado())
+						pedidos.add(pedidoRetorno);
 				}	
 				return pedidos;
 			}catch(SQLException e) {
@@ -116,8 +127,87 @@ public class PedidoDAO {
 				retorno.setId_pedido(idPedido);
 				retorno.setId_produto(resultado.getInt("id_produto"));
 				retorno.setQuantidade(resultado.getInt("quantidade"));
-				retorno.setPrecoUnit(resultado.getInt("preco_unitario"));				
+				retorno.setPrecoUnit(resultado.getInt("preco"));	
+				
 				lista.add(retorno);	
+			}
+			return lista;
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return lista;
+	}
+	public ArrayList<Pedido> buscarPorSetor(int idSetor){
+		
+		ArrayList<Pedido> lista = new ArrayList<Pedido>();
+		String sql = "SELECT *FROM pedido WHERE id_setor=?";
+		
+		try(PreparedStatement preparar = con.prepareStatement(sql)){	
+			preparar.setInt(1, idSetor);
+			ResultSet resultado = preparar.executeQuery();
+			
+			while(resultado.next()) {				
+				Pedido pedidoRetorno = new Pedido();
+				pedidoRetorno.setId(resultado.getInt("id_pedido"));
+				pedidoRetorno.setNome(resultado.getString("nome"));
+				pedidoRetorno.setDataLancamento(resultado.getString("data_lancamento"));
+				pedidoRetorno.setDataLimite(resultado.getString("data_limite"));
+				pedidoRetorno.setId_funcionario(resultado.getInt("id_funcionario"));
+				pedidoRetorno.setDescricao(resultado.getString("descricao"));
+				pedidoRetorno.setAutorizado(resultado.getBoolean("autorizado"));
+				
+				//PEGAR OS Itens
+				ArrayList<ItemPedido> ItensPedido = buscaItemPedido(resultado.getInt("id_pedido"));
+				//PEGAR OS PRODUTOS PELA LISTA DE ITENS
+				ArrayList<Produto> produtos = new ArrayList<Produto>();
+				for(ItemPedido p: ItensPedido) {
+					produtos.add(buscarProduto(p));						
+				}
+				pedidoRetorno.setProdutos(produtos);
+				
+				//PEGAR SOMENTE O QUE FORAM AUTORIZADOS PELO GERENTE
+				if(pedidoRetorno.isAutorizado())
+					lista.add(pedidoRetorno);
+			}
+			return lista;
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return lista;
+	}
+	
+	public ArrayList<Pedido> buscarPedentesSetor(int idSetor){
+		ArrayList<Pedido> lista = new ArrayList<Pedido>();
+		String sql = "SELECT *FROM pedido WHERE id_setor=?";
+		
+		try(PreparedStatement preparar = con.prepareStatement(sql)){	
+			preparar.setInt(1, idSetor);
+			ResultSet resultado = preparar.executeQuery();
+			
+			while(resultado.next()) {				
+				Pedido pedidoRetorno = new Pedido();
+				pedidoRetorno.setId(resultado.getInt("id_pedido"));
+				pedidoRetorno.setNome(resultado.getString("nome"));
+				pedidoRetorno.setDataLancamento(resultado.getString("data_lancamento"));
+				pedidoRetorno.setDataLimite(resultado.getString("data_limite"));
+				pedidoRetorno.setId_funcionario(resultado.getInt("id_funcionario"));
+				pedidoRetorno.setDescricao(resultado.getString("descricao"));
+				pedidoRetorno.setAutorizado(resultado.getBoolean("autorizado"));
+				
+				//PEGAR OS Itens
+				ArrayList<ItemPedido> ItensPedido = buscaItemPedido(resultado.getInt("id_pedido"));
+				//PEGAR OS PRODUTOS PELA LISTA DE ITENS
+				ArrayList<Produto> produtos = new ArrayList<Produto>();
+				for(ItemPedido p: ItensPedido) {
+					produtos.add(buscarProduto(p));						
+				}
+				pedidoRetorno.setProdutos(produtos);
+				
+				//PEGAR SOMENTE O QUE FORAM AUTORIZADOS PELO GERENTE
+				if(!pedidoRetorno.isAutorizado())
+					lista.add(pedidoRetorno);
 			}
 			return lista;
 			

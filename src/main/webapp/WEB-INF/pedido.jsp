@@ -71,7 +71,7 @@
                         <a href="pedidocontroller.do"><i class="fa fa-shopping-cart fa-fw"></i> Pedidos</a>
                         </li>
                         <li>
-                            <a href="lancescontroller.do"><i class="fa fa-wrench fa-fw"></i>Lances</a>
+                            <a href="lancescontroller.do"><i class="fa fa-legal fa-fw"></i>Lances</a>
                         </li>                        
                         <li>
                             <a href="pontcontroller.do"><i class="fa fa-bar-chart-o fa-fw"></i> Pontuação</a>
@@ -119,7 +119,9 @@
                     </div><!-- /.row -->
 
                     <!-- Table row -->
-                    <div class="row">
+                                     
+                    <form action="lancescontroller.do?acao=pedido&id="<%=pedido.getId()%>>
+                    <div class="row">   
                         <div class="col-xs-12 table-responsive">
                             <table class="table table-striped">
                                 <thead>
@@ -147,7 +149,6 @@
                             </table>                            
                         </div><!-- /.col -->
                     </div><!-- /.row -->
-
                     <div class="row">
                         <!-- accepted payments column -->
                         <div class="col-xs-6">
@@ -158,41 +159,38 @@
                         </div><!-- /.col -->
                         <div class="col-xs-6">
                             <p class="lead">Valor do lance</p>
-                            <div class="table-responsive">
-                                <table class="table">
+                            <div class="table-responsive">   
+                            <!-- <form action="pedidocontroller.do?acao=pedido&id="<%=pedido.getId()%>">     -->                 
+                                <table class="table" >
                                 	<tr>
                                         <th>Taxa de entrega:</th>
                                         <td><input class="form-control" onchange="calculaTotal()" placeholder="Valor da entrega" type="text" id="taxaentrega" required></td>
                                     </tr>
                                     <tr>
-                                        <th style="width:50%">Subtotal:</th>
+                                        <th style="width:50%">Produtos:</th>
                                         <td><input id= "subtotal" class="form-control" disabled></td>
                                     </tr>                                    
                                     <tr>
                                        <th style="width:50%">Total:</th>
                                         <td><input id= "total" class="form-control" disabled></td>
                                     </tr>
-                                </table>
-                            </div>
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
-
-                    <!-- this row will not appear when printing -->
-                    <div class="row no-print">
-                        <div class="col-xs-12">
-                            <button class="btn btn-success pull-right" type="submit" method="POST" action="pedidocontroller.do"><i class="fa fa-credit-card"></i> Efetuar lance</button>  
-                            <button class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-download"></i> Generate PDF</button>
-                        </div>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
+                                    <tr>
+                                    
+                                    </tr>
+                                    <tr>	
+                                    	<th>
+                                    		<button type="reset" class="btn btn-warning btn-block" onreset=javascript:limpar()>Limpar</button>  
+                                    	</th>
+                                    	<td>
+                                    	 <button class="btn btn-success pull-right btn-block" type="submit">Efetuar lance</button>  
+                                    	</td>
+                                    </tr>
+                                </table>   
+                                </div>
+                                </div>
+                                </div>                                          	 
+                           	</form>
             <!-- /.row -->
-            <div class="row">
-                <div class="col-lg-12">
-                 
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
     <!-- jQuery -->
     <script src="sbAdmin/vendor/jquery/jquery.min.js"></script>
 
@@ -213,21 +211,28 @@
     <script type="text/javascript">				
 			var valorTotalProdutos = 0;	
 			var taxaEntrega = 0;
+			var total = 0;
 			function calculaTotal(){	
 				taxaEntrega = parseFloat(document.getElementById("taxaentrega").value);
-				var total = valorTotalProdutos + taxaEntrega;
-    			//valorTotalProdutos += totalProdutos(id);
-    			console.log(total);
+				total= valorTotalProdutos + taxaEntrega;
     			document.getElementById("total").value = total;
-				//console.log(totalProdutos(id));
+    			//console.log(totalProdutos(id));
 				//console.log(valorTotalProdutos);
 			}
 			
     		function totalProdutos(id){
     			valorTotalProdutos += parseFloat(document.getElementById(id).value);
-    			document.getElementById("subtotal").value = valorTotalProdutos;     			
+    			document.getElementById("subtotal").value = valorTotalProdutos;  
+    			if(taxaEntrega>0)
+    				calculaTotal();
     		}
+    		function limpar(){
+    			valorTotalProdutos = 0;	
+    			taxaEntrega = 0;
+    			total = 0;
+    		}    		
 		</script>
+	</div>
 </div>
 </body>
 

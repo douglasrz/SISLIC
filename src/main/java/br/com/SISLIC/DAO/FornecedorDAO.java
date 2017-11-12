@@ -57,6 +57,9 @@ public class FornecedorDAO {
 				//PEGAR SUAS CATEGORIAS
 				CategoriaDAO cateDAO = new CategoriaDAO();				
 				fornecedor.setCategorias(cateDAO.buscarPorForn(fornecedor.getId()));
+				
+				//PEGAR OS LANCES
+				
 				return fornecedor;
 			}			
 		}catch(SQLException e) {

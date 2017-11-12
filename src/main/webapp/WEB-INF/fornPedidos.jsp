@@ -74,7 +74,7 @@
                         <a href="pedidocontroller.do"><i class="fa fa-shopping-cart fa-fw"></i> Pedidos</a>
                         </li>
                         <li>
-                            <a href="lancescontroller.do"><i class="fa fa-wrench fa-fw"></i>Lances</a>
+                            <a href="lancescontroller.do"><i class="fa fa-legal fa-fw"></i>Lances</a>
                         </li>                        
                         <li>
                             <a href="pontcontroller.do"><i class="fa fa-bar-chart-o fa-fw"></i> Pontuação</a>

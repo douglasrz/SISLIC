@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import br.com.SISLIC.DAO.FornecedorDAO;
+import br.com.SISLIC.DAO.FuncionarioDAO;
 import br.com.SISLIC.model.Fornecedor;
+import br.com.SISLIC.model.Funcionario;
 
 @WebServlet("/logincontroller.do")
 public class LoginController extends HttpServlet{
@@ -36,15 +38,31 @@ public class LoginController extends HttpServlet{
 				sessao.setMaxInactiveInterval(60*10);
 				//sessao.setAttribute("nomeForn",forAutenticado.getLogin());
 				//Direcionando para a página principal
-				req.getRequestDispatcher("pedidocontroller.do").forward(req, resp);;
+				req.getRequestDispatcher("pedidocontroller.do").forward(req, resp);
 			}else {
 				resp.getWriter().print("<script> window.alert('Usuario não encontrado'); location.href='login.html';</script>");
 			}
 		}else {
 			if(req.getParameter("perfil").equals("Gerente")) {
 				resp.getWriter().print("<script> window.alert('Ainda não implementei a parte do gerente'); location.href='login.html';</script>");
+				
 			}else {
-				resp.getWriter().print("<script> window.alert('Ainda não implementei a parte do funcionario'); location.href='login.html';</script>");
+				Funcionario fun = new Funcionario();
+				
+				fun.setLogin(login);
+				fun.setSenha(senha);
+				
+				FuncionarioDAO funDAO = new FuncionarioDAO();
+				Funcionario funAutenticado = funDAO.autenticar(fun);
+				
+				if(funAutenticado!=null) {
+					HttpSession sessao = req.getSession(); //criando a sessao
+					sessao.setAttribute("funAutenticado", funAutenticado);//add o usuario a sessao			
+					sessao.setMaxInactiveInterval(60*10);
+					req.getRequestDispatcher("homefuncontroller.do").forward(req, resp);
+				}else {
+					resp.getWriter().print("<script> window.alert('Usuário não encontrado'); location.href='login.html';</script>");
+				}
 			}
 		}
 	}

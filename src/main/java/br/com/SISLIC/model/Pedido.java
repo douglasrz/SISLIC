@@ -11,6 +11,7 @@ public class Pedido {
 	private int id_funcionario;
 	private String nome;
 	private String descricao;
+	private boolean autorizado;
 	
 	
 	public String getDataLancamento() {
@@ -55,6 +56,12 @@ public class Pedido {
 	}
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+	public boolean isAutorizado() {
+		return autorizado;
+	}
+	public void setAutorizado(boolean autorizado) {
+		this.autorizado = autorizado;
 	}
 	
 	

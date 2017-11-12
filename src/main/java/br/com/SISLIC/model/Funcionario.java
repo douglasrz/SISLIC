@@ -3,9 +3,12 @@ package br.com.SISLIC.model;
 public class Funcionario {
 
 	private int codFunc;
+	private String login;
+	private String senha;
 	private String nome;
 	private String telefone;
-	private Endereco endereco;
+	private Setor setor;
+	private String cargo;
 	
 	public int getCodFunc() {
 		return codFunc;
@@ -25,11 +28,29 @@ public class Funcionario {
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
-	public Endereco getEndereco() {
-		return endereco;
+	public String getLogin() {
+		return login;
 	}
-	public void setEndereco(Endereco endereco) {
-		this.endereco = endereco;
+	public void setLogin(String login) {
+		this.login = login;
+	}
+	public String getSenha() {
+		return senha;
+	}
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+	public Setor getSetor() {
+		return setor;
+	}
+	public void setSetor(Setor setor) {
+		this.setor = setor;
+	}
+	public String getCargo() {
+		return cargo;
+	}
+	public void setCargo(String cargo) {
+		this.cargo = cargo;
 	}
 	
 	
