@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.SISLIC.DAO.LanceDAO;
 import br.com.SISLIC.model.Fornecedor;
+import br.com.SISLIC.model.ItemPedido;
 import br.com.SISLIC.model.Lance;
 import br.com.SISLIC.model.Pedido;
 import br.com.SISLIC.model.Produto;
@@ -52,13 +53,14 @@ public class LanceController extends HttpServlet{
 			SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");
 			String novaData = formatador.format(data);
 			lance.setData(novaData);
-			
-			lance.setPedido(pedido);
 			lance.setTotal(Float.parseFloat(req.getParameter("total")));
 			lance.setTaxaEntrega(Float.parseFloat(req.getParameter("taxaentrega")));
 			
 			Fornecedor forn = (Fornecedor) req.getSession().getAttribute("forAutenticado");
 			lance.setIdfornecedor(forn.getId());
+			
+			ItemPedido itemPedido = new ItemPedido();
+			itemPedido.setPedido(pedido);
 			
 			LanceDAO lanceDAO = new LanceDAO();
 			//REVER A PARTE DO DAO NO LANCE
