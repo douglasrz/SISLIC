@@ -21,7 +21,7 @@ private Connection con = ConexaoFactory.getConnection();
 			preparar.setFloat(1,lance.getTotal() );
 			preparar.setInt(2,lance.getIdPedido() );			
 			preparar.setInt(3, lance.getIdfornecedor());
-			preparar.setDate(4, (Date) lance.getData());
+			preparar.setString(4, lance.getData());
 			//execurtando o comando sql no banco de dados
 			preparar.execute();
 			//fechanco a conexao com o banco

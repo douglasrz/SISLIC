@@ -127,7 +127,7 @@ public class PedidoDAO {
 				retorno.setId_pedido(idPedido);
 				retorno.setId_produto(resultado.getInt("id_produto"));
 				retorno.setQuantidade(resultado.getInt("quantidade"));
-				retorno.setPrecoUnit(resultado.getInt("preco"));	
+				//retorno.setPrecoUnit(resultado.getInt("preco"));	
 				
 				lista.add(retorno);	
 			}
