@@ -120,7 +120,7 @@
 
                     <!-- Table row -->
                                      
-                    <form action="lancescontroller.do?acao=pedido&id="<%=pedido.getId()%>>
+                    <form action="lancescontroller.do?acao=efetuarlance" method="POST">
                     <div class="row">   
                         <div class="col-xs-12 table-responsive">
                             <table class="table table-striped">
@@ -140,7 +140,7 @@
                                 			out.print("<td>"+p.getQuantidade()+"</td>");
                                 			out.print("<td>"+p.getNome()+"</td>");
                                 			out.print("<td>"+p.getDescricao()+"</td>");
-                                			out.print("<td><input onchange=\"totalProdutos("+p.getId()+")\" class=\"form-control\" placeholder=\"Valor\" type=\"text\" id="+p.getId()+" required></td>");
+                                			out.print("<td><input onchange=\"totalProdutos("+p.getId()+")\" class=\"form-control\" placeholder=\"Valor\" type=\"text\" id="+p.getId()+" name="+p.getId()+" required></td>");
                                 			out.print("</tr>");
                                 			i++;
                                 		}
@@ -160,11 +160,11 @@
                         <div class="col-xs-6">
                             <p class="lead">Valor do lance</p>
                             <div class="table-responsive">   
-                            <!-- <form action="pedidocontroller.do?acao=pedido&id="<%=pedido.getId()%>">     -->                 
+                            <!-- <form action="pedidocontroller.do?acao=pedido&id="">     -->                 
                                 <table class="table" >
                                 	<tr>
                                         <th>Taxa de entrega:</th>
-                                        <td><input class="form-control" onchange="calculaTotal()" placeholder="Valor da entrega" type="text" id="taxaentrega" required></td>
+                                        <td><input class="form-control" onchange="calculaTotal()" placeholder="Valor da entrega" type="text" id="taxaentrega" name="taxaentrega" required></td>
                                     </tr>
                                     <tr>
                                         <th style="width:50%">Produtos:</th>
@@ -172,7 +172,7 @@
                                     </tr>                                    
                                     <tr>
                                        <th style="width:50%">Total:</th>
-                                        <td><input id= "total" class="form-control" disabled></td>
+                                        <td><input id="total" name="total" class="form-control" readonly></td>
                                     </tr>
                                     <tr>
                                     

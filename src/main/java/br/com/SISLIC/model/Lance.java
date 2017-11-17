@@ -8,7 +8,8 @@ public class Lance {
 	private float total;
 	private int idPedido;
 	private int Idfornecedor;
-	private Date data;
+	private String data;
+	private float taxaEntrega;
 	
 	public float getTotal() {
 		return total;
@@ -34,10 +35,16 @@ public class Lance {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public Date getData() {
+	public float getTaxaEntrega() {
+		return taxaEntrega;
+	}
+	public void setTaxaEntrega(float taxaEntrega) {
+		this.taxaEntrega = taxaEntrega;
+	}
+	public String getData() {
 		return data;
 	}
-	public void setData(Date data) {
+	public void setData(String data) {
 		this.data = data;
 	}
 	
