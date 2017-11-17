@@ -30,6 +30,7 @@ public class LanceController extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		String acao = new String();
+		
 		if(req.getParameter("acao")!=null) {
 			acao = req.getParameter("acao");
 			
@@ -52,9 +53,9 @@ public class LanceController extends HttpServlet{
 			String novaData = formatador.format(data);
 			lance.setData(novaData);
 			
+			lance.setPedido(pedido);
 			lance.setTotal(Float.parseFloat(req.getParameter("total")));
 			lance.setTaxaEntrega(Float.parseFloat(req.getParameter("taxaentrega")));
-			lance.setIdPedido(pedido.getId());				
 			
 			Fornecedor forn = (Fornecedor) req.getSession().getAttribute("forAutenticado");
 			lance.setIdfornecedor(forn.getId());

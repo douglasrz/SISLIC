@@ -1,12 +1,11 @@
 package br.com.SISLIC.model;
 
-import java.util.Date;
 
 public class Lance {
 
 	private int id;
 	private float total;
-	private int idPedido;
+	private Pedido pedido;
 	private int Idfornecedor;
 	private String data;
 	private float taxaEntrega;
@@ -17,11 +16,11 @@ public class Lance {
 	public void setTotal(float total) {
 		this.total = total;
 	}	
-	public int getIdPedido() {
-		return idPedido;
+	public Pedido getPedido() {
+		return pedido;
 	}
-	public void setIdPedido(int idPedido) {
-		this.idPedido = idPedido;
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
 	}
 	public int getIdfornecedor() {
 		return Idfornecedor;

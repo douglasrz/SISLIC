@@ -9,6 +9,7 @@ public class Pedido {
 	private String dataLimite;
 	private ArrayList<Produto> produtos;
 	private int id_funcionario;
+	private Lance lance;
 	private String nome;
 	private String descricao;
 	private boolean autorizado;
@@ -62,6 +63,12 @@ public class Pedido {
 	}
 	public void setAutorizado(boolean autorizado) {
 		this.autorizado = autorizado;
+	}
+	public Lance getLance() {
+		return lance;
+	}
+	public void setLance(Lance lance) {
+		this.lance = lance;
 	}
 	
 	
