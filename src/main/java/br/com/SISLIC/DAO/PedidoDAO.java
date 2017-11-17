@@ -113,6 +113,8 @@ public class PedidoDAO {
 			return pedidos;
 		}
 	
+	
+	//Comitando pelo branch Marcos
 	public ArrayList<ItemPedido> buscaItemPedido(int idPedido){
 		
 		ArrayList<ItemPedido> lista = new ArrayList<ItemPedido>();
