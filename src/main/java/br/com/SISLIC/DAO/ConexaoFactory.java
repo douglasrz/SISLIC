@@ -10,7 +10,7 @@ public class ConexaoFactory {
 	public static Connection getConnection() {
 		try {
 			Class.forName("org.postgresql.Driver");//Forçando a inicializacao do drive
-			return DriverManager.getConnection("jdbc:postgresql://localhost:5432/SISLIC", "postgres","fdro196245");
+			return DriverManager.getConnection("jdbc:postgresql://localhost:5432/SISLIC", "postgres","root");
 		}catch(SQLException e) {
 			throw new RuntimeException(e);
 		} catch (ClassNotFoundException e) {

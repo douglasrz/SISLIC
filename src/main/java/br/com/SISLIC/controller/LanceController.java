@@ -1,8 +1,8 @@
 package br.com.SISLIC.controller;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.SISLIC.DAO.LanceDAO;
 import br.com.SISLIC.model.Fornecedor;
-import br.com.SISLIC.model.ItemPedido;
 import br.com.SISLIC.model.Lance;
 import br.com.SISLIC.model.Pedido;
 import br.com.SISLIC.model.Produto;
@@ -24,7 +23,13 @@ public class LanceController extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {			
 		
-			req.getRequestDispatcher("WEB-INF/fornLances.jsp").forward(req, resp);
+		if(req.getAttribute("lances")==null) {	
+		//SETAR OS LANCES DO FORNECEDOR PARA SEREM MOSTRADOS NA PÁGINA
+		Fornecedor forn = (Fornecedor) req.getSession().getAttribute("forAutenticado");
+		LanceDAO lanceDAO = new LanceDAO();
+		req.setAttribute("lances", lanceDAO.lancesFornId(forn.getId()));
+		}
+		req.getRequestDispatcher("WEB-INF/fornLances.jsp").forward(req, resp);
 		
 	}
 	@Override
@@ -36,6 +41,13 @@ public class LanceController extends HttpServlet{
 			acao = req.getParameter("acao");
 			
 		}else {
+			
+			if(req.getAttribute("lances")==null) {				
+			//SETAR OS LANCES DO FORNECEDOR PARA SEREM MOSTRADOS NA PÁGINA
+			Fornecedor forn = (Fornecedor) req.getSession().getAttribute("forAutenticado");
+			LanceDAO lanceDAO = new LanceDAO();
+			req.setAttribute("lances", lanceDAO.lancesFornId(forn.getId()));
+			}
 			req.getRequestDispatcher("WEB-INF/fornLances.jsp").forward(req, resp);
 		}
 		
@@ -47,27 +59,27 @@ public class LanceController extends HttpServlet{
 			for(Produto p: pedido.getProdutos()) {
 				p.setPreco(Float.parseFloat(req.getParameter(Integer.toString(p.getId()))));
 			}
-			Lance lance = new Lance();
+			Lance lance = new Lance();			
 			
-			Date data = new Date();
-			SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");
-			String novaData = formatador.format(data);
-			lance.setData(novaData);
+			//CONVERTER A DATA
+			java.util.Date dataUtil = new java.util.Date();
+			java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime());
+			
+			lance.setData(dataSql);
+			
 			lance.setTotal(Float.parseFloat(req.getParameter("total")));
-			lance.setTaxaEntrega(Float.parseFloat(req.getParameter("taxaentrega")));
-			
+			lance.setTaxaEntrega(Float.parseFloat(req.getParameter("taxaentrega")));			
 			Fornecedor forn = (Fornecedor) req.getSession().getAttribute("forAutenticado");
 			lance.setIdfornecedor(forn.getId());
 			
-			ItemPedido itemPedido = new ItemPedido();
-			itemPedido.setPedido(pedido);
+			lance.setPedido(pedido);
 			
 			LanceDAO lanceDAO = new LanceDAO();
-			//REVER A PARTE DO DAO NO LANCE
+
 			if(lanceDAO.cadastrar(lance)) {					
-				resp.getWriter().print("<script> window.alert('Lance efetuado com sucesso! Aguarde o contato por e-mail'); location.href='cadastrocontroller.do';</script>");
+				resp.getWriter().print("<script> window.alert('Lance efetuado com sucesso! Aguarde o contato por e-mail'); location.href='lancescontroller.do';</script>");
 			}else {
-				resp.getWriter().print("<script> window.alert('Erro ao efetuar o lance!'); location.href='cadastrocontroller.do';</script>");
+				resp.getWriter().print("<script> window.alert('Erro ao efetuar o lance!'); location.href='lancescontroller.do';</script>");
 			}
 		}
 	}

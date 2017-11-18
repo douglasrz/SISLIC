@@ -1,28 +1,22 @@
 package br.com.SISLIC.model;
 
+import java.sql.Date;
 
 public class Lance {
 
 	private int id;
-	private float total;
-	private Pedido pedido;
+	private float ValorTotal;
 	private int Idfornecedor;
-	private String data;
+	private Date data;
 	private float taxaEntrega;
-	private ItemPedido itempedido;
+	private Pedido pedido;
 	
 	public float getTotal() {
-		return total;
+		return ValorTotal;
 	}
 	public void setTotal(float total) {
-		this.total = total;
+		this.ValorTotal = total;
 	}	
-	public Pedido getPedido() {
-		return pedido;
-	}
-	public void setPedido(Pedido pedido) {
-		this.pedido = pedido;
-	}
 	public int getIdfornecedor() {
 		return Idfornecedor;
 	}
@@ -41,19 +35,25 @@ public class Lance {
 	public void setTaxaEntrega(float taxaEntrega) {
 		this.taxaEntrega = taxaEntrega;
 	}
-	public String getData() {
+	
+	public float getValorTotal() {
+		return ValorTotal;
+	}
+	public void setValorTotal(float valorTotal) {
+		ValorTotal = valorTotal;
+	}
+	public Pedido getPedido() {
+		return pedido;
+	}
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
+	}
+	public Date getData() {
 		return data;
 	}
-	public void setData(String data) {
+	public void setData(Date data) {
 		this.data = data;
 	}
-	public ItemPedido getItempedido() {
-		return itempedido;
-	}
-	public void setItempedido(ItemPedido itempedido) {
-		this.itempedido = itempedido;
-	}
-	
 	
 	
 }

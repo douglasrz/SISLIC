@@ -1,4 +1,6 @@
 <%@ page import="br.com.SISLIC.model.Fornecedor" %>
+<%@ page import="br.com.SISLIC.model.Lance" %>
+<%@ page import="java.util.ArrayList"%>
 <%@	page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -52,8 +54,8 @@
                 <!-- Ã­cone do Usuario (cabeÃ§alho)-->
                 <ul class="nav navbar-top-links navbar-right">
                 <li class="dropdown">                
-                	<% Fornecedor forn = ((Fornecedor) request.getSession().getAttribute("forAutenticado")); 
-                	
+                	<% Fornecedor forn = ((Fornecedor) request.getSession().getAttribute("forAutenticado"));   
+                	ArrayList<Lance> lances = (ArrayList<Lance>) request.getAttribute("lances");
 					out.print("<a href=cadastrocontroller.do >"+forn.getrSocial()+"</a>");%>
                     <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                 </li>
@@ -83,49 +85,36 @@
                 <!-- /.sidebar-collapse -->
             </div>
             <!-- /.navbar-static-side -->
-        </nav>
-
+        </nav>   
         <div id="page-wrapper">
-            <div class="row">
+        	<div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Lances</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
-            <!-- /.row -->
             <div class="row">
-                <div class="col-lg-12">
+                <% for(Lance l: lances){
+                	%>
+                	<div class="col-lg-4">
                     <div class="panel panel-default">
-                        <div class="panel-heading">Todos os Lances </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <table class="table table-striped table-bordered table-hover" id="dataTables-example"><!-- width="100%" tinha antes -->
-                                <thead>
-                                    <tr>
-                                        <th>Pedido</th>
-                                        <th>Descrição</th>
-                                        <th>Valor</th>
-                                        <th>Data</th>
-                                        <th>Expira</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Notebooks</td>
-                                        <td>Os notebooks devem ser DELL com i5...</td>
-                                        <td>21.000 R$</td>
-                                        <td>12/10/2017</td>
-                                        <td>29/10/2017</td>
-                                    </tr>                                    
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.panel-body -->
+                        <div class="panel-heading">
+                        <% 
+                      	out.print(l.getPedido().getNome()+"</div>");
+                        out.print("<div class=\"panel-body\">");
+                        out.print("<p>"+l.getPedido().getDescricao()+"</p><br>");
+                        out.print("<strong>Efetuado em: </strong>"+l.getData()+"<br>");
+                        out.print("<strong>Expira em: </strong>"+l.getPedido().getDataLimite());
+                        %>
+                        </div><!-- painel body -->
+                        <div class="panel-footer">
+                        <a type="submit" href="#" class="btn btn-success btn-block"> Detalhes </a> </div>
+                		</div>
+                		</div>
+                	<%} %>
                     </div>
-                    <!-- /.panel -->
                 </div>
-                <!-- /.col-lg-12 -->
-            </div>
+          </div>
     <!-- jQuery -->
     <script src="sbAdmin/vendor/jquery/jquery.min.js"></script>
 
@@ -144,6 +133,7 @@
     <script src="sbAdmin/dist/js/sb-admin-2.js"></script>
 
     <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+ 
     <script>
     $(document).ready(function() {
         $('#dataTables-example').DataTable({
@@ -154,5 +144,4 @@
 </div>
 </div>
 </body>
-
 </html>
