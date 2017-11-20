@@ -140,7 +140,7 @@
                                 			out.print("<td>"+p.getQuantidade()+"</td>");
                                 			out.print("<td>"+p.getNome()+"</td>");
                                 			out.print("<td>"+p.getDescricao()+"</td>");
-                                			out.print("<td><input onchange=\"totalProdutos("+p.getId()+")\" class=\"form-control\" placeholder=\"Valor\" type=\"text\" id="+p.getId()+" name="+p.getId()+" required></td>");
+                                			out.print("<td><input onchange=\"totalProdutos("+p.getId()+")\" class=\"form-control\" placeholder=\"Valor\" onkeyup=\"somenteNumeros(this);\" type=\"text\" id="+p.getId()+" name="+p.getId()+" required></td>");
                                 			out.print("</tr>");
                                 			i++;
                                 		}
@@ -164,22 +164,22 @@
                                 <table class="table" >
                                 	<tr>
                                         <th>Taxa de entrega:</th>
-                                        <td><input class="form-control" onchange="calculaTotal()" placeholder="Valor da entrega" type="text" id="taxaentrega" name="taxaentrega" required></td>
+                                        <td><input class="form-control" onkeyup="somenteNumeros(this);" onchange="calculaTotal()" placeholder="Valor da entrega" type="text" id="taxaentrega" name="taxaentrega" required></td>
                                     </tr>
                                     <tr>
                                         <th style="width:50%">Produtos:</th>
-                                        <td><input id= "subtotal" class="form-control" disabled></td>
+                                        <td><input id= "subtotal" class="form-control" value = 00.00 disabled></td>
                                     </tr>                                    
                                     <tr>
                                        <th style="width:50%">Total:</th>
-                                        <td><input id="total" name="total" class="form-control" readonly></td>
+                                        <td><input id="total" name="total" class="form-control" value = 00.00 readonly></td>
                                     </tr>
                                     <tr>
                                     
                                     </tr>
                                     <tr>	
                                     	<th>
-                                    		<button type="reset" class="btn btn-warning btn-block" onreset=javascript:limpar()>Limpar</button>  
+                                    		<button type="reset" class="btn btn-warning btn-block" onclick="javascript:limpar();">Limpar</button>  
                                     	</th>
                                     	<td>
                                     	 <button class="btn btn-success pull-right btn-block" type="submit">Efetuar lance</button>  
@@ -219,7 +219,6 @@
     			//console.log(totalProdutos(id));
 				//console.log(valorTotalProdutos);
 			}
-			
     		function totalProdutos(id){
     			valorTotalProdutos += parseFloat(document.getElementById(id).value);
     			document.getElementById("subtotal").value = valorTotalProdutos;  
@@ -230,7 +229,15 @@
     			valorTotalProdutos = 0;	
     			taxaEntrega = 0;
     			total = 0;
-    		}    		
+    		}
+    		function somenteNumeros(num) {
+    	        var er = /[^0-9.]/;
+    	        er.lastIndex = 0;
+    	        var campo = num;
+    	        if (er.test(campo.value)) {
+    	          campo.value = "";
+    	        }
+    	    }
 		</script>
 	</div>
 </div>

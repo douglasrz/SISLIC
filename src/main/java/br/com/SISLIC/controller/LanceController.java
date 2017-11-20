@@ -1,8 +1,6 @@
 package br.com.SISLIC.controller;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,14 +21,45 @@ public class LanceController extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {			
 		
-		if(req.getAttribute("lances")==null) {	
-		//SETAR OS LANCES DO FORNECEDOR PARA SEREM MOSTRADOS NA PÁGINA
-		Fornecedor forn = (Fornecedor) req.getSession().getAttribute("forAutenticado");
-		LanceDAO lanceDAO = new LanceDAO();
-		req.setAttribute("lances", lanceDAO.lancesFornId(forn.getId()));
+		if(req.getParameter("acao")!=null) {
+			String acao = req.getParameter("acao");
+			//PARA ATUALIZAR QUANDO ELE EFETUAR UMA NOVO
+			if(acao.equals("lances")) {//PEGO TODOS OS LANCES
+				//SETAR OS LANCES DO FORNECEDOR PARA SEREM MOSTRADOS NA PÁGINA				
+				Fornecedor forn = (Fornecedor) req.getSession().getAttribute("forAutenticado");
+				LanceDAO lanceDAO = new LanceDAO();
+				req.getSession().setAttribute("lances", lanceDAO.lancesFornId(forn.getId()));
+				req.getRequestDispatcher("WEB-INF/fornLances.jsp").forward(req, resp);
+			}
+			if(acao.equals("lance")) {//PEGO UM LANCE
+				int idLance = Integer.parseInt(req.getParameter("id"));
+				LanceDAO lanceDAO = new LanceDAO();
+				Lance lance = lanceDAO.buscarPorId(idLance);
+				req.setAttribute("lance", lance);
+				req.getRequestDispatcher("WEB-INF/lance.jsp").forward(req, resp);
+			}
+			if(acao.equals("cancelarLance")) {
+				int idLance = Integer.parseInt(req.getParameter("id"));
+				LanceDAO lanceDAO = new LanceDAO();
+				if(lanceDAO.deleteLance(idLance)) {
+					resp.getWriter().print("<script> window.alert('Lance cancelado com sucesso!'); location.href='lancescontroller.do?acao=lances';</script>");
+				}else {
+					resp.getWriter().print("<script> window.alert('Erro interno ao cancelar o pedido, tente novamente'); location.href='lancescontroller.do' </script>");
+				}
+			}
+		}else{
+			//CASO OS LANCES AINDA NÃO TENHA SIDO SETADO NA SESSAO
+			if(req.getSession().getAttribute("lances")==null) {
+				//SETAR OS LANCES DO FORNECEDOR PARA SEREM MOSTRADOS NA PÁGINA				
+				Fornecedor forn = (Fornecedor) req.getSession().getAttribute("forAutenticado");
+				LanceDAO lanceDAO = new LanceDAO();				
+				req.getSession().setAttribute("lances", lanceDAO.lancesFornId(forn.getId()));
+				req.getRequestDispatcher("WEB-INF/fornLances.jsp").forward(req, resp);
+			}else {
+			//CASO JÁ TENHA OS LANCES
+			req.getRequestDispatcher("WEB-INF/fornLances.jsp").forward(req, resp);
+			}
 		}
-		req.getRequestDispatcher("WEB-INF/fornLances.jsp").forward(req, resp);
-		
 	}
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -38,21 +67,10 @@ public class LanceController extends HttpServlet{
 		String acao = new String();
 		
 		if(req.getParameter("acao")!=null) {
-			acao = req.getParameter("acao");
-			
-		}else {
-			
-			if(req.getAttribute("lances")==null) {				
-			//SETAR OS LANCES DO FORNECEDOR PARA SEREM MOSTRADOS NA PÁGINA
-			Fornecedor forn = (Fornecedor) req.getSession().getAttribute("forAutenticado");
-			LanceDAO lanceDAO = new LanceDAO();
-			req.setAttribute("lances", lanceDAO.lancesFornId(forn.getId()));
-			}
-			req.getRequestDispatcher("WEB-INF/fornLances.jsp").forward(req, resp);
-		}
+			acao = req.getParameter("acao");			
+		}		
 		
-		if(acao.equals("efetuarlance")) {
-			
+		if(acao.equals("efetuarlance")) {			
 			Pedido pedido = (Pedido) req.getSession().getAttribute("pedido");
 			
 			//PEGAR OS PREÇOS DE CADA PRODUTO
@@ -67,7 +85,7 @@ public class LanceController extends HttpServlet{
 			
 			lance.setData(dataSql);
 			
-			lance.setTotal(Float.parseFloat(req.getParameter("total")));
+			lance.setValorTotal(Float.parseFloat(req.getParameter("total")));
 			lance.setTaxaEntrega(Float.parseFloat(req.getParameter("taxaentrega")));			
 			Fornecedor forn = (Fornecedor) req.getSession().getAttribute("forAutenticado");
 			lance.setIdfornecedor(forn.getId());
@@ -77,7 +95,7 @@ public class LanceController extends HttpServlet{
 			LanceDAO lanceDAO = new LanceDAO();
 
 			if(lanceDAO.cadastrar(lance)) {					
-				resp.getWriter().print("<script> window.alert('Lance efetuado com sucesso! Aguarde o contato por e-mail'); location.href='lancescontroller.do';</script>");
+				resp.getWriter().print("<script> window.alert('Lance efetuado com sucesso! Aguarde o contato por e-mail'); location.href='lancescontroller.do?acao=lances';</script>");
 			}else {
 				resp.getWriter().print("<script> window.alert('Erro ao efetuar o lance!'); location.href='lancescontroller.do';</script>");
 			}

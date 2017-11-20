@@ -52,12 +52,12 @@ public class PedidoDAO {
 				Pedido pedidoRetorno = new Pedido();
 				pedidoRetorno.setId(id);
 				pedidoRetorno.setNome(resultado.getString("nome"));
-				pedidoRetorno.setDataLancamento(resultado.getString("data_lancamento"));
-				pedidoRetorno.setDataLimite(resultado.getString("data_limite"));
+				pedidoRetorno.setDataLancamento(resultado.getDate("data_lancamento"));
+				pedidoRetorno.setDataLimite(resultado.getDate("data_limite"));
 				pedidoRetorno.setId_funcionario(resultado.getInt("id_funcionario"));
 				pedidoRetorno.setDescricao(resultado.getString("descricao"));
 				pedidoRetorno.setAutorizado(resultado.getBoolean("autorizado"));
-				
+				pedidoRetorno.setStatusAberto(pedidoRetorno.status());//VEJO SE AINDA ESTÁ ABERTO O PEDIDO, PARA NÃO MOSTRAR PARA O USUARIO
 				//PEGAR OS Itens
 				ArrayList<Produto> lista = buscaItemPedido(id);						
 				//RETORNO SOMENTE SE ESTIVER AUTORIZADO PELO GERENTE				
@@ -72,6 +72,67 @@ public class PedidoDAO {
 		return null;
 	}
 	
+	public Pedido buscarPedidoAberto(int id) {
+			
+			String sql = "SELECT *FROM pedido WHERE id_pedido=?";		
+			try(PreparedStatement preparar = con.prepareStatement(sql)){	
+				preparar.setInt(1, id);
+				ResultSet resultado = preparar.executeQuery();
+				if(resultado.next()) {
+					Pedido pedidoRetorno = new Pedido();
+					pedidoRetorno.setId(id);
+					pedidoRetorno.setNome(resultado.getString("nome"));
+					pedidoRetorno.setDataLancamento(resultado.getDate("data_lancamento"));
+					pedidoRetorno.setDataLimite(resultado.getDate("data_limite"));
+					pedidoRetorno.setId_funcionario(resultado.getInt("id_funcionario"));
+					pedidoRetorno.setDescricao(resultado.getString("descricao"));
+					pedidoRetorno.setAutorizado(resultado.getBoolean("autorizado"));
+					pedidoRetorno.setStatusAberto(pedidoRetorno.status());//VEJO SE AINDA ESTÁ ABERTO O PEDIDO, PARA NÃO MOSTRAR PARA O USUARIO
+					//PEGAR OS Itens
+					ArrayList<Produto> lista = buscaItemPedido(id);						
+					//RETORNO SOMENTE SE ESTIVER AUTORIZADO PELO GERENTE				
+					pedidoRetorno.setProdutos(lista);
+					if(pedidoRetorno.isAutorizado() && pedidoRetorno.isStatusAberto()) {
+						return pedidoRetorno;
+					}else return null;
+				}				
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+			return null;
+	}
+	public ArrayList<Pedido> buscarTodosPedidosAberto(){
+		
+		ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
+		String sql = "SELECT *FROM pedido";		
+		
+		try(PreparedStatement preparar = con.prepareStatement(sql)){
+			ResultSet resultado = preparar.executeQuery();
+			while(resultado.next()) {
+				Pedido pedidoRetorno = new Pedido();
+				pedidoRetorno.setId(resultado.getInt("id_pedido"));
+				pedidoRetorno.setNome(resultado.getString("nome"));
+				pedidoRetorno.setDataLancamento(resultado.getDate("data_lancamento"));
+				pedidoRetorno.setDataLimite(resultado.getDate("data_limite"));
+				pedidoRetorno.setId_funcionario(resultado.getInt("id_funcionario"));
+				pedidoRetorno.setDescricao(resultado.getString("descricao"));
+				pedidoRetorno.setAutorizado(resultado.getBoolean("autorizado"));
+				pedidoRetorno.setStatusAberto(pedidoRetorno.status());
+				//PEGAR OS Produtos
+				ArrayList<Produto> lista = buscaItemPedido(resultado.getInt("id_pedido"));
+				pedidoRetorno.setProdutos(lista);
+				
+				//PEGAR SOMENTE O QUE FORAM AUTORIZADOS PELO GERENTE
+				if(pedidoRetorno.isAutorizado() && pedidoRetorno.isStatusAberto())
+					pedidos.add(pedidoRetorno);
+			}	
+			return pedidos;
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return pedidos;
+	}
+	
 	public ArrayList<Pedido> buscarTodosPedidos() {
 		
 			ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
@@ -83,12 +144,12 @@ public class PedidoDAO {
 					Pedido pedidoRetorno = new Pedido();
 					pedidoRetorno.setId(resultado.getInt("id_pedido"));
 					pedidoRetorno.setNome(resultado.getString("nome"));
-					pedidoRetorno.setDataLancamento(resultado.getString("data_lancamento"));
-					pedidoRetorno.setDataLimite(resultado.getString("data_limite"));
+					pedidoRetorno.setDataLancamento(resultado.getDate("data_lancamento"));
+					pedidoRetorno.setDataLimite(resultado.getDate("data_limite"));
 					pedidoRetorno.setId_funcionario(resultado.getInt("id_funcionario"));
 					pedidoRetorno.setDescricao(resultado.getString("descricao"));
 					pedidoRetorno.setAutorizado(resultado.getBoolean("autorizado"));
-					
+					pedidoRetorno.setStatusAberto(pedidoRetorno.status());
 					//PEGAR OS Produtos
 					ArrayList<Produto> lista = buscaItemPedido(resultado.getInt("id_pedido"));					
 					pedidoRetorno.setProdutos(lista);
@@ -147,8 +208,8 @@ public class PedidoDAO {
 				Pedido pedidoRetorno = new Pedido();
 				pedidoRetorno.setId(resultado.getInt("id_pedido"));
 				pedidoRetorno.setNome(resultado.getString("nome"));
-				pedidoRetorno.setDataLancamento(resultado.getString("data_lancamento"));
-				pedidoRetorno.setDataLimite(resultado.getString("data_limite"));
+				pedidoRetorno.setDataLancamento(resultado.getDate("data_lancamento"));
+				pedidoRetorno.setDataLimite(resultado.getDate("data_limite"));
 				pedidoRetorno.setId_funcionario(resultado.getInt("id_funcionario"));
 				pedidoRetorno.setDescricao(resultado.getString("descricao"));
 				pedidoRetorno.setAutorizado(resultado.getBoolean("autorizado"));
@@ -181,8 +242,8 @@ public class PedidoDAO {
 				Pedido pedidoRetorno = new Pedido();
 				pedidoRetorno.setId(resultado.getInt("id_pedido"));
 				pedidoRetorno.setNome(resultado.getString("nome"));
-				pedidoRetorno.setDataLancamento(resultado.getString("data_lancamento"));
-				pedidoRetorno.setDataLimite(resultado.getString("data_limite"));
+				pedidoRetorno.setDataLancamento(resultado.getDate("data_lancamento"));
+				pedidoRetorno.setDataLimite(resultado.getDate("data_limite"));
 				pedidoRetorno.setId_funcionario(resultado.getInt("id_funcionario"));
 				pedidoRetorno.setDescricao(resultado.getString("descricao"));
 				pedidoRetorno.setAutorizado(resultado.getBoolean("autorizado"));

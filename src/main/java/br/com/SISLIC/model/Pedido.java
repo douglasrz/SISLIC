@@ -1,33 +1,48 @@
 package br.com.SISLIC.model;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class Pedido {
 	
 	private int id;
-	private String dataLancamento;
-	private String dataLimite;
+	private Date dataLancamento;
+	private Date dataLimite;
 	private ArrayList<Produto> produtos;
 	private int id_funcionario;
 	private Lance lance;
 	private String nome;
 	private String descricao;
 	private boolean autorizado;
+	private boolean statusAberto;
 	
-	
-	public String getDataLancamento() {
+	public boolean status() {
+		java.util.Date dataUtil = new java.util.Date();
+		java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime());
+		int resul = this.dataLimite.compareTo(dataSql);
+		//SE RETORNAR MENOR OU IGUAL A ZERO SIGNIFICA QUE O PEDIDO DO LANCE AINDA ESTÁ ABERTO
+		if(resul <= 0)	
+			return false;
+		else return true;
+	}	
+	public boolean isStatusAberto() {
+		return statusAberto;
+	}
+	public void setStatusAberto(boolean statusAberto) {
+		this.statusAberto = statusAberto;
+	}
+	public Date getDataLancamento() {
 		return dataLancamento;
 	}
-	public void setDataLancamento(String dataLancamento) {
+	public void setDataLancamento(Date dataLancamento) {
 		this.dataLancamento = dataLancamento;
 	}
-	public String getDataLimite() {
+	public Date getDataLimite() {
 		return dataLimite;
 	}
-	public void setDataLimite(String dataLimite) {
+	public void setDataLimite(Date dataLimite) {
 		this.dataLimite = dataLimite;
 	}
-	
 	public ArrayList<Produto> getProdutos() {
 		return produtos;
 	}

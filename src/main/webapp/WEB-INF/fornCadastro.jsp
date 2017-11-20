@@ -213,23 +213,6 @@
 	</div>
 	</div>
 	</div>
-	<!--  <script>	
-	function validarSenha(){ 
-		var senha = document.formulario.novasenha.value;		
-		var senhaRepetida = document.formulario.novasenhaAlt.value;
-		if (senha != senhaRepetida){
-			alert("Repita a senha corretamente");
-			document.formulario.novasenhaAlt.focus();
-			return false;
-		}
-	}
-	function confirmaExclusao(id){
-		if(window.confirm("Tem certeza que deseja excluir?")){
-			location.href="usucontroller.do?acao=excluir&id="+id;
-		}
-	}	
-	}
-	</script>-->
     <!-- jQuery -->
     <script src="sbAdmin/vendor/jquery/jquery.min.js"></script>
 

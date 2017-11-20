@@ -44,7 +44,8 @@ public class CategoriaDAO {
 			ResultSet resultado = prepara.executeQuery();
 			while(resultado.next()) {
 				lista.add(resultado.getInt("id_categoria"));
-			}			
+			}	
+			prepara.close();
 		}catch(SQLException e) {
 			e.printStackTrace();			
 		}
@@ -61,6 +62,7 @@ public class CategoriaDAO {
 					String descricao = resultado.getString("descricao");
 					Categoria categoria = new Categoria(id,nome,descricao);
 					categorias.add(categoria);
+					prepara.close();
 				}
 			}			
 		}catch(SQLException e) {

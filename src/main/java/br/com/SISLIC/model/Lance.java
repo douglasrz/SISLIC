@@ -11,12 +11,6 @@ public class Lance {
 	private float taxaEntrega;
 	private Pedido pedido;
 	
-	public float getTotal() {
-		return ValorTotal;
-	}
-	public void setTotal(float total) {
-		this.ValorTotal = total;
-	}	
 	public int getIdfornecedor() {
 		return Idfornecedor;
 	}

@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import br.com.SISLIC.model.Fornecedor;
 import br.com.SISLIC.model.Lance;
 import br.com.SISLIC.model.Pedido;
 import br.com.SISLIC.model.Produto;
@@ -20,7 +19,7 @@ private Connection con = ConexaoFactory.getConnection();
 		try {
 			PreparedStatement preparar = con.prepareStatement(sql);
 			//Substitui o ? pelo dado do usuario
-			preparar.setFloat(1,lance.getTotal() );
+			preparar.setFloat(1,lance.getValorTotal() );
 			preparar.setInt(2,lance.getPedido().getId());			
 			preparar.setInt(3, lance.getIdfornecedor());
 			preparar.setDate(4,lance.getData());
@@ -95,7 +94,7 @@ private Connection con = ConexaoFactory.getConnection();
 			while(resultado.next()) {
 				Lance retorno = new Lance();
 				retorno.setId(resultado.getInt("id_lance"));
-				retorno.setTotal(resultado.getFloat("valor_total"));
+				retorno.setValorTotal(resultado.getFloat("valor_total"));
 				retorno.setData(resultado.getDate("data"));
 				retorno.setIdfornecedor(resultado.getInt("id_fornecedor"));
 				retorno.setTaxaEntrega(resultado.getFloat("taxa_entrega"));				
@@ -103,6 +102,7 @@ private Connection con = ConexaoFactory.getConnection();
 				retorno.setPedido(pedidoDAO.buscarPedido(resultado.getInt("id_pedido")));
 				lista.add(retorno);
 			}
+			preparar.close();
 			return lista;
 			
 		}catch(SQLException e) {
@@ -110,4 +110,64 @@ private Connection con = ConexaoFactory.getConnection();
 		}
 		return lista;
 	}
+	public Lance buscarPorId(int id) {
+		
+		String sql = "SELECT * FROM lance WHERE id_lance = ?";
+		try (PreparedStatement preparar = con.prepareStatement(sql)){
+			preparar.setInt(1, id);
+			ResultSet resultado = preparar.executeQuery();		
+			if(resultado.next()) {
+					Lance lance = new Lance();
+					lance.setId(id);
+					lance.setValorTotal(resultado.getFloat("valor_total"));
+					lance.setData(resultado.getDate("data"));
+					lance.setIdfornecedor(resultado.getInt("id_fornecedor"));
+					lance.setTaxaEntrega(resultado.getFloat("taxa_entrega"));
+					
+					//PEGAR O PEDIDO
+					PedidoDAO pedidoDAO = new PedidoDAO();
+					Pedido pedido = pedidoDAO.buscarPedido(resultado.getInt("id_pedido"));
+					
+					//PEGAR OS VALORES OFERTADO NESTE LANCE DOS PRODUTOS
+					ArrayList<Produto> produtos = new ArrayList<Produto>();
+					for(Produto p: pedido.getProdutos()) {
+						produtos.add(pedidoDAO.buscaPrecoProduto(p));						
+					}
+					pedido.setProdutos(produtos);
+					lance.setPedido(pedido);
+					preparar.close();
+					return lance;
+				}				
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+			return null;
+	}
+	public boolean deleteLance(int idLance) {//APAGO A TABELA LANCE E LANCE_ITEM_PEDIDO
+		 
+		if(!deleteLanceItens(idLance)) {//APAGO LOGO OS ITENS DO LANCE (lance_item_pedido)
+			return false;//se não conseguiu apagar os itens então já retorno sem apagar o lance
+		}
+		String sql = "DELETE FROM lance WHERE id_lance = ?";
+		try(PreparedStatement prepara = con.prepareStatement(sql)){
+			prepara.setInt(1, idLance);	
+			prepara.execute();
+			return true;
+		} catch (SQLException e) {			
+			e.printStackTrace();
+			return false;
+		}
+	}
+	private boolean deleteLanceItens(int idLance) {
+		String sql = "DELETE FROM lance_item_pedido WHERE id_lance = ?";
+		try(PreparedStatement prepara = con.prepareStatement(sql)){
+			prepara.setInt(1, idLance);			
+			prepara.execute(); 	
+			return true;
+		} catch (SQLException e) {			
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 }

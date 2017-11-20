@@ -55,7 +55,7 @@
                 <ul class="nav navbar-top-links navbar-right">
                 <li class="dropdown">                
                 	<% Fornecedor forn = ((Fornecedor) request.getSession().getAttribute("forAutenticado"));   
-                	ArrayList<Lance> lances = (ArrayList<Lance>) request.getAttribute("lances");
+                	ArrayList<Lance> lances = (ArrayList<Lance>)  request.getSession().getAttribute("lances");
 					out.print("<a href=cadastrocontroller.do >"+forn.getrSocial()+"</a>");%>
                     <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                 </li>
@@ -108,7 +108,7 @@
                         %>
                         </div><!-- painel body -->
                         <div class="panel-footer">
-                        <a type="submit" href="#" class="btn btn-success btn-block"> Detalhes </a> </div>
+                        <a type="submit" href="lancescontroller.do?acao=lance&id=<%=l.getId()%>" class="btn btn-success btn-block"> Detalhes </a> </div>
                 		</div>
                 		</div>
                 	<%} %>
