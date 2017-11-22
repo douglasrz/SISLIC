@@ -33,12 +33,16 @@ public class LoginController extends HttpServlet{
 			FornecedorDAO forDAO = new FornecedorDAO();
 			Fornecedor forAutenticado = forDAO.autenticar(forn);
 			if(forAutenticado!=null) {
-				HttpSession sessao = req.getSession(); //criando a sessao
-				sessao.setAttribute("forAutenticado", forAutenticado);//add o usuario a sessao			
-				sessao.setMaxInactiveInterval(60*10);
-				//sessao.setAttribute("nomeForn",forAutenticado.getLogin());
-				//Direcionando para a página principal
-				req.getRequestDispatcher("pedidocontroller.do").forward(req, resp);
+				if(forAutenticado.isAutorizado()) {
+					HttpSession sessao = req.getSession(); //criando a sessao
+					sessao.setAttribute("forAutenticado", forAutenticado);//add o usuario a sessao			
+					sessao.setMaxInactiveInterval(60*10);
+					//sessao.setAttribute("nomeForn",forAutenticado.getLogin());
+					//Direcionando para a página principal
+					req.getRequestDispatcher("pedidocontroller.do").forward(req, resp);
+				}else {
+					resp.getWriter().print("<script> window.alert('Seu cadastrado ainda não foi autorizado, aguarde a análise.'); location.href='login.html';</script>");
+				}
 			}else {
 				resp.getWriter().print("<script> window.alert('Usuario não encontrado'); location.href='login.html';</script>");
 			}

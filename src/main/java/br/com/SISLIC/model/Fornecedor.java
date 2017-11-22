@@ -1,8 +1,9 @@
 package br.com.SISLIC.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Fornecedor {
+public class Fornecedor implements Serializable{
 	
 	private int id;
 	private String login;
@@ -14,6 +15,7 @@ public class Fornecedor {
 	private String email;
 	private ArrayList<Categoria> categorias;
 	private ArrayList<Lance> lances;
+	private boolean autorizado;
 	
 	public Fornecedor() {}
 	public Fornecedor(String login, String senha, String rSocial, String telefone, String email) {
@@ -24,7 +26,16 @@ public class Fornecedor {
 		this.telefone = telefone;
 		this.email = email;
 	}
-
+	
+	public Fornecedor(String login, String senha, String cnpj, String rSocial, String telefone, String email) {
+		super();
+		this.login = login;
+		this.senha = senha;
+		this.cnpj = cnpj;
+		this.rSocial = rSocial;
+		this.telefone = telefone;
+		this.email = email;
+	}
 	@Override
 	public String toString() {
 		return "Fornecedor [id=" + id + ", login=" + login + ", senha=" + senha + ", cnpj=" + cnpj + ", rSocial="
@@ -97,7 +108,13 @@ public class Fornecedor {
 	public String getEmail() {
 		return email;
 	}
-
+	
+	public boolean isAutorizado() {
+		return autorizado;
+	}
+	public void setAutorizado(boolean autorizado) {
+		this.autorizado = autorizado;
+	}
 	public void setEmail(String email) {
 		this.email = email;
 	}

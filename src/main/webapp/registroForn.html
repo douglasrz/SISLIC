@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Cadastro - SISLIC</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="sbAdmin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="sbAdmin/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="sbAdmin/dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="sbAdmin/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript">			
+			function validarSenha(){ 
+				var senha = document.formCadastro.novasenha.value;		
+				var senhaRepetida = document.formCadastro.novasenhaAlt.value;
+				if (senha != senhaRepetida){
+					alert("Repita a senha corretamente");
+					document.formCadastro.novasenhaAlt.focus();
+					return false;
+				}				
+			}			
+	</script>
+</head>
+<body>
+	<div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Soliciçãoo de Cadastro</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form name="formCadastro" method="POST" action="cadastrocontroller.do?acao=cadastrar">
+                           <fieldset>         
+                           	<div class="col-lg-6">                       
+                                    	<div class="form-group">
+                                          	<label for="disabledSelect">Username</label>
+                                        	<input class="form-control" name="login" type="text"  placeholder="Login (não poderá ser alterado)" required>
+                                        </div>                                        
+                                        <div class="form-group">
+                                            <label>Razão Social</label>
+                                            <input class="form-control" name="razaoSocial"  placeholder="Razão Social (não poderá ser alterado)" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Senha</label>
+                                            <input class="form-control" placeholder="Nova senha" type="password" name="novasenha" required>
+                                        </div> 
+                                        <div class="form-group">
+                                            <input class="form-control" placeholder="Digite a nova senha novamente" type="password" name="novasenhaAlt" required>
+                                        </div>
+                                    </div>
+                                     <div class="col-lg-6">
+                                    	<div class="form-group">
+                                            <label for="disabledSelect">CNPJ</label>
+                                            <input class="form-control" id="disabledInput" type="text"  placeholder="CNPJ (não poderá ser alterado)" name="cnpj" required>
+                                        </div>
+	                                 	<div class="form-group">
+	                                	    <label>Telefone</label>
+	                                        <input class="form-control"  placeholder="Telefone" name="telefone" onkeyup="somenteNumeros(this);" required>
+	                                    </div>
+                                        <div class="form-group">
+                                           	<label>E-mail</label>
+                                           	<input class="form-control"  placeholder="E-mail" name="email" required>
+                                        </div> 
+                                     </div>
+                                     <div class="col-lg-12">   
+                                       	<div class="col-lg-6">
+	                                 	   <button type="submit" class="btn btn-success btn-block" onclick="return validarSenha()" >Enviar</button>            
+	                                    </div>   
+	                                    <div class="col-lg-6">
+	                                    	<button type="reset" class="btn btn-warning btn-block">Limpar</button> 
+	                                    </div>   
+                                    </div>                                                                           
+                                </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<script>
+		function somenteNumeros(num) {
+	        var er = /[^0-9.]/;
+	        er.lastIndex = 0;
+	        var campo = num;
+	        if (er.test(campo.value)) {
+	          campo.value = "";
+        	}
+		}
+	</script>
+    <!-- jQuery -->
+    <script src="sbAdmin/vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="sbAdmin/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="sbAdmin/vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="sbAdmin/dist/js/sb-admin-2.js"></script>
+</body>
+
+</html>

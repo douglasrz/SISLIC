@@ -1,8 +1,9 @@
 package br.com.SISLIC.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class Lance {
+public class Lance implements Serializable{
 
 	private int id;
 	private float ValorTotal;

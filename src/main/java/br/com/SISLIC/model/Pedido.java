@@ -1,9 +1,10 @@
 package br.com.SISLIC.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 
-public class Pedido {
+public class Pedido implements Serializable{
 	
 	private int id;
 	private Date dataLancamento;
