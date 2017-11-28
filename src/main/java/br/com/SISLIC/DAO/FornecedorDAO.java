@@ -111,5 +111,22 @@ public class FornecedorDAO {
 			e.printStackTrace();
 		}
 		return false;
-	}	
+	}
+	public void updateSenha(String login, String senha) {
+		String sql = "UPDATE fornecedor SET senha=? WHERE login=?";
+		//md5 criptografa a senha
+		try {
+			PreparedStatement preparar = con.prepareStatement(sql);
+			//Substitui o ? pelo dado do usuario
+			preparar.setString(1, senha);			
+			preparar.setString(2, login);
+			//execurtando o comando sql no banco de dados
+			preparar.execute();
+			//fechanco a conexao com o banco
+			preparar.close();
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

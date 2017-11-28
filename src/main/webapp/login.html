@@ -69,14 +69,42 @@
                         </form>
 				        <div class="text-center">
 				          <a class="d-block small mt-3" href="registroForn.html"><br>Criar uma nova conta</a><br>
-				          <a class="d-block small" href="forgot-password.html">Perdi minha senha</a>
+				          <a class="d-block small" data-toggle="modal" data-target="#myModal">Perdi minha senha</a>
 				       </div>
                     </div>
-                </div>
+                    <!-- RECUPERAÇÃO DE SENHA -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    	<div class="modal-dialog">
+                             <div class="modal-content">
+                        		 <div class="modal-header">
+	                                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	                                  <h4 class="modal-title" id="myModalLabel">Recuperar senha</h4>
+                                  </div>                                  
+                                  <div class="modal-body">
+                                  <form name="formrec" method="POST" action="recuperarsenha.do">                                    
+	                                    <div class="form-group">
+	                                        <label>Login</label>
+	                                        <input class="form-control" name="username" type="text" required>
+	                                   	</div>                                        
+	                                    <div class="form-group">
+	                                    	<label>E-mail</label>
+	                                        <input class="form-control" name="email" type="text" required>
+	                                    </div>
+	                                    <div>
+	                                    <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+	                                    Uma nova senha será enviada para seu e-mail, caso o login digitado seja cadastrado, assim como o e-mail.</p>
+	                                    </div>               
+	                                    <button type="submit" class="btn btn-success " >Enviar</button>            
+	                                    <button type="reset" class="btn btn-warning ">Limpar</button>                                                                          
+                                	</form>
+                                    </div>
+                               </div>
+                    	</div>
+                	</div> <!-- /.modal-content -->
             </div>
         </div>
     </div>
-
+</div>
     <!-- jQuery -->
     <script src="sbAdmin/vendor/jquery/jquery.min.js"></script>
 

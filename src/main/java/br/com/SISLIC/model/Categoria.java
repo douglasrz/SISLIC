@@ -1,6 +1,8 @@
 package br.com.SISLIC.model;
 
-public class Categoria {
+import java.io.Serializable;
+
+public class Categoria implements Serializable{
 
 	private int cod;
 	private String nome;

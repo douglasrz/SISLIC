@@ -17,7 +17,6 @@ import br.com.SISLIC.model.Produto;
 @WebServlet("/lancescontroller.do")
 public class LanceController extends HttpServlet{
 	
-
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {			
 		
