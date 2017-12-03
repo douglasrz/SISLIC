@@ -64,7 +64,7 @@
                 	<% Fornecedor forn = ((Fornecedor) request.getSession().getAttribute("forAutenticado")); 
                 	ArrayList<Categoria> categorias = forn.getCategorias();
 					out.print("<a href=cadastrocontroller.do >"+forn.getrSocial()+"</a>");%>
-                    <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+                    <li><a href="logincontroller.do"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                 </li>
                 </ul>
             <!-- /.navbar-top-links -->
@@ -157,9 +157,9 @@
                             <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 <thead>
                                     <tr>
-                                        <th>Categoria</th>
+                                        <th width="20%">Categoria</th>
                                         <th>Descrição</th>                                   
-                                        <th>Excluir</th>
+                                        <th width="10%">Ação</th>
                                     </tr>
                                 </thead>
                                 <tbody>

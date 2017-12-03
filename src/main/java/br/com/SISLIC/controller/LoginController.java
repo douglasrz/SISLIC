@@ -11,8 +11,10 @@ import javax.servlet.http.HttpSession;
 
 import br.com.SISLIC.DAO.FornecedorDAO;
 import br.com.SISLIC.DAO.FuncionarioDAO;
+import br.com.SISLIC.DAO.GerenteDAO;
 import br.com.SISLIC.model.Fornecedor;
 import br.com.SISLIC.model.Funcionario;
+import br.com.SISLIC.model.Gerente;
 
 @WebServlet("/logincontroller.do")
 public class LoginController extends HttpServlet{
@@ -48,7 +50,21 @@ public class LoginController extends HttpServlet{
 			}
 		}else {
 			if(req.getParameter("perfil").equals("Gerente")) {
-				resp.getWriter().print("<script> window.alert('Ainda não implementei a parte do gerente'); location.href='login.html';</script>");
+				Gerente ger = new Gerente();
+				ger.setLogin(login);
+				ger.setSenha(senha);
+				//resp.getWriter().print("<script> window.alert('Ainda não implementei a parte do gerente'); location.href='login.html';</script>");
+				GerenteDAO gerDAO = new GerenteDAO();
+				Gerente gerAutenticado = gerDAO.autenticar(ger);
+				if(gerAutenticado!=null) {
+					HttpSession sessao = req.getSession();
+					sessao.setAttribute("gerAutenticado", gerAutenticado);
+					sessao.setMaxInactiveInterval(60*10);
+					//resp.sendRedirect("gerentepedidos.do?acao=pedidosaberto");					
+					req.getRequestDispatcher("gerentepedidos.do").forward(req, resp);
+				}else {
+					resp.getWriter().print("<script> window.alert('Usuário não encontrado'); location.href='login.html';</script>");
+				}
 				
 			}else {
 				Funcionario fun = new Funcionario();

@@ -1,6 +1,8 @@
 package br.com.SISLIC.model;
 
-public class Produto {
+import java.io.Serializable;
+
+public class Produto implements Serializable {
 	
 	private String nome;	
 	private int id;

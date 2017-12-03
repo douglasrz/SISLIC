@@ -1,19 +1,13 @@
-<%@ page import="br.com.SISLIC.model.Gerente" %>
-<%@ page import="br.com.SISLIC.model.Pedido" %>
-<%@ page import="br.com.SISLIC.model.Produto" %>
+<%@ page import="br.com.SISLIC.model.Gerente"%>
+<%@ page import="br.com.SISLIC.model.Lance"%>
 <%@ page import="java.util.ArrayList"%>
 <%@	page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
-<html lang="en">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>SISLIC - PEDIDOS </title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>SISLIC - LANCES</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="sbAdmin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -43,8 +37,9 @@
 </head>
 
 <body>
+
     <div id="wrapper">
-		
+
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
@@ -54,33 +49,20 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="homefuncontroller.do">SISLIC - Sistema de Compras e Licitações</a>
+                <a class="navbar-brand" href="pedidocontroller.do">SISLIC - Sistema de Compras e Licitações</a>
             </div>            
-                <!-- Ã­cone do Usuario (cabeÃ§alho)-->
+                <!-- ícone do Usuario (cabeçalho)-->
                 <ul class="nav navbar-top-links navbar-right">
-                <li class="dropdown">                	
-                	<% Gerente ger = ((Gerente) request.getSession().getAttribute("gerAutenticado")); 
-                	ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
-                	String tipo = "aberto";
-                	if(request.getSession().getAttribute("tipoPedido").equals("pedidosabertos")){
-                		pedidos = ger.getPedidosAberto();
-                	}else{
-                		if(request.getSession().getAttribute("tipoPedido").equals("pedidospendentes")){
-                			pedidos = ger.getPedidosPendentes();
-                			tipo = "pendente";
-                		}else{
-                			if(request.getSession().getAttribute("tipoPedido").equals("pedidosfechados")){
-                				pedidos = ger.getPedidosFechados();
-                				tipo = "fechado";
-                			}
-                		}
-                	}
-					out.print("<a href=cadastrocontroller.do >"+ger.getNome()+"</a>");%>
+                <li class="dropdown">
+                	<% Gerente ger = ((Gerente) request.getSession().getAttribute("gerAutenticado"));            	
+					out.print("<a href=cadastrocontroller.do >"+ger.getNome()+"</a>");
+					ArrayList<Lance> lances = (ArrayList<Lance>) request.getSession().getAttribute("todosLances");
+					%>
                     <li><a href="logincontroller.do"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                 </li>
                 </ul>
             <!-- /.navbar-top-links -->
-			<!-- OPÃ‡Ã•ES DA PARTE ESQUERDA -->
+			<!-- OPÇÕES DA PARTE ESQUERDA -->
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
@@ -97,7 +79,7 @@
                                     <a href="gerentepedidos.do?acao=pedidosfechados">Pedidos finalizados</a>
                                 </li>
                                 <li>
-                                    <a href="#">Cadastrar pedido</a>
+                                    <a href="cadastropedido.do">Cadastrar pedido</a>
                                 </li>
                             </ul>
                         </li>                                               
@@ -133,42 +115,45 @@
 
         <div id="page-wrapper">
             <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Pedidos <small><%if(tipo.equals("pendente")){
-                    	out.print("(Pendentes)");
-                    	}else{ 
-                    		if(tipo.equals("fechado")){
-                    			out.print("(Fechados)");
-                    			}else{
-                    				out.print("(Em aberto)");
-                    				} 
-                    		}%></small></h1>
-                    	
+            <div class="col-lg-12">
+                    <h1 class="page-header">Lances</h1>
                 </div>
                 <!-- /.col-lg-12 -->
-            </div>
+            </div>           
             <!-- /.row -->
-            <div class="row">
-                <%for(Pedido p: pedidos){
-                	//PEDIDO
-					out.print("<div class=\"col-lg-4\">");
-					out.print("<div class=\"panel panel-default\">");
-					out.print("<div class=\"panel-heading\">");
-					out.print(p.getNome()+"</div>");
-					//DESCRIÇÃO
-					out.print("<div class=\"panel-body\">");
-					out.print("<p> "+p.getDescricao()+"</p> <br>");
-					out.print("Expira em "+p.getDataLimite()+"</div>");
-					//out.print("<button type=\"button\" class=\"btn btn-primary btn-lg btn-block\"> Confira </button> </div>");
-					
-					//PRAZO E LINK
-					out.print("<div class=\"panel-footer\">");
-					int id = p.getId();
-					out.print("<a type=\"submit\" href=\"gerentepedidos.do?acao=pedido&id="+id+"\" class=\"btn btn-success btn-block\"> Confira </a> </div>");
-					//out.print("Expira em "+p.getDataLimite());
-					out.print("</div> </div>");
-                }
-				%> 
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Todos os lances</div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <table width="100%" class="table table-bordered table-hover" id="dataTables-example">
+                                <thead>
+                                <tr>
+                                	<th>Pedido</th>
+                                   	<th>Descricao</th>
+                                   	<th>Fornecedor</th>
+                                   	<th>CNPJ</th>
+                                   	<th>Valor</th>
+                                   	<th>Data</th>
+                               	</tr>                               	
+                                </thead>                                
+                                <tbody>                                
+							 	<% for(Lance l: lances){
+							 		out.print("<tr onclick= location.href=\"gerentelancescontroller.do?acao=lance&id="+l.getId()+"\" style=\"cursor: pointer;\" title=\"Ver detalhes\">");
+							 		out.print("<td>"+l.getPedido().getNome()+"</td>");
+							 		out.print("<td>"+l.getPedido().getDescricao()+"</td> <td>"+l.getForn().getrSocial()+"</td>");
+							 		out.print("<td>"+l.getForn().getCnpj()+"</td> <td>"+l.getValorTotal()+"</td>");
+							 		out.print("<td>"+l.getData()+"</td>");
+							 		out.print("</a></tr>");
+							 	}%>                          
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
             </div>
     <!-- jQuery -->
     <script src="sbAdmin/vendor/jquery/jquery.min.js"></script>
@@ -188,7 +173,6 @@
     <script src="sbAdmin/dist/js/sb-admin-2.js"></script>
 
     <!-- Page-Level Demo Scripts - Tables - Use for reference -->
- 
     <script>
     $(document).ready(function() {
         $('#dataTables-example').DataTable({

@@ -7,17 +7,12 @@ public class Lance implements Serializable{
 
 	private int id;
 	private float ValorTotal;
-	private int Idfornecedor;
+	private Fornecedor fornecedor;
 	private Date data;
 	private float taxaEntrega;
 	private Pedido pedido;
 	
-	public int getIdfornecedor() {
-		return Idfornecedor;
-	}
-	public void setIdfornecedor(int idfornecedor) {
-		Idfornecedor = idfornecedor;
-	}
+	
 	public int getId() {
 		return id;
 	}
@@ -48,6 +43,12 @@ public class Lance implements Serializable{
 	}
 	public void setData(Date data) {
 		this.data = data;
+	}
+	public Fornecedor getForn() {
+		return fornecedor;
+	}
+	public void setForn(Fornecedor forn) {
+		this.fornecedor = forn;
 	}
 	
 	

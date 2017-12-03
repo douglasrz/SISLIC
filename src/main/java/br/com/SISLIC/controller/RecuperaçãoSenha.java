@@ -28,7 +28,7 @@ public class RecuperaçãoSenha extends HttpServlet{
 		if(ver.verifEmailLoginForn(login, email)) {
 			Email enviarEmail = new Email();
 			try {
-				enviarEmail.Enviar(login, email);
+				enviarEmail.emailRecuperacaoSenha(login, email);
 			} catch (EmailException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

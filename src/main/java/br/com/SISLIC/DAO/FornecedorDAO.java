@@ -129,4 +129,34 @@ public class FornecedorDAO {
 			e.printStackTrace();
 		}
 	}
+	public Fornecedor buscarPorId(int id) {
+		String sql = "SELECT *FROM fornecedor WHERE id_fornecedor=?";
+		try(PreparedStatement prepara = con.prepareStatement(sql)){
+			prepara.setInt(1, id);
+			ResultSet resultado = prepara.executeQuery();
+			if(resultado.next()) {
+				Fornecedor fornecedor = new Fornecedor();
+				fornecedor.setId(resultado.getInt("id_fornecedor"));
+				fornecedor.setrSocial(resultado.getString("razao_social"));
+				fornecedor.setLogin(resultado.getString("login"));
+				fornecedor.setSenha(resultado.getString("senha"));
+				fornecedor.setCnpj(resultado.getString("cnpj"));
+				fornecedor.setTelefone(resultado.getString("telefone"));				
+				fornecedor.setPontuacao(resultado.getInt("pontuacao"));
+				fornecedor.setEmail(resultado.getString("email"));
+				fornecedor.setAutorizado(resultado.getBoolean("autorizado"));
+					
+				//PEGAR SUAS CATEGORIAS
+				CategoriaDAO cateDAO = new CategoriaDAO();				
+				fornecedor.setCategorias(cateDAO.buscarPorForn(fornecedor.getId()));
+					
+				//PEGAR OS LANCES
+					
+				return fornecedor;
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();				
+		}
+		return null;
+	}
 }

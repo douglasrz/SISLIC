@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>SISLIC - PONTUAÇÃO</title>
+<title>SISLIC - PEDIDO</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="sbAdmin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -59,7 +59,7 @@
 					out.print("<a href=cadastrocontroller.do >"+forn.getrSocial()+"</a>");
 					Pedido pedido = ((Pedido) request.getSession().getAttribute("pedido"));
 					%>
-                    <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+                    <li><a href="logincontroller.do"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                 </li>
                 </ul>
             <!-- /.navbar-top-links -->
@@ -126,10 +126,10 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Quant.</th>
-                                        <th>Produtos</th>
+                                        <th width="7%">Quant.</th>
+                                        <th width="20%">Produto</th>
                                         <th>Descrição</th>
-                                        <th>Valor</th>
+                                        <th width="24%">Valor</th>
                                     </tr>                                    
                                 </thead>
                                 <tbody>

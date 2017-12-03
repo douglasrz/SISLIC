@@ -59,7 +59,7 @@
                 	float porcentagem = (pontuacao*100)/20;
                 	ArrayList<Penalidade> penalidades = (ArrayList<Penalidade>) request.getSession().getAttribute("penalidades");                	
 					out.print("<a href=cadastrocontroller.do >"+forn.getrSocial()+"</a>");%>
-                    <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+                    <li><a href="logincontroller.do"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                 </li>
                 </ul>
             <!-- /.navbar-top-links -->

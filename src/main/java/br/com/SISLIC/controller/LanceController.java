@@ -86,8 +86,7 @@ public class LanceController extends HttpServlet{
 			
 			lance.setValorTotal(Float.parseFloat(req.getParameter("total")));
 			lance.setTaxaEntrega(Float.parseFloat(req.getParameter("taxaentrega")));			
-			Fornecedor forn = (Fornecedor) req.getSession().getAttribute("forAutenticado");
-			lance.setIdfornecedor(forn.getId());
+			lance.setForn((Fornecedor) req.getSession().getAttribute("forAutenticado"));
 			
 			lance.setPedido(pedido);
 			

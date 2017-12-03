@@ -57,7 +57,7 @@
                 	<% Fornecedor forn = ((Fornecedor) request.getSession().getAttribute("forAutenticado"));   
                 	ArrayList<Lance> lances = (ArrayList<Lance>)  request.getSession().getAttribute("lances");
 					out.print("<a href=cadastrocontroller.do >"+forn.getrSocial()+"</a>");%>
-                    <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+                    <li><a href="logincontroller.do"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                 </li>
                 </ul>
             <!-- /.navbar-top-links -->

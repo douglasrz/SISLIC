@@ -52,7 +52,7 @@ public class PedidoController extends HttpServlet{
 		//QUANDO EU INSERIR UM NOVO AÍ QUE EU DEVO ATUALIZAR
 		if(req.getSession().getAttribute("pedidos")==null) {
 			PedidoDAO pedidoDAO = new PedidoDAO();
-			ArrayList<Pedido> pedidos = pedidoDAO.buscarTodosPedidos();
+			ArrayList<Pedido> pedidos = pedidoDAO.buscarTodosPedidosAberto();
 			//FornecedorDAO
 			req.getSession().setAttribute("pedidos", pedidos);
 			req.getRequestDispatcher("WEB-INF/fornPedidos.jsp").forward(req, resp);

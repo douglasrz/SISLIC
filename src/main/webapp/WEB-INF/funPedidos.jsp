@@ -62,7 +62,7 @@
                 	<% Funcionario fun = ((Funcionario) request.getSession().getAttribute("funAutenticado")); 
                 	ArrayList<Pedido> pedidos = fun.getSetor().getPedidos();
 					out.print("<a href=cadastrocontroller.do >"+fun.getNome()+"</a>");%>
-                    <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+                    <li><a href="logincontroller.do"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                 </li>
                 </ul>
             <!-- /.navbar-top-links -->

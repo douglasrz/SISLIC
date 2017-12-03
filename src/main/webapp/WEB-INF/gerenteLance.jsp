@@ -1,4 +1,4 @@
-<%@ page import="br.com.SISLIC.model.Fornecedor"%>
+<%@ page import="br.com.SISLIC.model.Gerente"%>
 <%@ page import="br.com.SISLIC.model.Lance"%>
 <%@ page import="br.com.SISLIC.model.Pedido"%>
 <%@ page import="br.com.SISLIC.model.Produto"%>
@@ -35,17 +35,7 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->	
-    <script type="text/javascript">
-    
-		function confirma(idLance){
-			if(window.confirm("Tem certeza que deseja cancelar?")){
-				location.href="lancescontroller.do?acao=cancelarLance&id="+idLance;
-			}
-		}
-		function informa(){
-			window.alert('O pedido referente a este lance não está mais aberto, consequentemente o lance não pode ser cancelado.');
-		}
-</script>
+   
 </head>
 <body>
     <div id="wrapper">
@@ -64,8 +54,8 @@
                 <!-- ícone do Usuario (cabeçalho)-->
                 <ul class="nav navbar-top-links navbar-right">
                 <li class="dropdown">
-                	<% Fornecedor forn = ((Fornecedor) request.getSession().getAttribute("forAutenticado"));            	
-					out.print("<a href=cadastrocontroller.do >"+forn.getrSocial()+"</a>");
+                	<% Gerente ger = ((Gerente) request.getSession().getAttribute("gerAutenticado"));            	
+					out.print("<a href=cadastrocontroller.do >"+ger.getNome()+"</a>");
 					Lance lance = (Lance) request.getAttribute("lance");
 					%>
                     <li><a href="logincontroller.do"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
@@ -77,16 +67,41 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                        <a href="pedidocontroller.do"><i class="fa fa-shopping-cart fa-fw"></i> Pedidos</a>
+                        <a href="#"><i class="fa fa-shopping-cart fa-fw"></i>Pedidos<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="gerentepedidos.do?acao=pedidosaberto">Pedidos em aberto</a>
+                                </li>
+                                <li>
+                                    <a href="gerentepedidos.do?acao=pedidospendentes">Pedidos pendentes</a>
+                                </li>
+                                <li>
+                                    <a href="gerentepedidos.do?acao=pedidosfechados">Pedidos finalizados</a>
+                                </li>
+                                <li>
+                                    <a href="cadastropedido.do">Cadastrar pedido</a>
+                                </li>
+                            </ul>
+                        </li>                                               
+                        <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Fornecedores<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="#">Fornecedores pendentes</a>
+                                </li>
+                                <li>
+                                    <a href="#">Fornecedores cadastrados</a>
+                                </li>
+                                <li>
+                                    <a href="#">Cadastrar fornecedores</a>
+                                </li>
+                            </ul>
                         </li>
                         <li>
-                            <a href="lancescontroller.do"><i class="fa fa-legal fa-fw"></i>Lances</a>
-                        </li>                        
-                        <li>
-                            <a href="pontcontroller.do"><i class="fa fa-bar-chart-o fa-fw"></i> Pontuação</a>
+                        	<a href="gerentelancescontroller.do?acao=lances"> <i class="fa fa-legal fa-fw"></i>Lances</a>
                         </li>
                          <li>
-                            <a href="cadastrocontroller.do"><i class="fa fa-user fa-fw"></i> Cadastro</a>
+                            <a href="cadastrocontroller.do"><i class="fa fa-user fa-fw"></i>Cadastro</a>
                         </li>
                         <li>
                             <a href="sobrecontroller.do"><i class="fa fa-info-circle fa-fw"></i> Sobre</a>
@@ -100,41 +115,63 @@
 
         <div id="page-wrapper">
             <div class="row">
-            <div class="col-lg-12">
-                    <h2 class="page-header">
-                                <i class="fa fa-shopping-cart fa-fw"></i><%=lance.getPedido().getNome()%> <small>(Lance)</small>
-                                <small class="pull-right"><%=lance.getPedido().getProdutos().get(0).getCategoria().getNome() %></small>
-                            </h2>                            
-                        </div><!-- /.col -->
-                    </div>
-                    <!-- info row -->
-                    <div class="row invoice-info">
-                        <div class="col-sm-6 invoice-col">                            
-                            <address>
-                                <strong>Descrição</strong><br>
-                                <%
+	            <div class="col-lg-12">
+	                    <h2 class="page-header">
+	                                <i class="fa fa-shopping-cart fa-fw"></i><%=lance.getPedido().getNome()%> <small>(Lance)</small>
+	                                <small class="pull-right"><%=lance.getPedido().getProdutos().get(0).getCategoria().getNome() %></small>
+	                            </h2>                            
+	            </div><!-- /.col -->
+            </div>
+            <!-- info row -->
+            <div class="row invoice-info">
+            	<div class="col-sm-6 invoice-col">                            
+                    <address>
+                        <strong>Descrição</strong><br>
+                          	<%
                                 out.print(lance.getPedido().getDescricao());
-                                %>
-                            </address>
-                        </div><!-- /.col -->
-                        <div class="col-sm-3 invoice-col">
-                            <address>
-                                <strong>Datas</strong><br>
-                                Lançado em <%=lance.getPedido().getDataLancamento()%><br>
-                                Efetuado em <%=lance.getData()%><br>
-                                Expira em <%=lance.getPedido().getDataLimite() %>
-                               
-                            </address>
-                        </div><!-- /.col -->
-                        <div class="col-sm-3 invoice-col">
-                            <address>
-                                <strong>Valores R$</strong><br>
-                                Taxa de entrega: <%=lance.getTaxaEntrega()%><br>
-                                Valor total:  <%=lance.getValorTotal()%>                               
-                            </address>
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
-
+                           	%>
+                    </address>
+             	</div><!-- /.col -->
+                <div class="col-sm-3 invoice-col">
+                     <address>
+                         <strong>Datas</strong><br>
+                         Lançado em <%=lance.getPedido().getDataLancamento()%><br>
+                         Efetuado em <%=lance.getData()%><br>
+                         Expira em <%=lance.getPedido().getDataLimite() %>
+                     </address>
+                </div><!-- /.col -->
+                <div class="col-sm-3 invoice-col">
+                     <address>
+                         <strong>Valores R$</strong><br>
+                         Taxa de entrega: <%=lance.getTaxaEntrega()%><br>
+                         Valor total:  <%=lance.getValorTotal()%>                               
+                	</address>
+               </div><!-- /.col -->
+           </div><!-- /.row -->
+			<div class="row invoice-info">
+            	<div class="col-sm-6 invoice-col">                            
+                    <address>
+                        <strong>Fornecedor</strong><br>
+                          	<%
+                                out.print("<a href=\"#\">"+lance.getForn().getrSocial()+"</a>");
+                           	%>
+                    </address>
+             	</div><!-- /.col -->
+                <div class="col-sm-3 invoice-col">
+                     <address>
+                         <strong>Informações</strong><br>
+                         CNPJ: <%=lance.getForn().getCnpj()%><br>
+                         E-mail: <%=lance.getForn().getEmail()%><br>
+                     </address>
+                </div><!-- /.col --> 
+                <div class="col-sm-3 invoice-col">
+                     <address>
+                     	<br>
+                         Telefone: <%=lance.getForn().getTelefone()%><br>
+                         Pontuação atual: <%=lance.getForn().getPontuacao()%>
+                     </address>
+                </div><!-- /.col -->               
+           </div><!-- /.row -->
                     <!-- Table row -->
                     <form>
                     <div class="row">   
@@ -142,10 +179,10 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th width="7%">Quant.</th>
-                                        <th width="20%">Produto</th>
+                                        <th>Quant.</th>
+                                        <th>Produto</th>
                                         <th>Descrição</th>
-                                        <th width="20%">Valor R$</th>
+                                        <th>Valor R$</th>
                                     </tr>                                    
                                 </thead>
                                 <tbody>
@@ -163,19 +200,10 @@
                                 	%>
                                 </tbody>
                             </table>
-                           <strong>Informações gerais<br> </strong>
+                           <strong>Observações<br> </strong>
                             <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                            	- A negociação será efetuada por telefone ou e-mail do seu contato, caso seu lance seja considerado relevante, hávera o contato, mas não pelo nosso sistema.
-                               <br>- Cada preço na lista de acima, da lista de produtos é referente a quantidade, não ao valor unitário.
-                               <br>- Ao cancelar o lance o registro do mesmo será excluído da nossa base de dados, e não haverá possibilidade dele negociado.
-                            </p>
-                            <%
-                            	if(lance.getPedido().isStatusAberto()){
-                            		 %><a type="button" href="javascript:confirma(<%=lance.getId()%>)" class="btn btn-warning btn-block">Cancelar</a>
-                            	<%}else{
-                            		 %><a type="button" href="javascript:informa()" class="btn btn-warning btn-block" disabled>Cancelar</a>
-                            	<% }  %>                        
-                                           
+                            	A negociação não é realizada pelo sistema, para efetuar a compra é necessário entrar em contato com o fornecedor, pelo seus contatos disponiveis.
+                            </p>     
                         </div><!-- /.col -->                        
                     </div><!-- /.row -->                                                         	 
              </form>

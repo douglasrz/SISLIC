@@ -1,21 +1,15 @@
-<%@ page import="br.com.SISLIC.model.Fornecedor" %>
-<%@ page import="br.com.SISLIC.model.Pedido" %>
-<%@ page import="br.com.SISLIC.model.Produto" %>
+<%@ page import="br.com.SISLIC.model.Gerente" %>
+<%@ page import="br.com.SISLIC.model.Lance" %>
 <%@ page import="java.util.ArrayList"%>
 <%@	page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
-<html lang="en">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>SISLIC - LANCES</title>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>SISLIC - PEDIDOS</title>
-
-    <!-- Bootstrap Core CSS -->
+<!-- Bootstrap Core CSS -->
     <link href="sbAdmin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- MetisMenu CSS -->
@@ -39,12 +33,13 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
+    
 </head>
 
 <body>
+
     <div id="wrapper">
-		
+
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
@@ -58,10 +53,10 @@
             </div>            
                 <!-- Ã­cone do Usuario (cabeÃ§alho)-->
                 <ul class="nav navbar-top-links navbar-right">
-                <li class="dropdown">                	
-                	<% Fornecedor forn = ((Fornecedor) request.getSession().getAttribute("forAutenticado")); 
-                	ArrayList<Pedido> pedidos = (ArrayList<Pedido>) request.getSession().getAttribute("pedidos");
-					out.print("<a href=cadastrocontroller.do >"+forn.getrSocial()+"</a>");%>
+                <li class="dropdown">                
+                	<% Gerente ger = ((Gerente) request.getSession().getAttribute("gerAutenticado"));            	
+					out.print("<a href=cadastrocontroller.do >"+ger.getNome()+"</a>");  
+                	ArrayList<Lance> lances = (ArrayList<Lance>)  request.getSession().getAttribute("lances"); %>
                     <li><a href="logincontroller.do"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                 </li>
                 </ul>
@@ -71,16 +66,41 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                        <a href="pedidocontroller.do"><i class="fa fa-shopping-cart fa-fw"></i> Pedidos</a>
+                        <a href="#"><i class="fa fa-shopping-cart fa-fw"></i>Pedidos<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="gerentepedidos.do?acao=pedidosaberto">Pedidos em aberto</a>
+                                </li>
+                                <li>
+                                    <a href="gerentepedidos.do?acao=pedidospendentes">Pedidos pendentes</a>
+                                </li>
+                                <li>
+                                    <a href="gerentepedidos.do?acao=pedidosfechados">Pedidos finalizados</a>
+                                </li>
+                                <li>
+                                    <a href="cadastropedido.do">Cadastrar pedido</a>
+                                </li>
+                            </ul>
+                        </li>                                               
+                        <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Fornecedores<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="#">Fornecedores pendentes</a>
+                                </li>
+                                <li>
+                                    <a href="#">Fornecedores cadastrados</a>
+                                </li>
+                                <li>
+                                    <a href="#">Cadastrar fornecedores</a>
+                                </li>
+                            </ul>
                         </li>
                         <li>
-                            <a href="lancescontroller.do"><i class="fa fa-legal fa-fw"></i>Lances</a>
-                        </li>                        
-                        <li>
-                            <a href="pontcontroller.do"><i class="fa fa-bar-chart-o fa-fw"></i> Pontuação</a>
+                        	<a href="gerentelancescontroller.do?acao=lances"> <i class="fa fa-legal fa-fw"></i>Lances</a>
                         </li>
                          <li>
-                            <a href="cadastrocontroller.do"><i class="fa fa-user fa-fw"></i> Cadastro</a>
+                            <a href="cadastrocontroller.do"><i class="fa fa-user fa-fw"></i>Cadastro</a>
                         </li>
                         <li>
                             <a href="sobrecontroller.do"><i class="fa fa-info-circle fa-fw"></i> Sobre</a>
@@ -90,38 +110,37 @@
                 <!-- /.sidebar-collapse -->
             </div>
             <!-- /.navbar-static-side -->
-        </nav>
-
+        </nav>   
         <div id="page-wrapper">
-            <div class="row">
+        	<div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Pedidos</h1>
+                    <h1 class="page-header">Lances</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
-            <!-- /.row -->
             <div class="row">
-                <% for(Pedido p: pedidos){
-                	//PEDIDO
-					out.print("<div class=\"col-lg-4\">");
-					out.print("<div class=\"panel panel-default\">");
-					out.print("<div class=\"panel-heading\">");
-					out.print(p.getNome()+"</div>");
-					//DESCRIÇÃO
-					out.print("<div class=\"panel-body\">");
-					out.print("<p> "+p.getDescricao()+"</p> <br>");
-					out.print("Expira em "+p.getDataLimite()+"</div>");
-					//out.print("<button type=\"button\" class=\"btn btn-primary btn-lg btn-block\"> Confira </button> </div>");
-					
-					//PRAZO E LINK
-					out.print("<div class=\"panel-footer\">");
-					int id = p.getId();
-					out.print("<a type=\"submit\" href=\"pedidocontroller.do?acao=pedido&id="+id+"\" class=\"btn btn-success btn-block\"> Confira </a> </div>");
-					//out.print("Expira em "+p.getDataLimite());
-					out.print("</div> </div>");
-                }
-				%> 
-            </div>
+                <% for(Lance l: lances){
+                	%>
+                	<div class="col-lg-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                        <% 
+                      	out.print(l.getPedido().getNome()+"</div>");
+                        out.print("<div class=\"panel-body\">");
+                        out.print("<p>"+l.getPedido().getDescricao()+"</p><br>");
+                        out.print("<strong>Valor total: </strong>"+l.getValorTotal()+"<br>");
+                        out.print("<strong>Efetuado em: </strong>"+l.getData()+"<br>");
+                        out.print("<strong>Expira em: </strong>"+l.getPedido().getDataLimite());
+                        %>
+                        </div><!-- painel body -->
+                        <div class="panel-footer">
+                        <a type="submit" href="gerentelancescontroller.do?acao=lance&id=<%=l.getId()%>" class="btn btn-success btn-block"> Detalhes </a> </div>
+                		</div>
+                		</div>
+                	<%} %>
+                    </div>
+                </div>
+          </div>
     <!-- jQuery -->
     <script src="sbAdmin/vendor/jquery/jquery.min.js"></script>
 
@@ -148,8 +167,5 @@
         });
     });
     </script>
-</div>
-</div>
 </body>
-
 </html>

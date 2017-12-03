@@ -16,6 +16,7 @@ public class Pedido implements Serializable{
 	private String descricao;
 	private boolean autorizado;
 	private boolean statusAberto;
+	private int idSetor;
 	
 	public boolean status() {
 		java.util.Date dataUtil = new java.util.Date();
@@ -86,7 +87,12 @@ public class Pedido implements Serializable{
 	public void setLance(Lance lance) {
 		this.lance = lance;
 	}
-	
+	public int getIdSetor() {
+		return idSetor;
+	}
+	public void setIdSetor(int idSetor) {
+		this.idSetor = idSetor;
+	}	
 	
 	
 	
