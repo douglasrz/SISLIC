@@ -11,12 +11,12 @@ public class GerenteDAO {
 
 	private Connection con = ConexaoFactory.getConnection();
 	
-	public Gerente autenticar(Gerente ger) {
+	public Gerente autenticar(String login, String senha) {
 			String sql = "SELECT *FROM funcionario WHERE login=? and senha=?";
 			
 			try(PreparedStatement prepara = con.prepareStatement(sql)){
-				prepara.setString(1, ger.getLogin());
-				prepara.setString(2, ger.getSenha());
+				prepara.setString(1, login);
+				prepara.setString(2, senha);
 				ResultSet resultado = prepara.executeQuery();
 				
 				if(resultado.next()) {
@@ -29,9 +29,16 @@ public class GerenteDAO {
 					gerente.setSenha(resultado.getString("senha"));
 					gerente.setCargo(resultado.getString("cargo"));
 					
+					//PEGAR OS PEDIDOS
+					PedidoDAO pedidoDAO = new PedidoDAO();
+					gerente.setPedidosAberto(pedidoDAO.buscarTodosPedidosAberto());
+					gerente.setPedidosFechados(pedidoDAO.buscarTodosPedidosFechados());
+					gerente.setPedidosPendentes(pedidoDAO.buscarTodosPedidosPendentes());
+					
+					//
 					//PEGAR O SETOR E OS PEDIDOS DELE
-					SetorDAO setorDAO = new SetorDAO();		
-					gerente.setSetor(setorDAO.buscarPorId(resultado.getInt("id_setor")));
+					/*SetorDAO setorDAO = new SetorDAO();		
+					gerente.setSetor(setorDAO.buscarPorId(resultado.getInt("id_setor")));*/
 					prepara.close();
 					
 					if(gerente.getCargo().equals("gerente"))

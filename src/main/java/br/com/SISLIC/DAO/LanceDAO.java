@@ -95,15 +95,16 @@ private Connection con = ConexaoFactory.getConnection();
 			preparar.setInt(1, idForn);
 			ResultSet resultado = preparar.executeQuery();
 			PedidoDAO pedidoDAO = new PedidoDAO();	
-			FornecedorDAO fornDAO = new FornecedorDAO();
+			//FornecedorDAO fornDAO = new FornecedorDAO();
 			while(resultado.next()) {
 				Lance retorno = new Lance();
 				retorno.setId(resultado.getInt("id_lance"));
 				retorno.setValorTotal(resultado.getFloat("valor_total"));
 				retorno.setData(resultado.getDate("data"));
 				retorno.setTaxaEntrega(resultado.getFloat("taxa_entrega"));	
+				
 				//PEGAR O FORNECEDOR
-				retorno.setForn(fornDAO.buscarPorId(resultado.getInt("id_fornecedor")));
+				//retorno.setForn(fornDAO.buscarPorId(idForn));
 				//PEGAR O PEDIDO
 				retorno.setPedido(pedidoDAO.buscarPedido(resultado.getInt("id_pedido")));
 				lista.add(retorno);
@@ -230,7 +231,7 @@ public ArrayList<Lance>	todosLances(){
 				//retorno.setIdfornecedor(resultado.getInt("id_fornecedor"));
 				
 				//PEGAR O FORNECEDOR
-				retorno.setForn(fornDAO.buscarPorId(resultado.getInt("id_fornecedor")));
+				retorno.setForn(fornDAO.buscarPorIdSomenteForn(resultado.getInt("id_fornecedor")));
 				//PEGAR O PEDIDO
 				retorno.setPedido(pedidoDAO.buscarPedido(resultado.getInt("id_pedido")));
 				lista.add(retorno);

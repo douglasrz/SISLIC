@@ -14,7 +14,7 @@ import br.com.SISLIC.model.Gerente;
 import br.com.SISLIC.model.Pedido;
 
 @WebServlet("/gerentepedidos.do")
-public class PedidosGerenteController extends HttpServlet{
+public class GerentePedidosController extends HttpServlet{
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

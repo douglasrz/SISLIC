@@ -51,9 +51,8 @@ public class CadastroController extends HttpServlet{
 				Fornecedor forn =new Fornecedor(login,senha,rSocial,telefone,email);
 				FornecedorDAO forDAO = new FornecedorDAO();
 				//req.setAttribute("forAutenticado", forn);
-				if(forDAO.updateCad(forn)) {
-					
-					Fornecedor atualizado = forDAO.autenticar(forn);
+				if(forDAO.updateCad(forn)) {					
+					Fornecedor atualizado = forDAO.autenticar(forn.getLogin(),forn.getSenha());
 					HttpSession sessao = req.getSession();
 					sessao.removeAttribute("forAutenticado");					
 					sessao.setAttribute("forAutenticado",atualizado);

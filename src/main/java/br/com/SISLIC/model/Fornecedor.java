@@ -3,6 +3,9 @@ package br.com.SISLIC.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import br.com.SISLIC.DAO.FornecedorDAO;
+import br.com.SISLIC.DAO.LanceDAO;
+
 public class Fornecedor implements Serializable{
 	
 	private int id;
@@ -124,7 +127,6 @@ public class Fornecedor implements Serializable{
 	public void setLances(ArrayList<Lance> lances) {
 		this.lances = lances;
 	}
-	
 	
 	
 

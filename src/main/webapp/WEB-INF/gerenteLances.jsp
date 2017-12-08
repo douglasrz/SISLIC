@@ -49,16 +49,16 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="pedidocontroller.do">SISLIC - Sistema de Compras e Licitações</a>
+                <a class="navbar-brand" href="gerentePedidosController.jsp">SISLIC - Sistema de Compras e Licitações</a>
             </div>            
                 <!-- ícone do Usuario (cabeçalho)-->
                 <ul class="nav navbar-top-links navbar-right">
                 <li class="dropdown">
                 	<% Gerente ger = ((Gerente) request.getSession().getAttribute("gerAutenticado"));            	
-					out.print("<a href=cadastrocontroller.do >"+ger.getNome()+"</a>");
+					out.print("<a href=gerenteCadastroController.jsp >"+ger.getNome()+"</a>");
 					ArrayList<Lance> lances = (ArrayList<Lance>) request.getSession().getAttribute("todosLances");
 					%>
-                    <li><a href="logincontroller.do"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+                    <li><a href="loginController.jsp"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                 </li>
                 </ul>
             <!-- /.navbar-top-links -->
@@ -70,41 +70,52 @@
                         <a href="#"><i class="fa fa-shopping-cart fa-fw"></i>Pedidos<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="gerentepedidos.do?acao=pedidosaberto">Pedidos em aberto</a>
+                                    <a href="gerentePedidosController.jsp?acao=pedidosaberto">Pedidos em aberto</a>
                                 </li>
                                 <li>
-                                    <a href="gerentepedidos.do?acao=pedidospendentes">Pedidos pendentes</a>
+                                    <a href="gerentePedidosController.jsp?acao=pedidospendentes">Pedidos pendentes</a>
                                 </li>
                                 <li>
-                                    <a href="gerentepedidos.do?acao=pedidosfechados">Pedidos finalizados</a>
+                                    <a href="gerentePedidosController.jsp?acao=pedidosfechados">Pedidos finalizados</a>
                                 </li>
                                 <li>
-                                    <a href="cadastropedido.do">Cadastrar pedido</a>
+                                    <a href="cadastroPedido.jsp">Cadastrar pedido</a>
                                 </li>
                             </ul>
                         </li>                                               
-                        <li>
+                       <li>
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Fornecedores<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="#">Fornecedores pendentes</a>
+                                    <a href="gerenteFornecedoresController.jsp?acao=fornPendentes">Fornecedores pendentes</a>
                                 </li>
                                 <li>
-                                    <a href="#">Fornecedores cadastrados</a>
-                                </li>
-                                <li>
-                                    <a href="#">Cadastrar fornecedores</a>
+                                    <a href="gerenteFornecedoresController.jsp?acao=fornCadastrados">Fornecedores cadastrados</a>
                                 </li>
                             </ul>
                         </li>
                         <li>
-                        	<a href="gerentelancescontroller.do?acao=lances"> <i class="fa fa-legal fa-fw"></i>Lances</a>
-                        </li>
-                         <li>
-                            <a href="cadastrocontroller.do"><i class="fa fa-user fa-fw"></i>Cadastro</a>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Funcionário<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="#">Funcionários pendentes</a>
+                                </li>
+                                <li>
+                                    <a href="#">Funcionários cadastrados</a>
+                                </li>
+                                <li>
+                                    <a href="#">Cadastrar Funcionário</a>
+                                </li>
+                            </ul>
                         </li>
                         <li>
-                            <a href="sobrecontroller.do"><i class="fa fa-info-circle fa-fw"></i> Sobre</a>
+                        	<a href="gerenteLancesController.jsp?acao=lances"> <i class="fa fa-legal fa-fw"></i>Lances</a>
+                        </li>
+                         <li>
+                            <a href="gerenteCadastroController.jsp"><i class="fa fa-user fa-fw"></i>Cadastro</a>
+                        </li>
+                        <li>
+                            <a href="sobreController.jsp"><i class="fa fa-info-circle fa-fw"></i> Sobre</a>
                         </li>
                     </ul>
                 </div>
@@ -129,20 +140,19 @@
                             <table width="100%" class="table table-bordered table-hover" id="dataTables-example">
                                 <thead>
                                 <tr>
-                                	<th>Pedido</th>
+                                	<th width="20%">Pedido</th>
                                    	<th>Descricao</th>
-                                   	<th>Fornecedor</th>
-                                   	<th>CNPJ</th>
-                                   	<th>Valor</th>
-                                   	<th>Data</th>
+                                   	<th width="13%">Fornecedor</th>
+                                   	<th width="9%">Valor</th>
+                                   	<th width="10%">Data</th>
                                	</tr>                               	
                                 </thead>                                
                                 <tbody>                                
 							 	<% for(Lance l: lances){
-							 		out.print("<tr onclick= location.href=\"gerentelancescontroller.do?acao=lance&id="+l.getId()+"\" style=\"cursor: pointer;\" title=\"Ver detalhes\">");
+							 		out.print("<tr onclick= location.href=\"gerenteLancesController.jsp?acao=lance&id="+l.getId()+"\" style=\"cursor: pointer;\" title=\"Ver detalhes\">");
 							 		out.print("<td>"+l.getPedido().getNome()+"</td>");
 							 		out.print("<td>"+l.getPedido().getDescricao()+"</td> <td>"+l.getForn().getrSocial()+"</td>");
-							 		out.print("<td>"+l.getForn().getCnpj()+"</td> <td>"+l.getValorTotal()+"</td>");
+							 		out.print("<td>"+l.getValorTotal()+"</td>");
 							 		out.print("<td>"+l.getData()+"</td>");
 							 		out.print("</a></tr>");
 							 	}%>                          

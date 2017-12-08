@@ -29,11 +29,8 @@ public class LoginController extends HttpServlet{
 		String senha = req.getParameter("senha");
 		
 		if(req.getParameter("perfil").equals("Fornecedor")) {
-			Fornecedor forn =new Fornecedor();
-			forn.setLogin(login);
-			forn.setSenha(senha);
 			FornecedorDAO forDAO = new FornecedorDAO();
-			Fornecedor forAutenticado = forDAO.autenticar(forn);
+			Fornecedor forAutenticado = forDAO.autenticar(login,senha);
 			if(forAutenticado!=null) {
 				if(forAutenticado.isAutorizado()) {
 					HttpSession sessao = req.getSession(); //criando a sessao
@@ -50,30 +47,22 @@ public class LoginController extends HttpServlet{
 			}
 		}else {
 			if(req.getParameter("perfil").equals("Gerente")) {
-				Gerente ger = new Gerente();
-				ger.setLogin(login);
-				ger.setSenha(senha);
 				//resp.getWriter().print("<script> window.alert('Ainda não implementei a parte do gerente'); location.href='login.html';</script>");
 				GerenteDAO gerDAO = new GerenteDAO();
-				Gerente gerAutenticado = gerDAO.autenticar(ger);
+				Gerente gerAutenticado = gerDAO.autenticar(login,senha);
 				if(gerAutenticado!=null) {
 					HttpSession sessao = req.getSession();
 					sessao.setAttribute("gerAutenticado", gerAutenticado);
 					sessao.setMaxInactiveInterval(60*10);
 					//resp.sendRedirect("gerentepedidos.do?acao=pedidosaberto");					
-					req.getRequestDispatcher("gerentepedidos.do").forward(req, resp);
+					req.getRequestDispatcher("gerentePedidosController.jsp").forward(req, resp);
 				}else {
 					resp.getWriter().print("<script> window.alert('Usuário não encontrado'); location.href='login.html';</script>");
 				}
 				
 			}else {
-				Funcionario fun = new Funcionario();
-				
-				fun.setLogin(login);
-				fun.setSenha(senha);
-				
 				FuncionarioDAO funDAO = new FuncionarioDAO();
-				Funcionario funAutenticado = funDAO.autenticar(fun);
+				Funcionario funAutenticado = funDAO.autenticar(login,senha);
 				
 				if(funAutenticado!=null) {
 					HttpSession sessao = req.getSession(); //criando a sessao

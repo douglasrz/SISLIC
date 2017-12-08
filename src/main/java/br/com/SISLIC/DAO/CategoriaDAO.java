@@ -39,13 +39,13 @@ public class CategoriaDAO {
 		String sql = "SELECT *FROM categoria_fornecedor WHERE id_fornecedor=?";
 		ArrayList<Integer> lista = new ArrayList<Integer>();
 		
-		try(PreparedStatement prepara = con.prepareStatement(sql)){
-			prepara.setInt(1, idFornecedor);
-			ResultSet resultado = prepara.executeQuery();
+		try(PreparedStatement preparar = con.prepareStatement(sql)){
+			preparar.setInt(1, idFornecedor);
+			ResultSet resultado = preparar.executeQuery();
 			while(resultado.next()) {
 				lista.add(resultado.getInt("id_categoria"));
-			}	
-			prepara.close();
+			}
+			preparar.close();
 		}catch(SQLException e) {
 			e.printStackTrace();			
 		}
@@ -62,19 +62,20 @@ public class CategoriaDAO {
 					String descricao = resultado.getString("descricao");
 					Categoria categoria = new Categoria(id,nome,descricao);
 					categorias.add(categoria);
-					prepara.close();
 				}
-			}			
+			}
+			prepara.close();
 		}catch(SQLException e) {
 			e.printStackTrace();			
 		}
+		
 		return categorias;
 	}
 	
 	/*CADASTRAR UMA CATEGORIA PARA UM FORNECEDOR. PRIMEIRO VERIFICO TODAS AS CATEGORIAS QUE O FORNECEDOR JÁ TEM, AÍ VERIFICO NO FOR SE ELE JA QUE 
 	POSSUI UMA COM O NOME IGUAL A ESTA NOVA, CASO POSITIVO EU NÃO CADASTRO ELA. DEPOIS EU VERIFICO SE A CATEGORIA JÁ EXISTE NA EM CATEGORIAS QUE 
 	NÃO ESTA ASSOCIADO A ELE, CASO POSITIVO EU SÓ INSIRO NA TABELA categoria_fornecedor. CASO NEGATIVO NOS DOIS CASOS, É INSERIDO NAS DUAS TABELAS*/
-	public boolean cadastrar(Categoria categoria) {
+	public boolean cadastrarParaForn(Categoria categoria) {
 		
 		Categoria resul = buscaPeloNome(categoria.getNome());//PEGO O RESULTADO SE EXISTE A CATEGORIA
 		ArrayList<Categoria> categoriasDoForn = buscarPorForn(categoria.getIdFornecedor());//PEGO TODAS AS CATEGORIAS DELE
@@ -128,6 +129,7 @@ public class CategoriaDAO {
 		}
 		return null;
 	}
+	
 	public boolean cadCategoriaForn(int id_categoria, int id_fornecedor) {
 		String sql = "INSERT INTO categoria_fornecedor(id_categoria,id_fornecedor) VALUES(?,?)";
 		try {
@@ -142,6 +144,7 @@ public class CategoriaDAO {
 		}
 		return false;
 	}
+	
 	public Categoria buscaPeloId(int id) {
 		String sql = "SELECT *FROM categoria WHERE id_categoria=?";
 		try {
@@ -165,5 +168,68 @@ public class CategoriaDAO {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public ArrayList<Categoria> buscarTodasEForn(){
+		String sql = "SELECT *FROM categoria";
+		ArrayList<Categoria> lista = new ArrayList<Categoria>();
+		
+		try{
+			PreparedStatement prepara = con.prepareStatement(sql);
+			ResultSet resultado = prepara.executeQuery();
+			
+			while(resultado.next()) {
+				Categoria cat = new Categoria();
+				cat.setCod(resultado.getInt("id_categoria"));
+				cat.setNome(resultado.getString("nome"));
+				cat.setDescricao("descricao");
+				cat.setFornecedores(buscarFornPelaCategoria(cat.getCod()));
+				lista.add(cat);
+			}	
+			prepara.close();
+			return lista;
+		}catch(SQLException e) {
+			e.printStackTrace();			
+		}
+		return null;
+	}
+	public ArrayList<Fornecedor> buscarFornPelaCategoria(int idCategoria){
+		String sql = "SELECT *FROM categoria_fornecedor WHERE id_categoria=?";
+		ArrayList<Fornecedor> lista = new ArrayList<Fornecedor>();
+		FornecedorDAO fornDAO = new FornecedorDAO();
+		Fornecedor forn = new Fornecedor();
+		try(PreparedStatement prepara = con.prepareStatement(sql)){
+			prepara.setInt(1, idCategoria);
+			ResultSet resultado = prepara.executeQuery();
+			while(resultado.next()) {
+				forn = fornDAO.buscarPorId(resultado.getInt("id_Fornecedor"));
+				if(forn.equals(null))
+					lista.add(forn);
+			}	
+			prepara.close();
+			return lista;
+		}catch(SQLException e) {
+			e.printStackTrace();			
+		}
+		return null;
+	}
+
+	public boolean cadastrarCat(Categoria categoria) {
+		
+		if(buscaPeloNome(categoria.getNome()) == null){
+			String sql = "INSERT INTO categoria (nome,descricao) VALUES(?,?)";
+			try {
+				PreparedStatement preparar = con.prepareStatement(sql);				
+				preparar.setString(1,categoria.getNome());
+				preparar.setString(2, categoria.getDescricao());
+				preparar.execute();
+				preparar.close();
+				return true;
+			
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
 	}
 }

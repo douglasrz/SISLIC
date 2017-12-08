@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import br.com.SISLIC.model.Categoria;
 import br.com.SISLIC.model.Fornecedor;
+import br.com.SISLIC.model.Lance;
 
 public class FornecedorDAO {
 	
@@ -45,8 +46,10 @@ public class FornecedorDAO {
 			prepara.setString(1, login);
 			ResultSet resultado = prepara.executeQuery();
 			if(resultado.next()) {
+				prepara.close();
 				return true;
 			}else {
+				prepara.close();
 				return false;
 			}
 		}catch(SQLException e) {
@@ -55,12 +58,12 @@ public class FornecedorDAO {
 		}
 	}
 		
-	public Fornecedor autenticar(Fornecedor forn) {
+	public Fornecedor autenticar(String login, String senha) {
 		String sql = "SELECT *FROM fornecedor WHERE login=? and senha=?";
 		
 		try(PreparedStatement prepara = con.prepareStatement(sql)){
-			prepara.setString(1, forn.getLogin());
-			prepara.setString(2, forn.getSenha());
+			prepara.setString(1, login);
+			prepara.setString(2, senha);
 			ResultSet resultado = prepara.executeQuery();
 			
 			if(resultado.next()) {
@@ -80,7 +83,7 @@ public class FornecedorDAO {
 				fornecedor.setCategorias(cateDAO.buscarPorForn(fornecedor.getId()));
 				
 				//PEGAR OS LANCES
-				
+				prepara.close();
 				return fornecedor;
 			}			
 		}catch(SQLException e) {
@@ -151,7 +154,95 @@ public class FornecedorDAO {
 				fornecedor.setCategorias(cateDAO.buscarPorForn(fornecedor.getId()));
 					
 				//PEGAR OS LANCES
+				LanceDAO lanceDAO = new LanceDAO();
+				fornecedor.setLances(lanceDAO.lancesFornId(fornecedor.getId()));
+				prepara.close();	
+				return fornecedor;
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();				
+		}
+		return null;
+	}
+	public ArrayList<Fornecedor> buscarTodosPendentes() {
+		
+		ArrayList<Fornecedor> lista = new ArrayList<Fornecedor>();
+		String sql = "SELECT *FROM fornecedor WHERE autorizado = false";
+		
+		try(PreparedStatement preparar = con.prepareStatement(sql)){
+			ResultSet resultado = preparar.executeQuery();
+			
+			while(resultado.next()) {
+				Fornecedor retorno = new Fornecedor();
+				retorno.setId(resultado.getInt("id_fornecedor"));
+				retorno.setLogin(resultado.getString("login"));
+				retorno.setrSocial(resultado.getString("razao_social"));
+				retorno.setCnpj(resultado.getString("cnpj"));
+				retorno.setEmail(resultado.getString("email"));
+				retorno.setTelefone(resultado.getString("telefone"));
+				retorno.setPontuacao(resultado.getInt("pontuacao"));
+				retorno.setAutorizado(false);
+				lista.add(retorno);
+			}
+			preparar.close();
+			return lista;
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public ArrayList<Fornecedor> buscarTodosAutorizados() {
+		
+
+		ArrayList<Fornecedor> lista = new ArrayList<Fornecedor>();
+		String sql = "SELECT *FROM fornecedor WHERE autorizado = true";
+		
+		try(PreparedStatement preparar = con.prepareStatement(sql)){
+			ResultSet resultado = preparar.executeQuery();
+			
+			while(resultado.next()) {
+				Fornecedor retorno = new Fornecedor();
+				retorno.setId(resultado.getInt("id_fornecedor"));
+				retorno.setLogin(resultado.getString("login"));
+				retorno.setrSocial(resultado.getString("razao_social"));
+				retorno.setCnpj(resultado.getString("cnpj"));
+				retorno.setEmail(resultado.getString("email"));
+				retorno.setTelefone(resultado.getString("telefone"));
+				retorno.setPontuacao(resultado.getInt("pontuacao"));
+				retorno.setAutorizado(false);
+				lista.add(retorno);
+			}
+			preparar.close();
+			return lista;
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public Fornecedor buscarPorIdSomenteForn(int id) {
+		String sql = "SELECT *FROM fornecedor WHERE id_fornecedor=?";
+		try(PreparedStatement prepara = con.prepareStatement(sql)){
+			prepara.setInt(1, id);
+			ResultSet resultado = prepara.executeQuery();
+			if(resultado.next()) {
+				Fornecedor fornecedor = new Fornecedor();
+				fornecedor.setId(resultado.getInt("id_fornecedor"));
+				fornecedor.setrSocial(resultado.getString("razao_social"));
+				fornecedor.setLogin(resultado.getString("login"));
+				fornecedor.setSenha(resultado.getString("senha"));
+				fornecedor.setCnpj(resultado.getString("cnpj"));
+				fornecedor.setTelefone(resultado.getString("telefone"));				
+				fornecedor.setPontuacao(resultado.getInt("pontuacao"));
+				fornecedor.setEmail(resultado.getString("email"));
+				fornecedor.setAutorizado(resultado.getBoolean("autorizado"));
 					
+				//PEGAR SUAS CATEGORIAS
+				CategoriaDAO cateDAO = new CategoriaDAO();				
+				fornecedor.setCategorias(cateDAO.buscarPorForn(fornecedor.getId()));					
+				
+				prepara.close();	
 				return fornecedor;
 			}
 		}catch(SQLException e) {

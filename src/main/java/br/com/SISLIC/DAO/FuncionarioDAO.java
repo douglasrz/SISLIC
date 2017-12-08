@@ -12,12 +12,12 @@ public class FuncionarioDAO {
 	
 	private Connection con = ConexaoFactory.getConnection();
 	
-	public Funcionario autenticar(Funcionario fun) {
+	public Funcionario autenticar(String login, String senha) {
 			String sql = "SELECT *FROM funcionario WHERE login=? and senha=?";
 			
 			try(PreparedStatement prepara = con.prepareStatement(sql)){
-				prepara.setString(1, fun.getLogin());
-				prepara.setString(2, fun.getSenha());
+				prepara.setString(1, login);
+				prepara.setString(2, senha);
 				ResultSet resultado = prepara.executeQuery();
 				
 				if(resultado.next()) {

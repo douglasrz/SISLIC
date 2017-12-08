@@ -15,6 +15,7 @@ public class Gerente {
 	private ArrayList<Pedido> pedidosFechados = new ArrayList<Pedido>();
 	private ArrayList<Pedido> pedidosPendentes = new ArrayList<Pedido>();
 	
+	
 	public int getCodFunc() {
 		return codFunc;
 	}

@@ -14,7 +14,7 @@ import br.com.SISLIC.model.Lance;
 import br.com.SISLIC.model.Fornecedor;
 
 @WebServlet("/gerentelancescontroller.do")
-public class LancesGerenteController extends HttpServlet{
+public class GerenteLancesController extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

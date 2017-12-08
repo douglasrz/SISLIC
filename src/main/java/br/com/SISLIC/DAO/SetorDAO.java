@@ -27,7 +27,7 @@ public class SetorDAO {
 				//BUSCAR OS PEDIDOS DESSE SETOR
 				PedidoDAO pedidoDAO= new PedidoDAO();
 				setor.setPedidos(pedidoDAO.buscarPorSetor(id));
-				
+				prepara.close();
 				return setor;
 			}			
 		}catch(SQLException e) {

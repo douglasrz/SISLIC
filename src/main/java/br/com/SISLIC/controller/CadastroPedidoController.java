@@ -23,8 +23,14 @@ public class CadastroPedidoController extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		if(req.getSession().getAttribute("categoria")==null) {
+			CategoriaDAO catDAO = new CategoriaDAO();
+			req.getSession().setAttribute("categorias", catDAO.buscarTodasEForn());
+		}
 		req.getRequestDispatcher("WEB-INF/cadastroPedido.jsp").forward(req, resp);
 	}
+	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
@@ -37,7 +43,8 @@ public class CadastroPedidoController extends HttpServlet{
 				pedido.setNome((String) req.getAttribute("nomePedido"));
 				pedido.setDescricao((String) req.getAttribute("descricaoPedido"));
 				pedido.setDataLimite((Date) req.getAttribute("dataLimite"));
-				
+				System.out.println("NOME DO PEDIDO"+pedido.getNome());
+				System.out.println("DESCRICAO DO PEDIDO"+pedido.getDescricao());
 				//PEGAR DATA ATUAL
 				java.util.Date dataUtil = new java.util.Date();
 				java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime());
@@ -49,8 +56,9 @@ public class CadastroPedidoController extends HttpServlet{
 				Categoria categoria = catDAO.buscaPeloNome(nomeCategoria);
 				
 				//PRODUTOS
-				int quantProdutos = (int) req.getAttribute("quantProdutos");
+				int quantProdutos = (int) req.getAttribute("totalProdutos");
 				ArrayList<Produto> produtos = new ArrayList<Produto>();
+				
 				for(int i=1; i<=quantProdutos; i++) {
 					Produto produto = new Produto();
 					produto.setQuantidade((int) req.getAttribute("quant"+i));

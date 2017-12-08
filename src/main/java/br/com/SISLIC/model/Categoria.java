@@ -1,6 +1,7 @@
 package br.com.SISLIC.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Categoria implements Serializable{
 
@@ -8,6 +9,7 @@ public class Categoria implements Serializable{
 	private String nome;
 	private String descricao;
 	private int idFornecedor;
+	private ArrayList<Fornecedor> fornecedores;
 	
 	public Categoria() {}
 	
@@ -42,6 +44,14 @@ public class Categoria implements Serializable{
 
 	public void setIdFornecedor(int idFornecedor) {
 		this.idFornecedor = idFornecedor;
+	}
+
+	public ArrayList<Fornecedor> getFornecedores() {
+		return fornecedores;
+	}
+
+	public void setFornecedores(ArrayList<Fornecedor> fornecedores) {
+		this.fornecedores = fornecedores;
 	}
 	
 	
