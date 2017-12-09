@@ -49,7 +49,7 @@
 					HttpSession sessao = request.getSession(); //criando a sessao
 					sessao.setAttribute("funAutenticado", funAutenticado);//add o usuario a sessao			
 					sessao.setMaxInactiveInterval(60*10);
-					request.getRequestDispatcher("homefuncontroller.do").forward(request, response);
+					request.getRequestDispatcher("funcionarioController.jsp").forward(request, response);
 				}else {
 					response.getWriter().print("<script> window.alert('Usuário não encontrado'); location.href='login.html';</script>");
 					}

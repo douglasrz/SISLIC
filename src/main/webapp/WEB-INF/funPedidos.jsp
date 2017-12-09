@@ -54,7 +54,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="homefuncontroller.do">SISLIC - Sistema de Compras e Licitações</a>
+                <a class="navbar-brand" href="funcionarioController.jsp">SISLIC - Sistema de Compras e Licitações</a>
             </div>            
                 <!-- Ã­cone do Usuario (cabeÃ§alho)-->
                 <ul class="nav navbar-top-links navbar-right">
@@ -71,11 +71,19 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                        <a href="homefuncontroller.do"><i class="fa fa-shopping-cart fa-fw"></i>Pedidos Autorizados</a>
-                        </li>
-                        <li>
-                            <a href="homefuncontroller.do?acao=pedidosPendentes"><i class="fa fa-minus-square fa-fw"></i>Pedidos Pendentes</a>
-                        </li>                        
+                        <a href="#"><i class="fa fa-shopping-cart fa-fw"></i>Pedidos<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="funcionarioController.jsp?acao=pedidosPendentes">Pedidos em aberto</a>
+                                </li>
+                                <li>
+                                    <a href="#">Pedidos solicitados</a>
+                                </li>
+                                <li>
+                                    <a href="#">Solicitar pedido</a>
+                                </li>
+                            </ul>
+                        </li>                         
                         <li>
                             <a href="pontcontroller.do"><i class="fa fa-bar-chart-o fa-fw"></i>Fornecedores</a>
                         </li>
@@ -119,7 +127,7 @@
 					//PRAZO E LINK
 					out.print("<div class=\"panel-footer\">");
 					int id = p.getId();
-					out.print("<a type=\"submit\" href=\"pedidocontroller.do?acao=pedido&id="+id+"\" class=\"btn btn-success btn-block\"> Confira </a> </div>");
+					out.print("<a type=\"submit\" href=\"pedidocontrollerfun.do?acao=pedido&id="+id+"\" class=\"btn btn-success btn-block\"> Confira </a> </div>");
 					//out.print("Expira em "+p.getDataLimite());
 					out.print("</div> </div>");
                 }
