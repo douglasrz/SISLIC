@@ -8,10 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.SISLIC.DAO.FornecedorDAO;
 import br.com.SISLIC.DAO.LanceDAO;
 import br.com.SISLIC.model.Lance;
-import br.com.SISLIC.model.Fornecedor;
 
 @WebServlet("/gerentelancescontroller.do")
 public class GerenteLancesController extends HttpServlet{

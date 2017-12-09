@@ -72,7 +72,7 @@
 				PedidoDAO pedidoDAO = new PedidoDAO();
 				if(pedidoDAO.cadastrarPedidoProdutoItensPedido(pedido)) {
 					((Gerente) request.getSession().getAttribute("gerAutenticado")).getPedidosAberto().clear();
-					response.getWriter().print("<script> window.alert('Pedido cadastrado com sucesso!'); location.href='gerentepedidos.do';</script>");					
+					response.getWriter().print("<script> window.alert('Pedido cadastrado com sucesso!'); location.href='gerentePedidos.jsp';</script>");					
 				}
 			}
 		}	

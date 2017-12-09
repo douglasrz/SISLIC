@@ -6,7 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.apache.commons.mail.EmailException;
+
 import br.com.SISLIC.model.Categoria;
+import br.com.SISLIC.model.Email;
 import br.com.SISLIC.model.Fornecedor;
 import br.com.SISLIC.model.Lance;
 
@@ -249,5 +252,87 @@ public class FornecedorDAO {
 			e.printStackTrace();				
 		}
 		return null;
+	}
+	public boolean atribuirPenalidade(int valor,int idFornecedor) {
+		String sql = "UPDATE fornecedor SET pontuacao = pontuacao+? WHERE id_fornecedor = ?";
+		
+		try {
+			PreparedStatement preparar = con.prepareStatement(sql);	
+			preparar.setInt(1, valor);
+			preparar.setInt(2, idFornecedor);
+			preparar.execute();
+			preparar.close();
+			return true;
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean removerPenalidade(int valor,int idFornecedor) {
+		String sql = "UPDATE fornecedor SET pontuacao = pontuacao-? WHERE id_fornecedor = ?";
+		
+		try {
+			PreparedStatement preparar = con.prepareStatement(sql);	
+			preparar.setInt(1, valor);
+			preparar.setInt(2, idFornecedor);
+			preparar.execute();
+			preparar.close();
+			return true;
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	public boolean excluirCadastroEnotificar(int id, String email) {
+		String sql = "DELETE FROM fornecedor WHERE id_fornecedor = ?";
+		
+		try {
+			PreparedStatement preparar = con.prepareStatement(sql);	
+			preparar.setInt(1, id);
+			preparar.execute();
+			preparar.close();
+			//NOTIFICAR O FORNECEDOR
+			Email notificar = new Email();
+			String mensagem = "Seu cadastro foi excluído por motivos maiores, sentimos muito pelo transtorno";
+			try {
+				notificar.notificacao(mensagem, email);
+			} catch (EmailException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return true;
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	public boolean autorizarFornEnotificar(int id, String email) {
+		String sql = "UPDATE fornecedor SET autorizado = true WHERE id_fornecedor = ?";
+		
+		try {
+			PreparedStatement preparar = con.prepareStatement(sql);	
+			preparar.setInt(1, id);
+			preparar.execute();
+			preparar.close();
+			//NOTIFICAR O FORNECEDOR
+			Email notificar = new Email();
+			String mensagem = "Seu cadastro foi autorizado, navegue no nosso sistema [SISLIC] e aproveite os pedidos de compras.";
+			try {
+				notificar.notificacao(mensagem, email);
+			} catch (EmailException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return true;
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }

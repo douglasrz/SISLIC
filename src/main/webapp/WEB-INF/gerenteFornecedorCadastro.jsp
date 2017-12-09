@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>SISLIC - LANCE</title>
+<title>SISLIC - Fornecedor</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="sbAdmin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -27,14 +27,15 @@
 
     <!-- Custom Fonts -->
     <link href="sbAdmin/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->	
-   
+	
+   <script>
+   function confirma(mensagem, id){
+	   if(window.confirm("Tem certeza que deseja "+mensagem+" o fornecedor?")){
+		   console.log("location.href=\"gerenteFornecedoresController.jsp?acao=\"+mensagem+\"&id=\"+id;")
+		   location.href="gerenteFornecedoresController.jsp?acao="+mensagem+"&id="+id;
+	   }
+   }
+   </script>
 </head>
 <body>
     <div id="wrapper">
@@ -89,10 +90,10 @@
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Fornecedores<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="fornecedoresGerenteController.jsp?acao=fornPendentes">Fornecedores pendentes</a>
+                                    <a href="gerenteFornecedoresController.jsp?acao=fornPendentes">Fornecedores pendentes</a>
                                 </li>
                                 <li>
-                                    <a href="fornecedoresGerenteController.jsp?acao=fornCadastrados">Fornecedores cadastrados</a>
+                                    <a href="gerenteFornecedoresController.jsp?acao=fornCadastrados">Fornecedores cadastrados</a>
                                 </li>
                             </ul>
                         </li>
@@ -100,13 +101,10 @@
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Funcionário<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="#">Funcionários pendentes</a>
+                                    <a href="gerenteFuncionariosController.jsp">Funcionários cadastrados</a>
                                 </li>
                                 <li>
-                                    <a href="#">Funcionários cadastrados</a>
-                                </li>
-                                <li>
-                                    <a href="#">Cadastrar Funcionário</a>
+                                    <a href="gerenteFuncionariosController.jsp?acao=Cadastrar">Cadastrar Funcionário</a>
                                 </li>
                             </ul>
                         </li>
@@ -175,8 +173,8 @@
 		                        		}
 		                        	}
 		                        	%>
-		                                <span class="sr-only">40% Completo (success)</span>
-                               		</div>
+		                         <span class="sr-only">40% Completo (success)</span>
+                               </div>
                       </address>
                       </div>
                     <div class="col-sm-5 invoice-col">    
@@ -233,16 +231,111 @@
                                 </tbody>
                             </table>                             
                         </div><!-- /.col --> 
-                         <div class="col-xs-4">	
-                         	<a type="button" class="btn btn-primary pull-right btn-block" <%if(tipo){out.print("disabled");}else{%> href="#"<%} %>>Atribuir penalidade</a> 
+                         <div class="col-xs-3">	
+                         	<a type="button" class="btn btn-primary pull-right btn-block" <%if(tipo){out.print("disabled");}%> data-toggle="modal" data-target="#myModal">Atribuir penalidade</a> 
                         </div>
-                        <div class="col-xs-4">	
-                        	<a type="button" class="btn btn-warning btn-block" href="#">Excluir</a>  
+                        <div class="col-xs-3">	
+                        	<a type="button" class="btn btn-warning btn-block" href="javascript:confirma('excluir', <%=fornecedor.getId()%>)">Excluir</a>  
                         </div>
-                        <div class="col-xs-4">
-                        	<a type="button" class="btn btn-success btn-block" <%if(!tipo){out.print("disabled");}else{%> href="#" <%} %>>Autorizar</a> 
+                        <div class="col-xs-3">
+                        	<a type="button" class="btn btn-success btn-block" <%if(!tipo){out.print("disabled");}else{%> href="javascript:confirma('autorizar', <%=fornecedor.getId()%>)"<%} %>>Autorizar</a> 
                         </div>
+                        <div class="col-xs-3">
+                         	<a type="button" class="btn btn-primary pull-right btn-block" <%if(tipo){out.print("disabled");}%> data-toggle="modal" data-target="#myModal2">Remover penalidade</a> 
                         </div>
+                         <!-- Modal -->
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="myModalLabel">Atribuir penalidade</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="penalidadeController.jsp?acao=atribuirPenalidade" method="POST">                                    
+	                                    		<div class="form-group col-lg-3">
+	                                            	<label>Valor</label>
+	                                                <input class="form-control" name="valor" type="text" placeholder="Entre 0 e 20" required>
+	                                        	</div>                                        
+	                                        	<div class="form-group col-lg-9">
+	                                            	<label>Motivo</label>
+	                                            	<input class="form-control" name="motivo" type="text" placeholder="Ex.: Atraso na entrega" required>
+	                                        	</div>
+	                                        	<div class="form-group col-lg-12">
+	                                            	<label>Descrição</label>
+	                                            	<input class="form-control" name="descricao" type="text" required>
+	                                        	</div>
+	                                        	<div class="form-group col-lg-12">
+	                                        		<label>Nome do pedido</label>
+		                                            <select class="form-control" name="pedido">
+		                                            	<option disabled>Selecione um pedido</option>
+		                                            <%
+		                                            for(Lance lances: fornecedor.getLances()){
+	                                            		out.print("<option>"+lances.getPedido().getNome()+"</option>");		                                            		
+	                                            	}
+		                                            %>	
+		                                            </select>
+		                               			</div> 
+		                               			<div class="form-group col-lg-12">
+	                                        	<p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+	                                        	A pontuação é entre 0 e 20, quando for antigido 20 pontos de penalidade, o seu cadastro será bloqueado. Na descrição identifique se é adcionado a penalidade ou diminuido, para ficar no log.  
+	                                        	</p> 
+	                                        	</div> 
+	                                        	<button type="submit" class="btn btn-success btn-block">Enviar</button>  	                                        	                                                                          
+                                			</form>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                            <!-- MODAL 2 -->
+                            <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="myModalLabel">Remover penalidade</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="penalidadeController.jsp?acao=removerPenalidade" method="POST">                                    
+	                                    		<div class="form-group col-lg-3">
+	                                            	<label>Valor</label>
+	                                                <input class="form-control" name="valor" type="text" placeholder="Entre 0 e 20" required>
+	                                        	</div>                                        
+	                                        	<div class="form-group col-lg-9">
+	                                            	<label>Motivo</label>
+	                                            	<input class="form-control" name="motivo" type="text" placeholder="Ex.: Atraso na entrega" required>
+	                                        	</div>
+	                                        	<div class="form-group col-lg-12">
+	                                            	<label>Descrição</label>
+	                                            	<input class="form-control" name="descricao" type="text" required>
+	                                        	</div>
+	                                        	<div class="form-group col-lg-12">
+	                                        		<label>Nome do pedido</label>
+		                                            <select class="form-control" name="pedido">
+		                                            	<option disabled>Selecione um pedido</option>
+		                                            <%
+		                                            for(Lance lances: fornecedor.getLances()){
+	                                            		out.print("<option>"+lances.getPedido().getNome()+"</option>");		                                            		
+	                                            	}
+		                                            %>	
+		                                            </select>
+		                               			</div> 
+		                               			<div class="form-group col-lg-12">
+	                                        	<p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+	                                        	A pontuação é entre 0 e 20, quando for antigido 20 pontos de penalidade, o seu cadastro será bloqueado. Na descrição identifique se é adcionado a penalidade ou diminuido, para ficar no log.  
+	                                        	</p> 
+	                                        	</div> 
+	                                        	<button type="submit" class="btn btn-success btn-block">Enviar</button>  	                                        	                                                                          
+                                			</form>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+
                          
             <!-- /.row -->
     <!-- jQuery -->

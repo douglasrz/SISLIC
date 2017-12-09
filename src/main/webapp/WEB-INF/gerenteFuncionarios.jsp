@@ -1,5 +1,5 @@
-<%@ page import="br.com.SISLIC.model.Fornecedor"%>
-<%@ page import="br.com.SISLIC.model.Penalidade"%>
+<%@ page import="br.com.SISLIC.model.Gerente"%>
+<%@ page import="br.com.SISLIC.model.Funcionario"%>
 <%@ page import="java.util.ArrayList"%>
 <%@	page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>SISLIC - PONTUAÇÃO</title>
+<title>SISLIC - Fornecedores</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="sbAdmin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -39,7 +39,6 @@
 <body>
 
     <div id="wrapper">
-
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
@@ -49,16 +48,16 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="pedidocontroller.do">SISLIC - Sistema de Compras e Licitações</a>
+                <a class="navbar-brand" href="gerentePedidosController.jsp">SISLIC - Sistema de Compras e Licitações</a>
             </div>            
                 <!-- ícone do Usuario (cabeçalho)-->
                 <ul class="nav navbar-top-links navbar-right">
                 <li class="dropdown">
-                	<% Fornecedor forn = ((Fornecedor) request.getSession().getAttribute("forAutenticado")); 
-                	int pontuacao = forn.getPontuacao();
-                	float porcentagem = (pontuacao*100)/20;
-                	ArrayList<Penalidade> penalidades = (ArrayList<Penalidade>) request.getSession().getAttribute("penalidades");                	
-					out.print("<a href=cadastrocontroller.do >"+forn.getrSocial()+"</a>");%>
+                	<% Gerente ger = ((Gerente) request.getSession().getAttribute("gerAutenticado"));            	
+					out.print("<a href=gerenteCadastroController.jsp >"+ger.getNome()+"</a>");
+					ArrayList<Funcionario> funcionarios = new ArrayList<Funcionario>();
+					funcionarios = (ArrayList<Funcionario>) request.getSession().getAttribute("funcionarios");
+					%>
                     <li><a href="logincontroller.do"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                 </li>
                 </ul>
@@ -68,19 +67,49 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                        <a href="pedidocontroller.do"><i class="fa fa-shopping-cart fa-fw"></i> Pedidos</a>
+                        <a href="#"><i class="fa fa-shopping-cart fa-fw"></i>Pedidos<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="gerentePedidosController.jsp?acao=pedidosaberto">Pedidos em aberto</a>
+                                </li>
+                                <li>
+                                    <a href="gerentePedidosController.jsp?acao=pedidospendentes">Pedidos pendentes</a>
+                                </li>
+                                <li>
+                                    <a href="gerentePedidosController.jsp?acao=pedidosfechados">Pedidos finalizados</a>
+                                </li>
+                                <li>
+                                    <a href="cadastroPedidoController.jsp">Cadastrar pedido</a>
+                                </li>
+                            </ul>
+                        </li>                                               
+                       <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Fornecedores<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">                                
+                                <li>
+                                    <a href="gerenteFornecedoresController.jsp">Fornecedores cadastrados</a>
+                                </li>
+                            </ul>
                         </li>
                         <li>
-                            <a href="lancescontroller.do"><i class="fa fa-legal fa-fw"></i>Lances</a>
-                        </li>                        
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Funcionário<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="gerenteFuncionarioController.jsp">Funcionários cadastrados</a>
+                                </li>
+                                <li>
+                                    <a href="#">Cadastrar Funcionário</a>
+                                </li>
+                            </ul>
+                        </li>
                         <li>
-                            <a href="pontcontroller.do"><i class="fa fa-bar-chart-o fa-fw"></i> Pontuação</a>
+                        	<a href="gerenteLancesController.jsp?acao=lances"> <i class="fa fa-legal fa-fw"></i>Lances</a>
                         </li>
                          <li>
-                            <a href="cadastrocontroller.do"><i class="fa fa-user fa-fw"></i> Cadastro</a>
+                            <a href="gerentePedidosController.jsp"><i class="fa fa-user fa-fw"></i>Cadastro</a>
                         </li>
                         <li>
-                            <a href="sobrecontroller.do"><i class="fa fa-info-circle fa-fw"></i> Sobre</a>
+                            <a href="sobreController.jsp"><i class="fa fa-info-circle fa-fw"></i> Sobre</a>
                         </li>
                     </ul>
                 </div>
@@ -92,74 +121,35 @@
         <div id="page-wrapper">
             <div class="row">
             <div class="col-lg-12">
-                    <h1 class="page-header">Pontuação</h1>
+                    <h1 class="page-header">Fornecedores <small>(Cadastrados)</small></h1>
                 </div>
                 <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Pontuação de penalidades</div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                        	<p>
-                                <strong>
-                                Sua pontuação no momento é <%=pontuacao%>  (<%=porcentagem %>%)
-                                </strong>
-                                <!-- A PONTUAÇÃO TOTAL É 20 PONTOS. 100% = 20 -->
-                                <span class="pull-right text-muted">100%</span>
-                            </p>
-                               <div class="progress progress-striped active">
-                               <% if( porcentagem <= 50){
-		                        		out.print("<div class=\"progress-bar progress-bar-success\" style=\"width: ");
-		                        		out.print(porcentagem);
-		                        		out.print("%\" >");
-		                        	}else{
-		                        		if(porcentagem<=80){
-		                        			out.print("<div class=\"progress-bar progress-bar-warning\" style=\"width: ");
-		                        			out.print(porcentagem);
-			                        		out.print("%\" >");
-		                        		}else{
-		                        			out.print("<div class=\"progress-bar progress-bar-danger\" style=\"width: ");
-		                        			out.print(porcentagem);
-			                        		out.print("%\" >");			                        	
-		                        		}
-		                        	}
-		                        	%>
-		                                <span class="sr-only">40% Completo (success)</span>
-                               		</div>
-                                </div>
-                                <span class="pull-right text-muted small">
-                                    <em> Obs: A pontuação refere-se as penalidades atribuídas a você, por descomprimentos das regras estabelecidade por nossa empresa, tais como: atraso de entrega, produto de baixa qualidade, desistência do lance ofertado, etc. Para maiores informações nos contate.</em>
-                                </span>
-                        </div>
-            		</div>
-           		</div>
+            </div>           
             <!-- /.row -->
                 <div class="col-lg-12">
                     <div class="panel panel-default">
-                        <div class="panel-heading">Penalidade</div>
+                        <div class="panel-heading">Todos os funcionarios </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                            <table width="100%" class="table table-bordered table-hover" id="dataTables-example">
                                 <thead>
                                 <tr>
-                                   <th>Pedido</th>
-                                   <th>Motivo</th>
-                                   <th>Descrição</th>
-                                   <th>Valor</th>
-                                   <th>Data</th>
+                                	<th width="30%">Nome</th>
+                                   	<th width="30%">Cargo</th>
+                                   	<th width="20%">Setor</th>
+                                   	<th width="20%">Telefone</th>
                                	</tr>                               	
                                 </thead>                                
                                 <tbody>                                
-							 	<% for(Penalidade p: penalidades){
-							 		out.print("<tr>");
-							 		out.print("<td>"+p.getNomePedido()+"</td> <td>"+p.getMotivo()+"</td>");
-							 		out.print("<td>"+p.getDescricao()+"</td> <td>"+p.getValor()+"</td>");
-							 		out.print("<td>"+p.getData()+"</td>");
-							 		out.print("</tr>");
-							 	}%>                          
+							 	<% 
+								 	for(Funcionario f: funcionarios){
+								 		out.print("<tr onclick= location.href=\"gerenteFuncionariosController.jsp?acao=cadastro&id="+f.getCodFunc()+"\" style=\"cursor: pointer;\" title=\"Ver detalhes\">");
+								 		out.print("<td>"+f.getNome()+"</td>");
+								 		out.print("<td>"+f.getCargo()+"</td> <td>"+f.getSetor().getNome()+"</td>");
+								 		out.print("<td>"+f.getTelefone()+"</td>");
+								 		out.print("</a></tr>");
+								 	}
+							 	%>                          
                                 </tbody>
                             </table>
                         </div>

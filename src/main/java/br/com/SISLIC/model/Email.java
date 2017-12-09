@@ -39,7 +39,7 @@ public class Email {
 		   forn.updateSenha(login, novaSenha);
 	}
 	
-	public void cancelamentoPedido(String mensagem, String emailDestinatario) throws EmailException {
+	public void notificacao(String mensagem, String emailDestinatario) throws EmailException {
 	    
 		   SimpleEmail email = new SimpleEmail();
 		   //Utilize o hostname do seu provedor de email

@@ -1,6 +1,7 @@
 <%@ page import="br.com.SISLIC.model.Gerente"%>
 <%@ page import="br.com.SISLIC.model.Fornecedor"%>
 <%@ page import="br.com.SISLIC.DAO.FornecedorDAO"%>
+<%@ page import="br.com.SISLIC.DAO.LanceDAO"%>
 <%@ page import="br.com.SISLIC.model.Lance"%>
 <%@ page import="br.com.SISLIC.model.Categoria"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -60,6 +61,32 @@
 						request.getRequestDispatcher("WEB-INF/gerenteFornecedores.jsp").forward(request, response);
 					}
 				}
+				else{
+					String email = ((Fornecedor) session.getAttribute("fornecedor")).getEmail();
+					if(acao.equals("excluir")){
+						//DELETAR OS LANCES DELES						
+						int idForn = Integer.parseInt(request.getParameter("id"));
+						LanceDAO lanceDAO = new LanceDAO();						
+						if(fornDAO.excluirCadastroEnotificar(idForn, email) && lanceDAO.deletetodossLancesDoForn(idForn)){
+							session.setAttribute("fornecedores", fornDAO.buscarTodosPendentes());//ATUALIZO
+							request.getRequestDispatcher("WEB-INF/gerenteFornecedores.jsp").forward(request, response);
+						}else{
+							response.getWriter().print("<script> window.alert('Erro interno, tente novamente mais tarde.');</script>");
+						}
+					}
+					else{
+						if(acao.equals("autorizar")){
+							int idForn = Integer.parseInt(request.getParameter("id"));
+							if(fornDAO.autorizarFornEnotificar(idForn, email)){
+								request.getSession().setAttribute("fornecedores", fornDAO.buscarTodosAutorizados());//Atualizo
+								request.getSession().setAttribute("tipoFornPendete", false);
+								request.getRequestDispatcher("WEB-INF/gerenteFornecedores.jsp").forward(request, response);
+							}else{
+								response.getWriter().print("<script> window.alert('Erro interno, tente novamente mais tarde.');</script>");
+							}
+						}
+					}
+				}
 			}
 		}
 	}else{
@@ -68,4 +95,4 @@
 	}	
 			
 			
-			%>
+%>

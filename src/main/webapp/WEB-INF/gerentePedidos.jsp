@@ -116,13 +116,10 @@
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Funcionário<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="#">Funcionários pendentes</a>
+                                    <a href="gerenteFuncionariosController.jsp">Funcionários cadastrados</a>
                                 </li>
                                 <li>
-                                    <a href="#">Funcionários cadastrados</a>
-                                </li>
-                                <li>
-                                    <a href="#">Cadastrar Funcionário</a>
+                                    <a href="gerenteFuncionariosController.jsp?acao=formCadastro">Cadastrar Funcionário</a>
                                 </li>
                             </ul>
                         </li>

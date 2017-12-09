@@ -35,5 +35,56 @@ public class SetorDAO {
 		}
 		return null;
 	}
-
+	public Setor buscarSomenteOsetor(int id) {
+		String sql = "SELECT *FROM setor WHERE id_setor = ?";
+		
+		try(PreparedStatement prepara = con.prepareStatement(sql)){
+			prepara.setInt(1, id);
+			ResultSet resultado = prepara.executeQuery();
+			
+			if(resultado.next()) {
+				Setor setor = new Setor();				
+				setor.setId(id);
+				setor.setNome(resultado.getString("nome"));	
+				prepara.close();
+				return setor;
+			}			
+		}catch(SQLException e) {
+			e.printStackTrace();			
+		}
+		return null;
+	}
+	public Setor buscarSomenteOsetorPeloNome(String nome) {
+		String sql = "SELECT *FROM setor WHERE nome = ?";
+		
+		try(PreparedStatement prepara = con.prepareStatement(sql)){
+			prepara.setString(1, nome);
+			ResultSet resultado = prepara.executeQuery();
+			
+			if(resultado.next()) {
+				Setor setor = new Setor();				
+				setor.setId(Integer.parseInt(resultado.getString("id_setor")));
+				setor.setNome(resultado.getString("nome"));	
+				prepara.close();
+				return setor;
+			}			
+		}catch(SQLException e) {
+			e.printStackTrace();			
+		}
+		return null;
+	}
+	public boolean cadastrar(String nome) {
+		String sql = "INSERT INTO setor(nome) VALUES(?)";
+		
+		try(PreparedStatement prepara = con.prepareStatement(sql)){
+			prepara.setString(1, nome);
+			prepara.executeQuery();
+			prepara.close();
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

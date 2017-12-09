@@ -380,8 +380,7 @@ public class PedidoDAO {
 			try {
 				for(Lance l: lances) {		
 					lanceDAO.deleteLance(l.getId());//DELETANDO CADA LANCES PARA ESSE PEDIDO
-					notificar.cancelamentoPedido(mensagem, l.getForn().getEmail());
-					
+					notificar.notificacao(mensagem, l.getForn().getEmail());					
 				}
 			} catch (EmailException e) {
 				// TODO Auto-generated catch block
@@ -392,17 +391,14 @@ public class PedidoDAO {
 		//APGAR OS ITENS DO PEDIDO
 		if(!apagarItensPedido(id)) {
 			return false;
-		}
-		
-		String sql = "DELETE FROM pedido WHERE id_pedido=?";
-		
+		}		
+		String sql = "DELETE FROM pedido WHERE id_pedido=?";		
 		try {
 			PreparedStatement preparar = con.prepareStatement(sql);	
 			preparar.setInt(1, id);
 			preparar.execute();
 			preparar.close();
-			return true;
-			
+			return true;			
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -478,5 +474,35 @@ public class PedidoDAO {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	public ArrayList<Pedido> buscarPorIdFun(int id){
+		ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
+		String sql = "SELECT *FROM pedido WHERE id_funcionario =? ";		
+		
+		try(PreparedStatement preparar = con.prepareStatement(sql)){
+			preparar.setInt(1, id);
+			ResultSet resultado = preparar.executeQuery();
+			while(resultado.next()) {
+				Pedido pedidoRetorno = new Pedido();
+				pedidoRetorno.setId(resultado.getInt("id_pedido"));
+				pedidoRetorno.setNome(resultado.getString("nome"));
+				pedidoRetorno.setDataLancamento(resultado.getDate("data_lancamento"));
+				pedidoRetorno.setDataLimite(resultado.getDate("data_limite"));
+				pedidoRetorno.setId_funcionario(resultado.getInt("id_funcionario"));
+				pedidoRetorno.setDescricao(resultado.getString("descricao"));
+				pedidoRetorno.setAutorizado(resultado.getBoolean("autorizado"));
+				pedidoRetorno.setStatusAberto(pedidoRetorno.status());
+				//PEGAR OS Produtos
+				ArrayList<Produto> lista = buscaItemPedido(resultado.getInt("id_pedido"));
+				pedidoRetorno.setProdutos(lista);
+				
+				pedidos.add(pedidoRetorno);
+			}	
+			preparar.close();
+			return pedidos;
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return pedidos;
 	}
 }

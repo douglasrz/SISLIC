@@ -213,7 +213,7 @@ private Connection con = ConexaoFactory.getConnection();
 		}
 		return lista;
 	}
-public ArrayList<Lance>	todosLances(){
+	public ArrayList<Lance>	todosLances(){
 		
 		ArrayList<Lance> lista = new ArrayList<Lance>();
 		String sql = "SELECT *FROM lance";
@@ -243,6 +243,18 @@ public ArrayList<Lance>	todosLances(){
 			e.printStackTrace();
 		}
 		return lista;
+	}
+	public boolean deletetodossLancesDoForn(int idForn) {
+		String sql = "DELETE FROM lance WHERE id_fornecedor = ?";
+		try(PreparedStatement prepara = con.prepareStatement(sql)){
+			prepara.setInt(1, idForn);	
+			prepara.execute();
+			prepara.close();
+			return true;
+		} catch (SQLException e) {			
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 }

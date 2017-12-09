@@ -50,7 +50,7 @@
 							if(pedidoDAO.cancelarPedidoElances(id)) {
 								((Gerente) request.getSession().getAttribute("gerAutenticado")).getPedidosAberto().clear();
 								((Gerente) request.getSession().getAttribute("gerAutenticado")).getPedidosPendentes().clear();		
-								response.getWriter().print("<script> window.alert('Pedido cancelado com sucesso!'); location.href='gerentepedidos.do?acao=pedidosaberto';</script>");
+								response.getWriter().print("<script> window.alert('Pedido cancelado com sucesso!'); location.href='gerentePedidosController.jsp?acao=pedidosaberto';</script>");
 							}
 						}else {
 							if(acao.equals("autorizar")) {
