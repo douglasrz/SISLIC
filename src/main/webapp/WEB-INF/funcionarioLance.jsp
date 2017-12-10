@@ -1,4 +1,4 @@
-<%@ page import="br.com.SISLIC.model.Gerente"%>
+<%@ page import="br.com.SISLIC.model.Funcionario"%>
 <%@ page import="br.com.SISLIC.model.Lance"%>
 <%@ page import="br.com.SISLIC.model.Pedido"%>
 <%@ page import="br.com.SISLIC.model.Produto"%>
@@ -49,13 +49,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="gerentePedidosController.jsp?acao=pedidosaberto">SISLIC - Sistema de Compras e Licitações</a>
+                <a class="navbar-brand" href="funcionarioPedidosController.jsp?acao=pedidosaberto">SISLIC - Sistema de Compras e Licitações</a>
             </div>            
                 <!-- ícone do Usuario (cabeçalho)-->
                 <ul class="nav navbar-top-links navbar-right">
                 <li class="dropdown">
-                	<% Gerente ger = ((Gerente) request.getSession().getAttribute("gerAutenticado"));            	
-					out.print("<a href=gerenteCadastroController.jsp >"+ger.getNome()+"</a>");
+                	<% Funcionario ger = ((Funcionario) request.getSession().getAttribute("funAutenticado"));            	
+					out.print("<a href=funcionarioCadastroController.jsp >"+ger.getNome()+"</a>");
 					Lance lance = (Lance) request.getAttribute("lance");
 					%>
                     <li><a href="loginController.jsp"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
@@ -65,51 +65,32 @@
 			<!-- OPÇÕES DA PARTE ESQUERDA -->
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
+                     <ul class="nav" id="side-menu">
                         <li>
                         <a href="#"><i class="fa fa-shopping-cart fa-fw"></i> Pedidos<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="gerentePedidosController.jsp?acao=pedidosaberto"> Pedidos em aberto</a>
+                                    <a href="funcionarioPedidosController.jsp?acao=pedidosabertos"> Pedidos em aberto</a>
                                 </li>
                                 <li>
-                                    <a href="gerentePedidosController.jsp?acao=pedidospendentes"> Pedidos pendentes</a>
+                                    <a href="funcionarioPedidosController.jsp?acao=pedidospendentes"> Pedidos pendentes</a>
                                 </li>
                                 <li>
-                                    <a href="gerentePedidosController.jsp?acao=pedidosfechados"> Pedidos finalizados</a>
+                                    <a href="funcionarioPedidosController.jsp?acao=pedidosfechados"> Pedidos finalizados</a>
                                 </li>
                                 <li>
-                                    <a href="cadastroPedidoController.jsp"> Cadastrar pedido</a>
+                                    <a href="funcionarioCadastroPedidoController.jsp"> Solicitar pedido</a>
                                 </li>
                             </ul>
                         </li>                                               
                         <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-users"></i> Fornecedores<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="gerenteFornecedoresController.jsp?acao=fornPendentes"> Fornecedores pendentes</a>
-                                </li>
-                                <li>
-                                    <a href="gerenteFornecedoresController.jsp?acao=fornCadastrados"> Fornecedores cadastrados</a>
-                                </li>
-                            </ul>
-                        </li>
+                            <a href="funcionarioFornecedoresController.jsp?acao=fornCadastrados"><i class="fa fa-bar-chart-o fa-users"></i> Fornecedores</a>
+                       </li>
                         <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-users"></i> Funcionário<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="gerenteFuncionariosController.jsp"> Funcionários cadastrados</a>
-                                </li>
-                                <li>
-                                    <a href="gerenteFuncionariosController.jsp?acao=Cadastrar"> Cadastrar Funcionário</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                        	<a href="gerenteLancesController.jsp?acao=lances"> <i class="fa fa-legal fa-fw"></i> Lances</a>
+                        	<a href="funcionarioLancesController.jsp?acao=lances"> <i class="fa fa-legal fa-fw"></i> Lances</a>
                         </li>
                          <li>
-                            <a href="gerenteCadastroController.jsp"><i class="fa fa-user fa-fw"></i> Cadastro</a>
+                            <a href="funcionarioCadastroController.jsp"><i class="fa fa-user fa-fw"></i> Cadastro</a>
                         </li>
                         <li>
                             <a href="sobreController.jsp"><i class="fa fa-info-circle fa-fw"></i> Sobre</a>
@@ -161,7 +142,7 @@
                     <address>
                         <strong>Fornecedor</strong><br>
                           	<%
-                                out.print("<a href=\"gerenteFornecedoresController.jsp?acao=fornCadastrados&id="+lance.getForn().getId()+"\">"+lance.getForn().getrSocial()+"</a>");
+                                out.print("<a href=\"funcionarioFornecedoresController.jsp?acao=fornCadastrados&id="+lance.getForn().getId()+"\">"+lance.getForn().getrSocial()+"</a>");
                            	%>
                     </address>
              	</div><!-- /.col -->

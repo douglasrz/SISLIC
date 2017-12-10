@@ -4,16 +4,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import br.com.SISLIC.model.Produto;
 
 public class ProdutoDAO {
 	
-	private Connection con = ConexaoFactory.getConnection();
+	private Connection con;
 
 	
 	public Produto buscarProduto(int id) {
-		
+		con = ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM produto WHERE id_produto=?";		
 		
 		try(PreparedStatement preparar = con.prepareStatement(sql)){	
@@ -31,6 +32,7 @@ public class ProdutoDAO {
 				
 				//QUANTIDADE E PREÇO PEGO SOMENTE SER FOR UM ITEMPEDIDO
 				preparar.close();
+				con.close();
 				return produtoRetorno;
 			}				
 		}catch(SQLException e) {
@@ -40,7 +42,7 @@ public class ProdutoDAO {
 	}
 	//MÉTODO USADO SOMENTE QUANDO O PRODUTO FOR DE UM LANCE JÁ EFETUADO
 	public Produto buscaPrecoProduto(Produto produto) {
-			
+		con = ConexaoFactory.getConnection();
 			String sql = "SELECT *FROM lance_item_pedido WHERE id_item_pedido=?";
 			try(PreparedStatement preparar = con.prepareStatement(sql)){	
 				preparar.setInt(1, produto.getIdItemPedido());
@@ -52,6 +54,7 @@ public class ProdutoDAO {
 					return produto;
 				}
 				preparar.close();
+				con.close();
 			}catch(SQLException e) {
 				e.printStackTrace();
 			}
@@ -59,22 +62,53 @@ public class ProdutoDAO {
 			return produto;
 	}
 		
-	public boolean cadastrarProduto(Produto produto) {
+	public int cadastrarProdutoEretornaId(Produto produto) {
 		
+		//VERIFICO SE JÁ EXISTE UM PRODUTO COM ESTE NOME
+		int id = buscaIdProduto(produto.getNome());
+		if(id != 0){
+			return id;
+		}
+		con = ConexaoFactory.getConnection();
 		String sql = "INSERT INTO produto(nome, descricao, id_categoria) VALUES(?,?,?)";
 		
 		try {
-			PreparedStatement preparar = con.prepareStatement(sql);	
+			PreparedStatement preparar = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);	
 			preparar.setString(1, produto.getNome());
 			preparar.setString(2, produto.getDescricao());
 			preparar.setInt(3, produto.getCategoria().getCod());
 			preparar.execute();
+			ResultSet rs = preparar.getGeneratedKeys();
+			if (rs.next()) {
+			    id = rs.getInt("id_produto");
+			}
 			preparar.close();
-			return true;
+			con.close();
+			return id;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return false;
+		return 0;
+	}
+	
+	private int buscaIdProduto(String nome) {
+		con = ConexaoFactory.getConnection();
+		String sql = "SELECT *FROM produto WHERE nome=?";
+		try(PreparedStatement preparar = con.prepareStatement(sql)){	
+			preparar.setString(1, nome);
+			ResultSet resultado = preparar.executeQuery();
+			
+			if(resultado.next()) {
+				int retorno = resultado.getInt("id_produto");
+				preparar.close();
+				return retorno;
+			}
+			preparar.close();
+			con.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 }

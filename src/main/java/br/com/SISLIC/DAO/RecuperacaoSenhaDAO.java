@@ -7,10 +7,10 @@ import java.sql.SQLException;
 
 public class RecuperacaoSenhaDAO {
 
-	private Connection con = ConexaoFactory.getConnection();
+	private Connection con;
 	//VERIFICAR SE EXISTE ALGUM USUARIO COM ESSE LOGIN E SENHA
 	public boolean verifEmailLoginForn(String login, String email) {
-		
+		con = ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM fornecedor WHERE login=? AND email=?";
 		
 		try(PreparedStatement prepara = con.prepareStatement(sql)){
@@ -18,8 +18,10 @@ public class RecuperacaoSenhaDAO {
 			prepara.setString(2, email);
 			ResultSet resultado = prepara.executeQuery();
 			if(resultado.next()) {
+				con.close();
 				return true;
 			}
+			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

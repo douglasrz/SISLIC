@@ -1,25 +1,15 @@
 <%@ page import="br.com.SISLIC.model.Gerente"%>
-<%@ page import="br.com.SISLIC.model.Funcionario"%>
-<%@ page import="java.util.ArrayList"%>
-<%@	page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>SISLIC - Fornecedores</title>
+<meta charset="ISO-8859-1">
+<title>SISLIC - Sobre</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="sbAdmin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- MetisMenu CSS -->
     <link href="sbAdmin/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
-
-    <!-- DataTables CSS -->
-    <link href="sbAdmin/vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
-
-    <!-- DataTables Responsive CSS -->
-    <link href="sbAdmin/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="sbAdmin/dist/css/sb-admin-2.css" rel="stylesheet">
@@ -37,8 +27,7 @@
 </head>
 
 <body>
-
-    <div id="wrapper">
+	<div id="wrapper">
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
@@ -50,19 +39,16 @@
                 </button>
                 <a class="navbar-brand" href="gerentePedidosController.jsp?acao=pedidosaberto">SISLIC - Sistema de Compras e Licitações</a>
             </div>            
-                <!-- ícone do Usuario (cabeçalho)-->
+                <!-- Ã­cone do Usuario (cabeÃ§alho)-->
                 <ul class="nav navbar-top-links navbar-right">
-                <li class="dropdown">
-                	<% Gerente ger = ((Gerente) request.getSession().getAttribute("gerAutenticado"));            	
-					out.print("<a href=gerenteCadastroController.jsp >"+ger.getNome()+"</a>");
-					ArrayList<Funcionario> funcionarios = new ArrayList<Funcionario>();
-					funcionarios = (ArrayList<Funcionario>) request.getSession().getAttribute("funcionarios");
-					%>
-                    <li><a href="loginController.jsp"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+                <li class="dropdown">                
+                	<% Gerente ger = ((Gerente) request.getSession().getAttribute("gerAutenticado"));                	
+					out.print("<a href=gerenteCadastroController.jsp >"+ger.getNome()+"</a>");%>
+                    <li><a href="logincontroller.do"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                 </li>
                 </ul>
             <!-- /.navbar-top-links -->
-			<!-- OPÇÕES DA PARTE ESQUERDA -->
+			<!-- OPÃ‡Ã•ES DA PARTE ESQUERDA -->
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
@@ -83,9 +69,9 @@
                                 </li>
                             </ul>
                         </li>                                               
-                       <li>
+                        <li>
                             <a href="#"><i class="fa fa-bar-chart-o fa-users"></i> Fornecedores<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">                                
+                            <ul class="nav nav-second-level">
                                 <li>
                                     <a href="gerenteFornecedoresController.jsp?acao=fornPendentes"> Fornecedores pendentes</a>
                                 </li>
@@ -95,13 +81,13 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-users"></i> Funcionário<span class="fa arrow"></span></a>
+                            <a><i class="fa fa-bar-chart-o fa-users"></i> Funcionário<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="gerenteFuncionariosController.jsp"> Funcionários cadastrados</a>
                                 </li>
                                 <li>
-                                    <a href="gerenteFuncionariosController.jsp?acao=formCadastro"> Cadastrar Funcionário</a>
+                                    <a href="gerenteFuncionariosController.jsp?acao=Cadastrar"> Cadastrar Funcionário</a>
                                 </li>
                             </ul>
                         </li>
@@ -109,7 +95,7 @@
                         	<a href="gerenteLancesController.jsp?acao=lances"> <i class="fa fa-legal fa-fw"></i> Lances</a>
                         </li>
                          <li>
-                            <a href="gerentePedidosController.jsp"><i class="fa fa-user fa-fw"></i> Cadastro</a>
+                            <a href="gerenteCadastroController.jsp"><i class="fa fa-user fa-fw"></i> Cadastro</a>
                         </li>
                         <li>
                             <a href="sobreController.jsp"><i class="fa fa-info-circle fa-fw"></i> Sobre</a>
@@ -120,77 +106,50 @@
             </div>
             <!-- /.navbar-static-side -->
         </nav>
-
         <div id="page-wrapper">
-            <div class="row">
-            <div class="col-lg-12">
-                    <h2 class="page-header">
-	                <i class="fa fa-users"></i> Fornecedores
-	                <small>(Cadastrados)</small></h2>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>           
-            <!-- /.row -->
-                <div class="col-lg-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Todos os funcionarios </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <table width="100%" class="table table-bordered table-hover" id="dataTables-example">
-                                <thead>
-                                <tr>
-                                	<th width="30%">Nome</th>
-                                   	<th width="30%">Cargo</th>
-                                   	<th width="20%">Setor</th>
-                                   	<th width="20%">Telefone</th>
-                               	</tr>                               	
-                                </thead>                                
-                                <tbody>                                
-							 	<% 
-								 	for(Funcionario f: funcionarios){
-								 		out.print("<tr onclick= location.href=\"gerenteFuncionariosController.jsp?acao=cadastro&id="+f.getCodFunc()+"\" style=\"cursor: pointer;\" title=\"Ver detalhes\">");
-								 		out.print("<td>"+f.getNome()+"</td>");
-								 		out.print("<td>"+f.getCargo()+"</td> <td>"+f.getSetor().getNome()+"</td>");
-								 		out.print("<td>"+f.getTelefone()+"</td>");
-								 		out.print("</a></tr>");
-								 	}
-							 	%>                          
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.panel-body -->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                    	<h2 class="page-header">
+	                                <i class="fa fa-spinner"></i> SISLIC
+	                            </h2> 
+                         <p>SISLIC é um sistema de compras e licitações da empresa M2D, que por objetivo oferecer a oportunidade de empresas possam aproveitar as nossas necessidades e oferecer seus produtos.</p>
                     </div>
-                    <!-- /.panel -->
+                   
+                    <!-- /.col-lg-12 -->
                 </div>
-                <!-- /.col-lg-12 -->
+                <!-- /.row -->
             </div>
-    <!-- jQuery -->
-    <script src="sbAdmin/vendor/jquery/jquery.min.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="sbAdmin/vendor/bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- Metis Menu Plugin JavaScript -->
-    <script src="sbAdmin/vendor/metisMenu/metisMenu.min.js"></script>
-
-    <!-- DataTables JavaScript -->
-    <script src="sbAdmin/vendor/datatables/js/jquery.dataTables.min.js"></script>
-    <script src="sbAdmin/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-    <script src="sbAdmin/vendor/datatables-responsive/dataTables.responsive.js"></script>
-
-    <!-- Custom Theme JavaScript -->
-    <script src="sbAdmin/dist/js/sb-admin-2.js"></script>
-
-    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
-    <script>
-    $(document).ready(function() {
-        $('#dataTables-example').DataTable({
-            responsive: true
-        });
-    });
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+		<!-- jQuery -->
+	    <script src="sbAdmin/vendor/jquery/jquery.min.js"></script>
+	
+	    <!-- Bootstrap Core JavaScript -->
+	    <script src="sbAdmin/vendor/bootstrap/js/bootstrap.min.js"></script>
+	
+	    <!-- Metis Menu Plugin JavaScript -->
+	    <script src="sbAdmin/vendor/metisMenu/metisMenu.min.js"></script>
+	
+	    <!-- DataTables JavaScript -->
+	    <script src="sbAdmin/vendor/datatables/js/jquery.dataTables.min.js"></script>
+	    <script src="sbAdmin/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+	    <script src="sbAdmin/vendor/datatables-responsive/dataTables.responsive.js"></script>
+	
+	    <!-- Custom Theme JavaScript -->
+	    <script src="sbAdmin/dist/js/sb-admin-2.js"></script>
+	
+	    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+	    <script>
+	    $(document).ready(function() {
+	        $('#dataTables-example').DataTable({
+	            responsive: true
+	        });
+	    });
     </script>
-</div>
-</div>
+	</div>
 </body>
 
 </html>
+		

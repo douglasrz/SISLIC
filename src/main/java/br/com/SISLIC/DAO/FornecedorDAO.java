@@ -15,9 +15,10 @@ import br.com.SISLIC.model.Lance;
 
 public class FornecedorDAO {
 	
-	private Connection con = ConexaoFactory.getConnection();
+	private Connection con; 
 	
 	public boolean cadastrar(Fornecedor fornecedor) {
+		con = ConexaoFactory.getConnection();
 		String sql = "INSERT INTO fornecedor(login,razao_social,telefone,cnpj,email,senha,pontuacao) VALUES(?,?,?,?,?,?,0)";
 		//md5 criptografa a senha
 		try {
@@ -37,6 +38,7 @@ public class FornecedorDAO {
 			preparar.execute();
 			//fechanco a conexao com o banco
 			preparar.close();
+			con.close();
 			return true;
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -44,15 +46,18 @@ public class FornecedorDAO {
 		}
 	}
 	public boolean buscarLogin(String login) {
+		con = ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM fornecedor WHERE login=?";
 		try(PreparedStatement prepara = con.prepareStatement(sql)){
 			prepara.setString(1, login);
 			ResultSet resultado = prepara.executeQuery();
 			if(resultado.next()) {
 				prepara.close();
+				con.close();
 				return true;
 			}else {
 				prepara.close();
+				con.close();
 				return false;
 			}
 		}catch(SQLException e) {
@@ -62,6 +67,7 @@ public class FornecedorDAO {
 	}
 		
 	public Fornecedor autenticar(String login, String senha) {
+		con = ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM fornecedor WHERE login=? and senha=?";
 		
 		try(PreparedStatement prepara = con.prepareStatement(sql)){
@@ -87,6 +93,7 @@ public class FornecedorDAO {
 				
 				//PEGAR OS LANCES
 				prepara.close();
+				con.close();
 				return fornecedor;
 			}			
 		}catch(SQLException e) {
@@ -96,6 +103,7 @@ public class FornecedorDAO {
 	}
 	
 	public boolean updateCad(Fornecedor fornecedor) {
+		con = ConexaoFactory.getConnection();
 		String sql = "UPDATE fornecedor SET razao_social=?, telefone=?, senha=?, email=? WHERE login=?";
 		//md5 criptografa a senha
 		try {
@@ -111,6 +119,7 @@ public class FornecedorDAO {
 			preparar.execute();
 			//fechanco a conexao com o banco
 			preparar.close();
+			con.close();
 			return true;
 			
 		}catch(SQLException e) {
@@ -119,6 +128,7 @@ public class FornecedorDAO {
 		return false;
 	}
 	public void updateSenha(String login, String senha) {
+		con = ConexaoFactory.getConnection();
 		String sql = "UPDATE fornecedor SET senha=? WHERE login=?";
 		//md5 criptografa a senha
 		try {
@@ -130,12 +140,14 @@ public class FornecedorDAO {
 			preparar.execute();
 			//fechanco a conexao com o banco
 			preparar.close();
+			con.close();
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	public Fornecedor buscarPorId(int id) {
+		con = ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM fornecedor WHERE id_fornecedor=?";
 		try(PreparedStatement prepara = con.prepareStatement(sql)){
 			prepara.setInt(1, id);
@@ -160,6 +172,7 @@ public class FornecedorDAO {
 				LanceDAO lanceDAO = new LanceDAO();
 				fornecedor.setLances(lanceDAO.lancesFornId(fornecedor.getId()));
 				prepara.close();	
+				con.close();
 				return fornecedor;
 			}
 		}catch(SQLException e) {
@@ -168,7 +181,7 @@ public class FornecedorDAO {
 		return null;
 	}
 	public ArrayList<Fornecedor> buscarTodosPendentes() {
-		
+		con = ConexaoFactory.getConnection();
 		ArrayList<Fornecedor> lista = new ArrayList<Fornecedor>();
 		String sql = "SELECT *FROM fornecedor WHERE autorizado = false";
 		
@@ -188,6 +201,7 @@ public class FornecedorDAO {
 				lista.add(retorno);
 			}
 			preparar.close();
+			con.close();
 			return lista;
 			
 		}catch(SQLException e) {
@@ -197,7 +211,7 @@ public class FornecedorDAO {
 	}
 	public ArrayList<Fornecedor> buscarTodosAutorizados() {
 		
-
+		con = ConexaoFactory.getConnection();
 		ArrayList<Fornecedor> lista = new ArrayList<Fornecedor>();
 		String sql = "SELECT *FROM fornecedor WHERE autorizado = true";
 		
@@ -217,6 +231,7 @@ public class FornecedorDAO {
 				lista.add(retorno);
 			}
 			preparar.close();
+			con.close();
 			return lista;
 			
 		}catch(SQLException e) {
@@ -225,6 +240,7 @@ public class FornecedorDAO {
 		return null;
 	}
 	public Fornecedor buscarPorIdSomenteForn(int id) {
+		con = ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM fornecedor WHERE id_fornecedor=?";
 		try(PreparedStatement prepara = con.prepareStatement(sql)){
 			prepara.setInt(1, id);
@@ -246,6 +262,7 @@ public class FornecedorDAO {
 				fornecedor.setCategorias(cateDAO.buscarPorForn(fornecedor.getId()));					
 				
 				prepara.close();	
+				con.close();
 				return fornecedor;
 			}
 		}catch(SQLException e) {
@@ -254,6 +271,7 @@ public class FornecedorDAO {
 		return null;
 	}
 	public boolean atribuirPenalidade(int valor,int idFornecedor) {
+		con = ConexaoFactory.getConnection();
 		String sql = "UPDATE fornecedor SET pontuacao = pontuacao+? WHERE id_fornecedor = ?";
 		
 		try {
@@ -262,6 +280,7 @@ public class FornecedorDAO {
 			preparar.setInt(2, idFornecedor);
 			preparar.execute();
 			preparar.close();
+			con.close();
 			return true;
 			
 		}catch(SQLException e) {
@@ -271,6 +290,7 @@ public class FornecedorDAO {
 	}
 	
 	public boolean removerPenalidade(int valor,int idFornecedor) {
+		con = ConexaoFactory.getConnection();
 		String sql = "UPDATE fornecedor SET pontuacao = pontuacao-? WHERE id_fornecedor = ?";
 		
 		try {
@@ -279,6 +299,7 @@ public class FornecedorDAO {
 			preparar.setInt(2, idFornecedor);
 			preparar.execute();
 			preparar.close();
+			con.close();
 			return true;
 			
 		}catch(SQLException e) {
@@ -287,6 +308,7 @@ public class FornecedorDAO {
 		return false;
 	}
 	public boolean excluirCadastroEnotificar(int id, String email) {
+		con = ConexaoFactory.getConnection();
 		String sql = "DELETE FROM fornecedor WHERE id_fornecedor = ?";
 		
 		try {
@@ -294,6 +316,7 @@ public class FornecedorDAO {
 			preparar.setInt(1, id);
 			preparar.execute();
 			preparar.close();
+			con.close();
 			//NOTIFICAR O FORNECEDOR
 			Email notificar = new Email();
 			String mensagem = "Seu cadastro foi excluído por motivos maiores, sentimos muito pelo transtorno";
@@ -311,6 +334,7 @@ public class FornecedorDAO {
 		return false;
 	}
 	public boolean autorizarFornEnotificar(int id, String email) {
+		con = ConexaoFactory.getConnection();
 		String sql = "UPDATE fornecedor SET autorizado = true WHERE id_fornecedor = ?";
 		
 		try {
@@ -318,6 +342,7 @@ public class FornecedorDAO {
 			preparar.setInt(1, id);
 			preparar.execute();
 			preparar.close();
+			con.close();
 			//NOTIFICAR O FORNECEDOR
 			Email notificar = new Email();
 			String mensagem = "Seu cadastro foi autorizado, navegue no nosso sistema [SISLIC] e aproveite os pedidos de compras.";

@@ -42,9 +42,11 @@
 						int id = Integer.parseInt(request.getParameter("id"));						
 						if(request.getSession().getAttribute("fornecedor") == null) {							
 							request.getSession().setAttribute("fornecedor", fornDAO.buscarPorId(id));
+							request.getSession().setAttribute("tipoFornPendete", false);
 						}else {
 							if(((Fornecedor) request.getSession().getAttribute("fornecedor")).getId() != id){
 								request.getSession().setAttribute("fornecedor", fornDAO.buscarPorId(id));
+								request.getSession().setAttribute("tipoFornPendete", false);
 							}
 						}
 						request.getRequestDispatcher("WEB-INF/gerenteFornecedorCadastro.jsp").forward(request, response);					
@@ -90,7 +92,6 @@
 			}
 		}
 	}else{
-		
 		
 	}	
 			

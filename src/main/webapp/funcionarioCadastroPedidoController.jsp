@@ -4,7 +4,6 @@
 <%@ page import="br.com.SISLIC.model.Pedido"%>
 <%@ page import="br.com.SISLIC.model.Categoria"%>
 <%@ page import="br.com.SISLIC.model.Produto"%>
-<%@ page import="br.com.SISLIC.model.Gerente"%>
 <%@ page import="br.com.SISLIC.model.Funcionario"%>
 <%@ page import="java.util.ArrayList" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -13,12 +12,11 @@
 <% 
 
 	if(request.getMethod().equals("GET")){
-
 		if(request.getSession().getAttribute("categoria")==null) {
 			CategoriaDAO catDAO = new CategoriaDAO();
 			request.getSession().setAttribute("categorias", catDAO.buscarTodas());
 		}
-		request.getRequestDispatcher("WEB-INF/cadastroPedido.jsp").forward(request, response);
+		request.getRequestDispatcher("WEB-INF/funcionarioCadastroPedido.jsp").forward(request, response);
 	
 	}else{
 		//MÉTODO POST
@@ -49,29 +47,22 @@
 				}
 				pedido.setProdutos(produtos);
 				
-				//VERIFICO SE É GERENTE OU FUNCIONARIO E AUTORIZO
-				if(request.getSession().getAttribute("gerAutenticado")!=null){
-					pedido.setAutorizado(true);
-					pedido.setId_funcionario(((Gerente) request.getSession().getAttribute("gerAutenticado")).getCodFunc());
-					pedido.setIdSetor(((Gerente) request.getSession().getAttribute("gerAutenticado")).getSetor().getId());
-				}else {
-					pedido.setAutorizado(false);
-					pedido.setId_funcionario(((Funcionario) request.getSession().getAttribute("funAutenticado")).getCodFunc());
-					pedido.setIdSetor(((Funcionario) request.getSession().getAttribute("funAutenticado")).getSetor().getId());
-				}
-				
+				pedido.setAutorizado(false);
+				pedido.setId_funcionario(((Funcionario) request.getSession().getAttribute("funAutenticado")).getCodFunc());
+				pedido.setIdSetor(((Funcionario) request.getSession().getAttribute("funAutenticado")).getSetor().getId());
+								
 				//CADASTRAR NO BANCO
 				PedidoDAO pedidoDAO = new PedidoDAO();
 				if(pedidoDAO.cadastrarPedidoProdutoItensPedido(pedido, dataLimite)){
-					((Gerente) request.getSession().getAttribute("gerAutenticado")).getPedidosAberto().clear();
-					response.getWriter().print("<script> window.alert('Pedido cadastrado com sucesso!'); location.href='gerentePedidosController.jsp?acao=pedidosaberto';</script>");					
+					session.setAttribute("pedidospendentes", pedidoDAO.buscarTodosPedidosPendentes());
+					response.getWriter().print("<script> window.alert('Pedido cadastrado com sucesso!'); location.href='funcionarioPedidosController.jsp?acao=pedidospendentes';</script>");					
 				}else{
-					response.getWriter().print("<script> window.alert('Erro ao cadastrar, tente novamente mais tarde.'); location.href='cadastroPedidoController.jsp';</script>");	
+					response.getWriter().print("<script> window.alert('Erro ao cadastrar, tente novamente mais tarde.'); location.href='funcionarioCadastroPedidoController.jsp';</script>");	
 				}
 			}
-		}	
-		//request.getRequestDispatcher("WEB-INF/cadastroPedido.jsp").forward(request, response);
+		}
 	}
+		
 
 	
 	

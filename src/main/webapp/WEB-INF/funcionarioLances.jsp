@@ -1,5 +1,5 @@
-<%@ page import="br.com.SISLIC.model.Gerente"%>
 <%@ page import="br.com.SISLIC.model.Funcionario"%>
+<%@ page import="br.com.SISLIC.model.Lance"%>
 <%@ page import="java.util.ArrayList"%>
 <%@	page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>SISLIC - Fornecedores</title>
+<title>SISLIC - LANCES</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="sbAdmin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -39,6 +39,7 @@
 <body>
 
     <div id="wrapper">
+
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
@@ -48,15 +49,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="gerentePedidosController.jsp?acao=pedidosaberto">SISLIC - Sistema de Compras e Licitações</a>
+                <a class="navbar-brand" href="funcionarioPedidosController.jsp?acao=pedidosaberto">SISLIC - Sistema de Compras e Licitações</a>
             </div>            
                 <!-- ícone do Usuario (cabeçalho)-->
                 <ul class="nav navbar-top-links navbar-right">
                 <li class="dropdown">
-                	<% Gerente ger = ((Gerente) request.getSession().getAttribute("gerAutenticado"));            	
-					out.print("<a href=gerenteCadastroController.jsp >"+ger.getNome()+"</a>");
-					ArrayList<Funcionario> funcionarios = new ArrayList<Funcionario>();
-					funcionarios = (ArrayList<Funcionario>) request.getSession().getAttribute("funcionarios");
+                	<% Funcionario ger = ((Funcionario) request.getSession().getAttribute("funAutenticado"));            	
+					out.print("<a href=funcionarioCadastroController.jsp >"+ger.getNome()+"</a>");
+					ArrayList<Lance> lances = (ArrayList<Lance>) request.getSession().getAttribute("todosLances");
 					%>
                     <li><a href="loginController.jsp"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                 </li>
@@ -70,46 +70,27 @@
                         <a href="#"><i class="fa fa-shopping-cart fa-fw"></i> Pedidos<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="gerentePedidosController.jsp?acao=pedidosaberto"> Pedidos em aberto</a>
+                                    <a href="funcionarioPedidosController.jsp?acao=pedidosabertos"> Pedidos em aberto</a>
                                 </li>
                                 <li>
-                                    <a href="gerentePedidosController.jsp?acao=pedidospendentes"> Pedidos pendentes</a>
+                                    <a href="funcionarioPedidosController.jsp?acao=pedidospendentes"> Pedidos pendentes</a>
                                 </li>
                                 <li>
-                                    <a href="gerentePedidosController.jsp?acao=pedidosfechados"> Pedidos finalizados</a>
+                                    <a href="funcionarioPedidosController.jsp?acao=pedidosfechados"> Pedidos finalizados</a>
                                 </li>
                                 <li>
-                                    <a href="cadastroPedidoController.jsp"> Cadastrar pedido</a>
+                                    <a href="funcionarioCadastroPedidoController.jsp"> Solicitar pedido</a>
                                 </li>
                             </ul>
                         </li>                                               
-                       <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-users"></i> Fornecedores<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">                                
-                                <li>
-                                    <a href="gerenteFornecedoresController.jsp?acao=fornPendentes"> Fornecedores pendentes</a>
-                                </li>
-                                <li>
-                                    <a href="gerenteFornecedoresController.jsp?acao=fornCadastrados"> Fornecedores cadastrados</a>
-                                </li>
-                            </ul>
-                        </li>
                         <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-users"></i> Funcionário<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="gerenteFuncionariosController.jsp"> Funcionários cadastrados</a>
-                                </li>
-                                <li>
-                                    <a href="gerenteFuncionariosController.jsp?acao=formCadastro"> Cadastrar Funcionário</a>
-                                </li>
-                            </ul>
-                        </li>
+                            <a href="funcionarioFornecedoresController.jsp?acao=fornCadastrados"><i class="fa fa-bar-chart-o fa-users"></i> Fornecedores</a>
+                       </li>
                         <li>
-                        	<a href="gerenteLancesController.jsp?acao=lances"> <i class="fa fa-legal fa-fw"></i> Lances</a>
+                        	<a href="funcionarioLancesController.jsp?acao=lances"> <i class="fa fa-legal fa-fw"></i> Lances</a>
                         </li>
                          <li>
-                            <a href="gerentePedidosController.jsp"><i class="fa fa-user fa-fw"></i> Cadastro</a>
+                            <a href="funcionarioCadastroController.jsp"><i class="fa fa-user fa-fw"></i> Cadastro</a>
                         </li>
                         <li>
                             <a href="sobreController.jsp"><i class="fa fa-info-circle fa-fw"></i> Sobre</a>
@@ -124,37 +105,37 @@
         <div id="page-wrapper">
             <div class="row">
             <div class="col-lg-12">
-                    <h2 class="page-header">
-	                <i class="fa fa-users"></i> Fornecedores
-	                <small>(Cadastrados)</small></h2>
+            	<h2 class="page-header">
+	                <i class="fa fa-legal fa-fw"></i> Lances
+	                </h2>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>           
             <!-- /.row -->
                 <div class="col-lg-12">
                     <div class="panel panel-default">
-                        <div class="panel-heading">Todos os funcionarios </div>
+                        <div class="panel-heading">Todos os lances</div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <table width="100%" class="table table-bordered table-hover" id="dataTables-example">
                                 <thead>
                                 <tr>
-                                	<th width="30%">Nome</th>
-                                   	<th width="30%">Cargo</th>
-                                   	<th width="20%">Setor</th>
-                                   	<th width="20%">Telefone</th>
+                                	<th width="20%">Pedido</th>
+                                   	<th>Descrição</th>
+                                   	<th width="13%">Fornecedor</th>
+                                   	<th width="9%">Valor</th>
+                                   	<th width="10%">Data</th>
                                	</tr>                               	
                                 </thead>                                
                                 <tbody>                                
-							 	<% 
-								 	for(Funcionario f: funcionarios){
-								 		out.print("<tr onclick= location.href=\"gerenteFuncionariosController.jsp?acao=cadastro&id="+f.getCodFunc()+"\" style=\"cursor: pointer;\" title=\"Ver detalhes\">");
-								 		out.print("<td>"+f.getNome()+"</td>");
-								 		out.print("<td>"+f.getCargo()+"</td> <td>"+f.getSetor().getNome()+"</td>");
-								 		out.print("<td>"+f.getTelefone()+"</td>");
-								 		out.print("</a></tr>");
-								 	}
-							 	%>                          
+							 	<% for(Lance l: lances){
+							 		out.print("<tr onclick= location.href=\"funcionarioLancesController.jsp?acao=lance&id="+l.getId()+"\" style=\"cursor: pointer;\" title=\"Ver detalhes\">");
+							 		out.print("<td>"+l.getPedido().getNome()+"</td>");
+							 		out.print("<td>"+l.getPedido().getDescricao()+"</td> <td>"+l.getForn().getrSocial()+"</td>");
+							 		out.print("<td>"+l.getValorTotal()+"</td>");
+							 		out.print("<td>"+l.getData()+"</td>");
+							 		out.print("</a></tr>");
+							 	}%>                          
                                 </tbody>
                             </table>
                         </div>

@@ -10,9 +10,10 @@ import br.com.SISLIC.model.Setor;
 
 public class SetorDAO {
 
-	private Connection con = ConexaoFactory.getConnection();
+	private Connection con;
 	
 	public Setor buscarPorId(int id) {
+		con = ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM setor WHERE id_setor = ?";
 				
 		try(PreparedStatement prepara = con.prepareStatement(sql)){
@@ -28,6 +29,7 @@ public class SetorDAO {
 				PedidoDAO pedidoDAO= new PedidoDAO();
 				setor.setPedidos(pedidoDAO.buscarPorSetor(id));
 				prepara.close();
+				con.close();
 				return setor;
 			}			
 		}catch(SQLException e) {
@@ -36,6 +38,7 @@ public class SetorDAO {
 		return null;
 	}
 	public Setor buscarSomenteOsetor(int id) {
+		con = ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM setor WHERE id_setor = ?";
 		
 		try(PreparedStatement prepara = con.prepareStatement(sql)){
@@ -47,6 +50,7 @@ public class SetorDAO {
 				setor.setId(id);
 				setor.setNome(resultado.getString("nome"));	
 				prepara.close();
+				con.close();
 				return setor;
 			}			
 		}catch(SQLException e) {
@@ -55,6 +59,7 @@ public class SetorDAO {
 		return null;
 	}
 	public Setor buscarSomenteOsetorPeloNome(String nome) {
+		con = ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM setor WHERE nome = ?";
 		
 		try(PreparedStatement prepara = con.prepareStatement(sql)){
@@ -66,6 +71,7 @@ public class SetorDAO {
 				setor.setId(Integer.parseInt(resultado.getString("id_setor")));
 				setor.setNome(resultado.getString("nome"));	
 				prepara.close();
+				con.close();
 				return setor;
 			}			
 		}catch(SQLException e) {
@@ -74,12 +80,14 @@ public class SetorDAO {
 		return null;
 	}
 	public boolean cadastrar(String nome) {
+		con = ConexaoFactory.getConnection();
 		String sql = "INSERT INTO setor(nome) VALUES(?)";
 		
 		try(PreparedStatement prepara = con.prepareStatement(sql)){
 			prepara.setString(1, nome);
 			prepara.executeQuery();
 			prepara.close();
+			con.close();
 			return true;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

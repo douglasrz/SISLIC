@@ -37,12 +37,12 @@
 	<script type="text/javascript">
 			function confirmaCancelamento(id){
 				if(window.confirm("Tem certeza que deseja cancelar o pedido? (Leia as observações)")){
-					location.href="gerentepedidos.do?acao=cancelar&id="+id;
+					location.href="gerentePedidosController.jsp?acao=cancelar&id="+id;
 				}
 			}
 			function confirmaAutorizacao(id){
 				if(window.confirm("Tem certeza que deseja autorizar o pedido? (Leia as observações)")){
-					location.href="gerentepedidos.do?acao=autorizar&id="+id;
+					location.href="gerentePedidosController.jsp?acao=autorizar&id="+id;
 				}
 			}
 	</script>
@@ -61,7 +61,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="gerentePedidosController.jsp">SISLIC - Sistema de Compras e Licitações</a>
+                <a class="navbar-brand" href="gerentePedidosController.jsp?acao=pedidosaberto">SISLIC - Sistema de Compras e Licitações</a>
             </div>            
                 <!-- ícone do Usuario (cabeçalho)-->
                 <ul class="nav navbar-top-links navbar-right">
@@ -70,7 +70,7 @@
 					out.print("<a href=gerenteCadastroController.jsp >"+ger.getNome()+"</a>");
 					Pedido pedido = ((Pedido) request.getSession().getAttribute("pedido"));
 					%>
-                    <li><a href="logincontroller.do"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+                    <li><a href="loginController.jsp"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                 </li>
                 </ul>
             <!-- /.navbar-top-links -->
@@ -79,52 +79,49 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                        <a href="#"><i class="fa fa-shopping-cart fa-fw"></i>Pedidos<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-shopping-cart fa-fw"></i> Pedidos<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="gerentePedidosController.jsp?acao=pedidosaberto">Pedidos em aberto</a>
+                                    <a href="gerentePedidosController.jsp?acao=pedidosaberto"> Pedidos em aberto</a>
                                 </li>
                                 <li>
-                                    <a href="gerentePedidosController.jsp?acao=pedidospendentes">Pedidos pendentes</a>
+                                    <a href="gerentePedidosController.jsp?acao=pedidospendentes"> Pedidos pendentes</a>
                                 </li>
                                 <li>
-                                    <a href="gerentePedidosController.jsp?acao=pedidosfechados">Pedidos finalizados</a>
+                                    <a href="gerentePedidosController.jsp?acao=pedidosfechados"> Pedidos finalizados</a>
                                 </li>
                                 <li>
-                                    <a href="cadastroPedido.jsp">Cadastrar pedido</a>
+                                    <a href="cadastroPedido.jsp"> Cadastrar pedido</a>
                                 </li>
                             </ul>
                         </li>                                               
                         <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Fornecedores<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Fornecedores<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="fornecedoresGerenteController.jsp?acao=fornPendentes">Fornecedores pendentes</a>
+                                    <a href="fornecedoresGerenteController.jsp?acao=fornPendentes"> Fornecedores pendentes</a>
                                 </li>
                                 <li>
-                                    <a href="fornecedoresGerenteController.jsp?acao=fornCadastrados">Fornecedores cadastrados</a>
+                                    <a href="fornecedoresGerenteController.jsp?acao=fornCadastrados"> Fornecedores cadastrados</a>
                                 </li>
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Funcionário<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Funcionário<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="#">Funcionários pendentes</a>
+                                    <a href="gerenteFuncionariosController.jsp?"> Funcionários cadastrados</a>
                                 </li>
                                 <li>
-                                    <a href="#">Funcionários cadastrados</a>
-                                </li>
-                                <li>
-                                    <a href="#">Cadastrar Funcionário</a>
+                                    <a href="gerenteFuncionariosController.jsp?acao=formCadastro"> Cadastrar Funcionário</a>
                                 </li>
                             </ul>
                         </li>
                         <li>
-                        	<a href="gerentelancescontroller.do?acao=lances"> <i class="fa fa-legal fa-fw"></i>Lances</a>
+                        	<a href="gerentelancescontroller.do?acao=lances"> <i class="fa fa-legal fa-fw"></i> Lances</a>
                         </li>
                          <li>
-                            <a href="gerenteCadastroController.jsp"><i class="fa fa-user fa-fw"></i>Cadastro</a>
+                            <a href="gerenteCadastroController.jsp"><i class="fa fa-user fa-fw"></i> Cadastro</a>
                         </li>
                         <li>
                             <a href="sobreController.jsp"><i class="fa fa-info-circle fa-fw"></i> Sobre</a>

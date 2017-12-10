@@ -13,7 +13,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>SISLIC - PEDIDOS</title>
+    <title>SISLIC - PEDIDOS </title>
 
     <!-- Bootstrap Core CSS -->
     <link href="sbAdmin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -54,15 +54,29 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="homefuncontroller.do">SISLIC - Sistema de Compras e Licitações</a>
+                <a class="navbar-brand" href="funcionarioPedidosController.jsp?acao=pedidosaberto">SISLIC - Sistema de Compras e Licitações</a>
             </div>            
                 <!-- Ã­cone do Usuario (cabeÃ§alho)-->
                 <ul class="nav navbar-top-links navbar-right">
                 <li class="dropdown">                	
-                	<% Funcionario fun = ((Funcionario) request.getSession().getAttribute("funAutenticado")); 
-                	ArrayList<Pedido> pedidos = (ArrayList<Pedido>) request.getSession().getAttribute("pedidosPendentes");
-					out.print("<a href=cadastrocontroller.do >"+fun.getNome()+"</a>");%>
-                    <li><a href="logincontroller.do"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+                	<% Funcionario ger = ((Funcionario) request.getSession().getAttribute("funAutenticado")); 
+                	ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
+                	String tipo = "aberto";
+                	if(request.getSession().getAttribute("tipoPedido").equals("pedidosabertos")){
+                		pedidos = (ArrayList<Pedido>) session.getAttribute("pedidosabertos");
+                	}else{
+                		if(request.getSession().getAttribute("tipoPedido").equals("pedidospendentes")){
+                			pedidos = (ArrayList<Pedido>) session.getAttribute("pedidospendentes");
+                			tipo = "pendente";
+                		}else{
+                			if(request.getSession().getAttribute("tipoPedido").equals("pedidosfechados")){
+                				pedidos = pedidos = (ArrayList<Pedido>) session.getAttribute("pedidosfechados");
+                				tipo = "fechado";
+                			}
+                		}
+                	}
+					out.print("<a href=funcionarioCadastroController.jsp >"+ger.getNome()+"</a>");%>
+                    <li><a href="loginController.jsp"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                 </li>
                 </ul>
             <!-- /.navbar-top-links -->
@@ -71,22 +85,33 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                        <a href="homefuncontroller.do"><i class="fa fa-shopping-cart fa-fw"></i>Pedidos Autorizados</a>
-                        </li>
+                        <a href="#"><i class="fa fa-shopping-cart fa-fw"></i> Pedidos<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="funcionarioPedidosController.jsp?acao=pedidosabertos"> Pedidos em aberto</a>
+                                </li>
+                                <li>
+                                    <a href="funcionarioPedidosController.jsp?acao=pedidospendentes"> Pedidos pendentes</a>
+                                </li>
+                                <li>
+                                    <a href="funcionarioPedidosController.jsp?acao=pedidosfechados"> Pedidos finalizados</a>
+                                </li>
+                                <li>
+                                    <a href="funcionarioCadastroPedidoController.jsp"> Solicitar pedido</a>
+                                </li>
+                            </ul>
+                        </li>                                               
                         <li>
-                            <a href="homefuncontroller.do?acao=pedidosPendentes"><i class="fa fa-minus-square fa-fw"></i>Pedidos Pendentes</a>
-                        </li>                        
+                            <a href="funcionarioFornecedoresController.jsp?acao=fornCadastrados"><i class="fa fa-bar-chart-o fa-users"></i> Fornecedores</a>
+                       </li>
                         <li>
-                            <a href="pontcontroller.do"><i class="fa fa-bar-chart-o fa-fw"></i>Fornecedores</a>
-                        </li>
-                        <li>
-                        	<a href=""> <i class="fa fa-legal fa-fw"></i>Lances</a>
+                        	<a href="funcionarioLancesController.jsp?acao=lances"> <i class="fa fa-legal fa-fw"></i> Lances</a>
                         </li>
                          <li>
-                            <a href="cadastrocontroller.do"><i class="fa fa-user fa-fw"></i>Cadastro</a>
+                            <a href="funcionarioCadastroController.jsp"><i class="fa fa-user fa-fw"></i> Cadastro</a>
                         </li>
                         <li>
-                            <a href="sobrecontroller.do"><i class="fa fa-info-circle fa-fw"></i> Sobre</a>
+                            <a href="sobreController.jsp"><i class="fa fa-info-circle fa-fw"></i> Sobre</a>
                         </li>
                     </ul>
                 </div>
@@ -98,13 +123,22 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Pedidos pendentes</h1>
+                    <h1 class="page-header">Pedidos <small><%if(tipo.equals("pendente")){
+                    	out.print("(Pendentes)");
+                    	}else{ 
+                    		if(tipo.equals("fechado")){
+                    			out.print("(Fechados)");
+                    			}else{
+                    				out.print("(Em aberto)");
+                    				} 
+                    		}%></small></h1>
+                    	
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
             <div class="row">
-                <% for(Pedido p: pedidos){
+                <%for(Pedido p: pedidos){
                 	//PEDIDO
 					out.print("<div class=\"col-lg-4\">");
 					out.print("<div class=\"panel panel-default\">");
@@ -119,7 +153,7 @@
 					//PRAZO E LINK
 					out.print("<div class=\"panel-footer\">");
 					int id = p.getId();
-					out.print("<a type=\"submit\" href=\"pedidocontroller.do?acao=pedido&id="+id+"\" class=\"btn btn-success btn-block\"> Confira </a> </div>");
+					out.print("<a type=\"submit\" href=\"funcionarioPedidosController.jsp?acao=pedido&id="+id+"\" class=\"btn btn-success btn-block\"> Confira </a> </div>");
 					//out.print("Expira em "+p.getDataLimite());
 					out.print("</div> </div>");
                 }

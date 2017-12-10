@@ -23,7 +23,7 @@
 					sessao.setMaxInactiveInterval(60*10);
 					//sessao.setAttribute("nomeForn",forAutenticado.getLogin());
 					//Direcionando para a página principal
-					request.getRequestDispatcher("pedidocontroller.do").forward(request, response);
+					request.getRequestDispatcher("fornecedorPedidoController.jsp").forward(request, response);
 				}else {
 					response.getWriter().print("<script> window.alert('Seu cadastrado ainda não foi autorizado, aguarde a análise.'); location.href='login.html';</script>");
 					}
@@ -49,7 +49,7 @@
 					HttpSession sessao = request.getSession(); //criando a sessao
 					sessao.setAttribute("funAutenticado", funAutenticado);//add o usuario a sessao			
 					sessao.setMaxInactiveInterval(60*10);
-					request.getRequestDispatcher("homefuncontroller.do").forward(request, response);
+					request.getRequestDispatcher("funcionarioPedidosController.jsp").forward(request, response);
 				}else {
 					response.getWriter().print("<script> window.alert('Usuário não encontrado'); location.href='login.html';</script>");
 					}

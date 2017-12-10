@@ -1,9 +1,16 @@
 package br.com.SISLIC.DAO;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import org.apache.commons.mail.EmailException;
@@ -18,11 +25,11 @@ import br.com.SISLIC.model.Produto;
 
 public class PedidoDAO {
 	
-	private Connection con = ConexaoFactory.getConnection();
+	private Connection con;
 
 		
 	public Pedido buscarPedido(int id) {
-		
+		con = ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM pedido WHERE id_pedido=?";		
 		try(PreparedStatement preparar = con.prepareStatement(sql)){	
 			preparar.setInt(1, id);
@@ -43,8 +50,12 @@ public class PedidoDAO {
 				pedidoRetorno.setProdutos(lista);
 				if(pedidoRetorno.isAutorizado()) {
 					preparar.close();
+					con.close();
 					return pedidoRetorno;
-				}else return null;
+				}else {
+					con.close();
+					return null;
+				}
 			}				
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -53,7 +64,7 @@ public class PedidoDAO {
 	}
 	
 	public Pedido buscarPedidoAberto(int id) {
-			
+		con = ConexaoFactory.getConnection();
 			String sql = "SELECT *FROM pedido WHERE id_pedido=?";		
 			try(PreparedStatement preparar = con.prepareStatement(sql)){	
 				preparar.setInt(1, id);
@@ -74,8 +85,10 @@ public class PedidoDAO {
 					pedidoRetorno.setProdutos(lista);
 					if(pedidoRetorno.isAutorizado() && pedidoRetorno.isStatusAberto()) {
 						preparar.close();
+						con.close();
 						return pedidoRetorno;
 					}else {
+						con.close();
 						preparar.close();
 						return null;
 					}
@@ -86,7 +99,7 @@ public class PedidoDAO {
 			return null;
 	}
 	public ArrayList<Pedido> buscarTodosPedidosAberto(){
-		
+		con = ConexaoFactory.getConnection();
 		ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
 		String sql = "SELECT *FROM pedido";		
 		
@@ -111,6 +124,7 @@ public class PedidoDAO {
 					pedidos.add(pedidoRetorno);
 			}	
 			preparar.close();
+			con.close();
 			return pedidos;
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -119,7 +133,7 @@ public class PedidoDAO {
 	}
 	
 	public ArrayList<Pedido> buscarTodosPedidos() {
-		
+		con = ConexaoFactory.getConnection();
 			ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
 			String sql = "SELECT *FROM pedido";		
 			
@@ -144,6 +158,7 @@ public class PedidoDAO {
 						pedidos.add(pedidoRetorno);
 				}	
 				preparar.close();
+				con.close();
 				return pedidos;
 			}catch(SQLException e) {
 				e.printStackTrace();
@@ -153,7 +168,7 @@ public class PedidoDAO {
 	
 
 	public ArrayList<Produto> buscaItemPedido(int idPedido){
-		
+		con = ConexaoFactory.getConnection();
 		ArrayList<Produto> lista = new ArrayList<Produto>();
 		String sql = "SELECT *FROM item_pedido WHERE id_pedido=?";
 		
@@ -176,6 +191,7 @@ public class PedidoDAO {
 				lista.add(retorno);	
 			}
 			preparar.close();
+			con.close();
 			return lista;
 			
 		}catch(SQLException e) {
@@ -184,7 +200,7 @@ public class PedidoDAO {
 		return lista;
 	}
 	public ArrayList<Pedido> buscarPorSetor(int idSetor){
-		
+		con = ConexaoFactory.getConnection();
 		ArrayList<Pedido> lista = new ArrayList<Pedido>();
 		String sql = "SELECT *FROM pedido WHERE id_setor=?";
 		
@@ -211,6 +227,7 @@ public class PedidoDAO {
 					lista.add(pedidoRetorno);
 			}
 			preparar.close();
+			con.close();
 			return lista;
 			
 		}catch(SQLException e) {
@@ -220,6 +237,7 @@ public class PedidoDAO {
 	}
 	
 	public ArrayList<Pedido> buscarPedentesSetor(int idSetor){
+		con = ConexaoFactory.getConnection();
 		ArrayList<Pedido> lista = new ArrayList<Pedido>();
 		String sql = "SELECT *FROM pedido WHERE id_setor=?";
 		
@@ -246,6 +264,7 @@ public class PedidoDAO {
 					lista.add(pedidoRetorno);
 			}
 			preparar.close();
+			con.close();
 			return lista;
 			
 		}catch(SQLException e) {
@@ -254,6 +273,7 @@ public class PedidoDAO {
 		return lista;
 	}
 	public ArrayList<Pedido> buscarTodosPedidosFechados() {
+		con = ConexaoFactory.getConnection();
 		ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
 		String sql = "SELECT *FROM pedido";		
 		
@@ -278,6 +298,7 @@ public class PedidoDAO {
 					pedidos.add(pedidoRetorno);
 			}	
 			preparar.close();
+			con.close();
 			return pedidos;
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -287,6 +308,7 @@ public class PedidoDAO {
 	
 	public ArrayList<Pedido> buscarTodosPedidosPendentes() {
 		
+		con = ConexaoFactory.getConnection();
 		ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
 		String sql = "SELECT *FROM pedido WHERE autorizado = false ";		
 		
@@ -309,6 +331,7 @@ public class PedidoDAO {
 				pedidos.add(pedidoRetorno);
 			}	
 			preparar.close();
+			con.close();
 			return pedidos;
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -317,7 +340,7 @@ public class PedidoDAO {
 	}
 	//ESTE MÉTODO PEGA O PEDIDO FECHADO, ABERTO OU PEDENTE, DEPENDE SOMENTE DO ID
 	public Pedido buscarPedidoSemRestrição(int id) {
-		
+		con = ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM pedido WHERE id_pedido=?";		
 		try(PreparedStatement preparar = con.prepareStatement(sql)){	
 			preparar.setInt(1, id);
@@ -336,6 +359,7 @@ public class PedidoDAO {
 				ArrayList<Produto> lista = buscaItemPedido(id);						
 				pedidoRetorno.setProdutos(lista);
 				preparar.close();
+				con.close();
 				return pedidoRetorno;
 				
 			}				
@@ -345,7 +369,7 @@ public class PedidoDAO {
 		return null;
 	}
 	public boolean autorizarPedido(int id) {
-		
+		con = ConexaoFactory.getConnection();
 		String sql = "UPDATE pedido SET autorizado = true WHERE id_pedido=?";
 		//md5 criptografa a senha
 		try {
@@ -356,6 +380,7 @@ public class PedidoDAO {
 			preparar.execute();
 			//fechanco a conexao com o banco
 			preparar.close();
+			con.close();
 			return true;
 			
 		}catch(SQLException e) {
@@ -367,9 +392,7 @@ public class PedidoDAO {
 	
 	//ESTE MÉTODO VAI APAGAR item_pedido, lance_item_pedido, lances, pedido E VAI NOTIFICAR CADA FORNECEDOR QUE FIZERAM LANCES NESSE PEDIDO
 	public boolean cancelarPedidoElances(int id) {
-		
 		LanceDAO lanceDAO = new LanceDAO();
-		FornecedorDAO forDAO = new FornecedorDAO();
 		ArrayList<Lance> lances = lanceDAO.buscarPorIdPedido(id); 
 		
 		if(!lances.isEmpty()) {
@@ -391,13 +414,15 @@ public class PedidoDAO {
 		//APGAR OS ITENS DO PEDIDO
 		if(!apagarItensPedido(id)) {
 			return false;
-		}		
+		}	
+		con = ConexaoFactory.getConnection();	
 		String sql = "DELETE FROM pedido WHERE id_pedido=?";		
 		try {
 			PreparedStatement preparar = con.prepareStatement(sql);	
 			preparar.setInt(1, id);
 			preparar.execute();
 			preparar.close();
+			con.close();
 			return true;			
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -407,6 +432,7 @@ public class PedidoDAO {
 	
 	private boolean apagarItensPedido(int idPedido) {
 		
+		con = ConexaoFactory.getConnection();
 		String sql = "DELETE FROM item_pedido WHERE id_pedido=?";
 		
 		try {
@@ -414,6 +440,7 @@ public class PedidoDAO {
 			preparar.setInt(1, idPedido);
 			preparar.execute();
 			preparar.close();
+			con.close();
 			return true;
 			
 		}catch(SQLException e) {
@@ -421,42 +448,36 @@ public class PedidoDAO {
 		}
 		return false;
 	}
-	public boolean cadastrarPedidoProdutoItensPedido(Pedido pedido) {
+	public boolean cadastrarPedidoProdutoItensPedido(Pedido pedido, String dataLimite) {	
 		
-		String sql = "INSERT INTO pedido(data_lancamento, data_limite, id_funcionario, nome, descricao, id_setor, autorizado) VALUES(?,?,?,?,?,?,?)";
-		
-		try {
-			PreparedStatement preparar = con.prepareStatement(sql);	
-			preparar.setDate(1, pedido.getDataLancamento());
-			preparar.setDate(2, pedido.getDataLimite());
-			preparar.setInt(3, pedido.getId_funcionario());
-			preparar.setString(4, pedido.getNome());
-			preparar.setString(5, pedido.getDescricao());
-			preparar.setInt(6, pedido.getIdSetor());
-			preparar.setBoolean(7, pedido.isAutorizado());
-			preparar.execute();
-			preparar.close();
-			
-			//CADASTRAR OS PRODUTOS
-			ProdutoDAO prodDAO = new ProdutoDAO();
-			for(Produto p: pedido.getProdutos()) {
-				if(!prodDAO.cadastrarProduto(p))
-					return false;
-			}
-			//CADASTRAR item_pedido
-			if(!cadastrarTodosItemPedido(pedido)) {
+		con = ConexaoFactory.getConnection();
+		//CADASTRAR OS PRODUTOS
+		ProdutoDAO prodDAO = new ProdutoDAO();
+		int idProduto;
+		for(Produto p: pedido.getProdutos()) {
+			idProduto = prodDAO.cadastrarProdutoEretornaId(p);
+			if(idProduto == 0) {//PRECISO ADICIONAR NO BANCO E SETAR O ID EM SEGUIDA PARA SER USADO NO CADASTRAR item_pedido
 				return false;
 			}
-			return true;
-			
-		}catch(SQLException e) {
-			e.printStackTrace();
+			p.setId(idProduto);
+		}		
+		//CADASTRAR O PEDIDO
+		int id = cadastrarSomentePedidoEretornaId(pedido, dataLimite);
+		if(id == 0) {
+			return false;
 		}
-		return false;
+		pedido.setId(id);
+		
+		//CADASTRAR item_pedido	
+		if(!cadastrarTodosItemPedido(pedido)) {
+			return false;
+		}
+		return true;
 	}
 	
 	public boolean cadastrarTodosItemPedido(Pedido pedido) {
 		
+		con = ConexaoFactory.getConnection();
 		String sql = "INSERT INTO item_pedido(quantidade, id_produto, id_pedido) VALUES(?,?,?)";
 		
 		try {
@@ -468,6 +489,7 @@ public class PedidoDAO {
 				preparar.execute();
 			}
 			preparar.close();
+			con.close();
 			return true;
 			
 		}catch(SQLException e) {
@@ -476,6 +498,7 @@ public class PedidoDAO {
 		return false;
 	}
 	public ArrayList<Pedido> buscarPorIdFun(int id){
+		con = ConexaoFactory.getConnection();
 		ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
 		String sql = "SELECT *FROM pedido WHERE id_funcionario =? ";		
 		
@@ -499,10 +522,54 @@ public class PedidoDAO {
 				pedidos.add(pedidoRetorno);
 			}	
 			preparar.close();
+			con.close();
 			return pedidos;
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
 		return pedidos;
+	}
+	private int cadastrarSomentePedidoEretornaId(Pedido pedido, String dataLimite) {
+		con = ConexaoFactory.getConnection();
+		//PEGAR DATA ATUAL
+		java.util.Date dataUtil = new java.util.Date();
+		java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime());
+		pedido.setDataLancamento(dataSql);		
+				
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		java.util.Date parsed = null;
+		try {
+			parsed = format.parse(dataLimite);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		java.sql.Date datasqlLimite = new java.sql.Date(parsed.getTime());		
+				
+		String sql = "INSERT INTO pedido(data_lancamento, data_limite, id_funcionario, nome, descricao, id_setor, autorizado) VALUES(?,?,?,?,?,?,?)";
+		
+		try {
+			PreparedStatement preparar = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);	
+			preparar.setDate(1, pedido.getDataLancamento());
+			preparar.setDate(2, datasqlLimite);
+			preparar.setInt(3, pedido.getId_funcionario());
+			preparar.setString(4, pedido.getNome());
+			preparar.setString(5, pedido.getDescricao());
+			preparar.setInt(6, pedido.getIdSetor());
+			preparar.setBoolean(7, pedido.isAutorizado());
+			preparar.execute();
+			ResultSet rs = preparar.getGeneratedKeys();
+			int id = 0;
+			if (rs.next()) {
+			    id = rs.getInt("id_pedido");
+			}
+			preparar.close();
+			con.close();
+			return id;
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
 	}
 }

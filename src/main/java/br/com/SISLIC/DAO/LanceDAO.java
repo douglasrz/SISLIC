@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import br.com.SISLIC.model.Lance;
@@ -12,13 +13,14 @@ import br.com.SISLIC.model.Produto;
 
 public class LanceDAO {
 	
-private Connection con = ConexaoFactory.getConnection();
+private Connection con;
 	
 	public boolean cadastrar(Lance lance) {
+		con = ConexaoFactory.getConnection();
 		String sql = "INSERT INTO lance(valor_total, id_pedido, id_fornecedor, data, taxa_entrega) VALUES(?,?,?,?,?)";		
 		
 		try {
-			PreparedStatement preparar = con.prepareStatement(sql);
+			PreparedStatement preparar = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			//Substitui o ? pelo dado do usuario
 			preparar.setFloat(1,lance.getValorTotal() );
 			preparar.setInt(2,lance.getPedido().getId());			
@@ -27,43 +29,26 @@ private Connection con = ConexaoFactory.getConnection();
 			preparar.setFloat(5, lance.getTaxaEntrega());
 			//execurtando o comando sql no banco de dados
 			preparar.execute();
-			//DEPOIS DE SALVAR O PEDIDO, EU PRECISO PEGAR O ID DELE GERADO PELO PRORPIO BANCO
-			//VAI BUGAR SE O MESMO FORNECEDOR EFETUAR O MESMO LANCE NO MESMO DIA 
-			lance = buscarIdLance(lance);//vai retornar o mesmo só que com o seu id			
+			ResultSet rs = preparar.getGeneratedKeys();
+			int id = 0;
+			if (rs.next()) {
+			    id = rs.getInt("id_lance");
+			}
+			lance.setId(id); 	
 			//AGORA PRECISO ADD OS PREÇOS NA TABELA lance_item_pedido
 			cadastrarItensLance(lance);
 			//fechanco a conexao com o banco
 			preparar.close();
+			con.close();
 			return true;
 		}catch(SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
-	public Lance buscarIdLance(Lance lance) {
-		String sql = "SELECT *FROM lance WHERE id_fornecedor = ? AND id_pedido = ? AND data = ?";
-		
-		try {
-			PreparedStatement preparar = con.prepareStatement(sql);
-			
-			preparar.setInt(1,lance.getForn().getId());
-			preparar.setInt(2,lance.getPedido().getId());			
-			preparar.setDate(3, lance.getData());
-			
-			ResultSet resultado = preparar.executeQuery();
-			if(resultado.next()) {
-				lance.setId(resultado.getInt("id_lance"));
-				preparar.close();
-				return lance;
-			}
-			preparar.close();
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return lance;
-	}
+	
 	public void cadastrarItensLance(Lance lance) {
+		con = ConexaoFactory.getConnection();
 		String sql = "INSERT INTO lance_item_pedido(id_lance, id_item_pedido, valor) VALUES(?,?,?)";
 		
 		try {
@@ -80,7 +65,7 @@ private Connection con = ConexaoFactory.getConnection();
 			
 			//fechanco a conexao com o banco
 			preparar.close();
-						
+			con.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -88,6 +73,7 @@ private Connection con = ConexaoFactory.getConnection();
 	}
 	public ArrayList<Lance>	lancesFornId(int idForn){
 		
+		con = ConexaoFactory.getConnection();
 		ArrayList<Lance> lista = new ArrayList<Lance>();
 		String sql = "SELECT *FROM lance WHERE id_fornecedor=?";
 		
@@ -110,6 +96,7 @@ private Connection con = ConexaoFactory.getConnection();
 				lista.add(retorno);
 			}
 			preparar.close();
+			con.close();
 			return lista;
 			
 		}catch(SQLException e) {
@@ -118,7 +105,7 @@ private Connection con = ConexaoFactory.getConnection();
 		return lista;
 	}
 	public Lance buscarPorId(int id) {
-		
+		con = ConexaoFactory.getConnection();
 		String sql = "SELECT * FROM lance WHERE id_lance = ?";
 		try (PreparedStatement preparar = con.prepareStatement(sql)){
 			preparar.setInt(1, id);
@@ -147,6 +134,7 @@ private Connection con = ConexaoFactory.getConnection();
 					pedido.setProdutos(produtos);
 					lance.setPedido(pedido);
 					preparar.close();
+					con.close();
 					return lance;
 				}				
 			}catch(SQLException e) {
@@ -155,15 +143,17 @@ private Connection con = ConexaoFactory.getConnection();
 			return null;
 	}
 	public boolean deleteLance(int idLance) {//APAGO A TABELA LANCE E LANCE_ITEM_PEDIDO
-		 
+		
 		if(!deleteLanceItens(idLance)) {//APAGO LOGO OS ITENS DO LANCE (lance_item_pedido)
 			return false;//se não conseguiu apagar os itens então já retorno sem apagar o lance
 		}
+		con = ConexaoFactory.getConnection();
 		String sql = "DELETE FROM lance WHERE id_lance = ?";
 		try(PreparedStatement prepara = con.prepareStatement(sql)){
 			prepara.setInt(1, idLance);	
 			prepara.execute();
 			prepara.close();
+			con.close();
 			return true;
 		} catch (SQLException e) {			
 			e.printStackTrace();
@@ -171,12 +161,13 @@ private Connection con = ConexaoFactory.getConnection();
 		}
 	}
 	private boolean deleteLanceItens(int idLance) {
-		
+		con = ConexaoFactory.getConnection();
 		String sql = "DELETE FROM lance_item_pedido WHERE id_lance = ?";
 		try(PreparedStatement prepara = con.prepareStatement(sql)){
 			prepara.setInt(1, idLance);			
 			prepara.execute(); 
 			prepara.close();
+			con.close();
 			return true;
 		} catch (SQLException e) {			
 			e.printStackTrace();
@@ -184,7 +175,7 @@ private Connection con = ConexaoFactory.getConnection();
 		}
 	}
 	public ArrayList<Lance>	buscarPorIdPedido(int idPedido){
-		
+		con = ConexaoFactory.getConnection();
 		ArrayList<Lance> lista = new ArrayList<Lance>();
 		String sql = "SELECT *FROM lance WHERE id_pedido=?";
 		
@@ -206,6 +197,7 @@ private Connection con = ConexaoFactory.getConnection();
 				lista.add(retorno);
 			}
 			preparar.close();
+			con.close();
 			return lista;
 			
 		}catch(SQLException e) {
@@ -214,7 +206,7 @@ private Connection con = ConexaoFactory.getConnection();
 		return lista;
 	}
 	public ArrayList<Lance>	todosLances(){
-		
+		con = ConexaoFactory.getConnection();
 		ArrayList<Lance> lista = new ArrayList<Lance>();
 		String sql = "SELECT *FROM lance";
 		
@@ -237,6 +229,7 @@ private Connection con = ConexaoFactory.getConnection();
 				lista.add(retorno);
 			}
 			preparar.close();
+			con.close();
 			return lista;
 			
 		}catch(SQLException e) {
@@ -245,11 +238,13 @@ private Connection con = ConexaoFactory.getConnection();
 		return lista;
 	}
 	public boolean deletetodossLancesDoForn(int idForn) {
+		con = ConexaoFactory.getConnection();
 		String sql = "DELETE FROM lance WHERE id_fornecedor = ?";
 		try(PreparedStatement prepara = con.prepareStatement(sql)){
 			prepara.setInt(1, idForn);	
 			prepara.execute();
 			prepara.close();
+			con.close();
 			return true;
 		} catch (SQLException e) {			
 			e.printStackTrace();

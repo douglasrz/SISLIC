@@ -31,7 +31,6 @@
    <script>
    function confirma(mensagem, id){
 	   if(window.confirm("Tem certeza que deseja "+mensagem+" o fornecedor?")){
-		   console.log("location.href=\"gerenteFornecedoresController.jsp?acao=\"+mensagem+\"&id=\"+id;")
 		   location.href="gerenteFornecedoresController.jsp?acao="+mensagem+"&id="+id;
 	   }
    }
@@ -49,7 +48,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="gerentePedidosController.jsp">SISLIC - Sistema de Compras e Licitações</a>
+                <a class="navbar-brand" href="gerentePedidosController.jsp?acao=pedidosaberto">SISLIC - Sistema de Compras e Licitações</a>
             </div>            
                 <!-- ícone do Usuario (cabeçalho)-->
                 <ul class="nav navbar-top-links navbar-right">
@@ -70,49 +69,49 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                        <a href="#"><i class="fa fa-shopping-cart fa-fw"></i>Pedidos<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-shopping-cart fa-fw"></i> Pedidos<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="gerentePedidosController.jsp?acao=pedidosaberto">Pedidos em aberto</a>
+                                    <a href="gerentePedidosController.jsp?acao=pedidosaberto"> Pedidos em aberto</a>
                                 </li>
                                 <li>
-                                    <a href="gerentePedidosController.jsp?acao=pedidospendentes">Pedidos pendentes</a>
+                                    <a href="gerentePedidosController.jsp?acao=pedidospendentes"> Pedidos pendentes</a>
                                 </li>
                                 <li>
-                                    <a href="gerentePedidosController.jsp?acao=pedidosfechados">Pedidos finalizados</a>
+                                    <a href="gerentePedidosController.jsp?acao=pedidosfechados"> Pedidos finalizados</a>
                                 </li>
                                 <li>
-                                    <a href="cadastroPedidoController.jsp">Cadastrar pedido</a>
+                                    <a href="cadastroPedidoController.jsp"> Cadastrar pedido</a>
                                 </li>
                             </ul>
                         </li>                                               
                         <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Fornecedores<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-users"></i> Fornecedores<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="gerenteFornecedoresController.jsp?acao=fornPendentes">Fornecedores pendentes</a>
+                                    <a href="gerenteFornecedoresController.jsp?acao=fornPendentes"> Fornecedores pendentes</a>
                                 </li>
                                 <li>
-                                    <a href="gerenteFornecedoresController.jsp?acao=fornCadastrados">Fornecedores cadastrados</a>
+                                    <a href="gerenteFornecedoresController.jsp?acao=fornCadastrados"> Fornecedores cadastrados</a>
                                 </li>
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Funcionário<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-users"></i> Funcionário<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="gerenteFuncionariosController.jsp">Funcionários cadastrados</a>
+                                    <a href="gerenteFuncionariosController.jsp"> Funcionários cadastrados</a>
                                 </li>
                                 <li>
-                                    <a href="gerenteFuncionariosController.jsp?acao=Cadastrar">Cadastrar Funcionário</a>
+                                    <a href="gerenteFuncionariosController.jsp?acao=formCadastro"> Cadastrar Funcionário</a>
                                 </li>
                             </ul>
                         </li>
                         <li>
-                        	<a href="gerenteLancesController.jsp?acao=lances"> <i class="fa fa-legal fa-fw"></i>Lances</a>
+                        	<a href="gerenteLancesController.jsp?acao=lances"> <i class="fa fa-legal fa-fw"></i> Lances</a>
                         </li>
                          <li>
-                            <a href="gerenteCadastroController.jsp"><i class="fa fa-user fa-fw"></i>Cadastro</a>
+                            <a href="gerenteCadastroController.jsp"><i class="fa fa-user fa-fw"></i> Cadastro</a>
                         </li>
                         <li>
                             <a href="sobreController.jsp"><i class="fa fa-info-circle fa-fw"></i> Sobre</a>
@@ -128,13 +127,13 @@
             <div class="row">
 	            <div class="col-lg-12">
 	                    <h2 class="page-header">
-	                                <i class="fa fa-shopping-cart fa-fw"></i>Fornecedor
+	                                <i class="fa fa-users"></i> Fornecedor
 	                                <small class="pull-right">Cadastro</small>
 	                            </h2>                            
 	            </div><!-- /.col -->
             </div>
             <!-- info row -->
-            <div class="row invoice-info">
+            <div class=" col-xs-12 row invoice-info">
             	<div class="col-sm-3 invoice-col">                            
                     <address>
                         <strong>Informaçãoes gerais</strong><br>
@@ -203,7 +202,7 @@
              	</div><!-- /.col -->
           </div> 
              <div class="col-xs-12 table-responsive">
-                        <h1>Lances</h1>
+                        <h2>Lances</h2>
                             <table class="table table-striped">
                                 <thead>
                                     <tr>

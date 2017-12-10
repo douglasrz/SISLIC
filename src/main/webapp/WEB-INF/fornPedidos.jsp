@@ -54,15 +54,15 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="pedidocontroller.do">SISLIC - Sistema de Compras e Licitações</a>
+                <a class="navbar-brand" href="fornecedorPedidoController.jsp">SISLIC - Sistema de Compras e Licitações</a>
             </div>            
                 <!-- Ã­cone do Usuario (cabeÃ§alho)-->
                 <ul class="nav navbar-top-links navbar-right">
                 <li class="dropdown">                	
                 	<% Fornecedor forn = ((Fornecedor) request.getSession().getAttribute("forAutenticado")); 
                 	ArrayList<Pedido> pedidos = (ArrayList<Pedido>) request.getSession().getAttribute("pedidos");
-					out.print("<a href=cadastrocontroller.do >"+forn.getrSocial()+"</a>");%>
-                    <li><a href="logincontroller.do"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+					out.print("<a href=fornecedroCadastroController.jsp >"+forn.getrSocial()+"</a>");%>
+                    <li><a href="loginController.jsp"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                 </li>
                 </ul>
             <!-- /.navbar-top-links -->
@@ -71,19 +71,19 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                        <a href="pedidocontroller.do"><i class="fa fa-shopping-cart fa-fw"></i> Pedidos</a>
+                        <a href="fornecedorPedidoController.jsp"><i class="fa fa-shopping-cart fa-fw"></i> Pedidos</a>
                         </li>
                         <li>
-                            <a href="lancescontroller.do"><i class="fa fa-legal fa-fw"></i>Lances</a>
+                            <a href="fornecedorLanceController.jsp"><i class="fa fa-legal fa-fw"></i> Lances</a>
                         </li>                        
                         <li>
-                            <a href="pontcontroller.do"><i class="fa fa-bar-chart-o fa-fw"></i> Pontuação</a>
+                            <a href="fornecedorPontuacaoController.jsp"><i class="fa fa-bar-chart-o fa-fw"></i> Pontuação</a>
                         </li>
                          <li>
-                            <a href="cadastrocontroller.do"><i class="fa fa-user fa-fw"></i> Cadastro</a>
+                            <a href="fornecedorCadastroController.jsp"><i class="fa fa-user fa-fw"></i> Cadastro</a>
                         </li>
                         <li>
-                            <a href="sobrecontroller.do"><i class="fa fa-info-circle fa-fw"></i> Sobre</a>
+                            <a href="sobreController.jsp"><i class="fa fa-info-circle fa-fw"></i> Sobre</a>
                         </li>
                     </ul>
                 </div>
@@ -95,7 +95,9 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Pedidos</h1>
+                <h2 class="page-header">
+	               <i class="fa fa-shopping-cart fa-fw"></i> Pedidos
+	            </h2>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -116,7 +118,7 @@
 					//PRAZO E LINK
 					out.print("<div class=\"panel-footer\">");
 					int id = p.getId();
-					out.print("<a type=\"submit\" href=\"pedidocontroller.do?acao=pedido&id="+id+"\" class=\"btn btn-success btn-block\"> Confira </a> </div>");
+					out.print("<a type=\"submit\" href=\"fornecedorPedidoController.jsp?acao=pedido&id="+id+"\" class=\"btn btn-success btn-block\"> Confira </a> </div>");
 					//out.print("Expira em "+p.getDataLimite());
 					out.print("</div> </div>");
                 }

@@ -1,5 +1,4 @@
 <%@ page import="br.com.SISLIC.model.Funcionario" %>
-<%@ page import="br.com.SISLIC.model.Gerente" %>
 <%@ page import="br.com.SISLIC.model.Pedido" %>
 <%@ page import="br.com.SISLIC.model.Produto" %>
 <%@ page import="br.com.SISLIC.model.Categoria" %>
@@ -54,14 +53,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="gerentePedidosController.jsp?acao=pedidosaberto">SISLIC - Sistema de Compras e Licitações</a>
+                <a class="navbar-brand" href="funcionarioPedidosController.jsp?acao=pedidosaberto">SISLIC - Sistema de Compras e Licitações</a>
             </div>            
                 <!-- Ã­cone do Usuario (cabeÃ§alho)-->
                 <ul class="nav navbar-top-links navbar-right">
                 <li class="dropdown">                	
                 	<% 
-                	Gerente ger = ((Gerente) request.getSession().getAttribute("gerAutenticado"));            	
-					out.print("<a href=gerenteCadastroController.jsp >"+ger.getNome()+"</a>");
+                	Funcionario ger = ((Funcionario) request.getSession().getAttribute("funAutenticado"));            	
+					out.print("<a href=funcionarioCadastroController.jsp >"+ger.getNome()+"</a>");
 					ArrayList<Categoria> categorias = (ArrayList<Categoria>) request.getSession().getAttribute("categorias");
 					Date data = new Date();
 					SimpleDateFormat formatador = new SimpleDateFormat("yyyy-MM-dd");
@@ -76,49 +75,30 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                        <a  href="#"><i class="fa fa-shopping-cart fa-fw"></i> Pedidos<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-shopping-cart fa-fw"></i> Pedidos<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="gerentePedidosController.jsp?acao=pedidosaberto"> Pedidos em aberto</a>
+                                    <a href="funcionarioPedidosController.jsp?acao=pedidosabertos"> Pedidos em aberto</a>
                                 </li>
                                 <li>
-                                    <a href="gerentePedidosController.jsp?acao=pedidospendentes"> Pedidos pendentes</a>
+                                    <a href="funcionarioPedidosController.jsp?acao=pedidospendentes"> Pedidos pendentes</a>
                                 </li>
                                 <li>
-                                    <a href="gerentePedidosController.jsp?acao=pedidosfechados"> Pedidos finalizados</a>
+                                    <a href="funcionarioPedidosController.jsp?acao=pedidosfechados"> Pedidos finalizados</a>
                                 </li>
                                 <li>
-                                    <a href="cadastroPedidoController.jsp"> Cadastrar pedido</a>
+                                    <a href="funcionarioCadastroPedidoController.jsp"> Solicitar pedido</a>
                                 </li>
                             </ul>
                         </li>                                               
                         <li>
-                            <a  href="#"><i class="fa fa-bar-chart-o fa-users"></i> Fornecedores<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="gerenteFornecedoresController.jsp?acao=fornPendentes"> Fornecedores pendentes</a>
-                                </li>
-                                <li>
-                                    <a href="gerenteFornecedoresController.jsp?acao=fornCadastrados"> Fornecedores cadastrados</a>
-                                </li>
-                            </ul>
-                        </li>
+                            <a href="funcionarioFornecedoresController.jsp?acao=fornCadastrados"><i class="fa fa-bar-chart-o fa-users"></i> Fornecedores</a>
+                       </li>
                         <li>
-                            <a  href="#"><i class="fa fa-bar-chart-o fa-users"></i> Funcionário<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="gerenteFuncionarioController.jsp?"> Funcionários cadastrados</a>
-                                </li>
-                                <li>
-                                    <a href="gerenteFuncionarioController.jsp?acao=cadastrar"> Cadastrar Funcionário</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                        	<a href="gerenteLancesController.jsp"> <i class="fa fa-legal fa-fw"></i> Lances</a>
+                        	<a href="funcionarioLancesController.jsp?acao=lances"> <i class="fa fa-legal fa-fw"></i> Lances</a>
                         </li>
                          <li>
-                            <a href="gerenteCadastroController.jsp"><i class="fa fa-user fa-fw"></i> Cadastro</a>
+                            <a href="funcionarioCadastroController.jsp"><i class="fa fa-user fa-fw"></i> Cadastro</a>
                         </li>
                         <li>
                             <a href="sobreController.jsp"><i class="fa fa-info-circle fa-fw"></i> Sobre</a>
@@ -134,7 +114,7 @@
             <div class="row">
                 <div class="col-lg-12">
                 	 <h2 class="page-header">
-	                                <i class="fa fa-shopping-cart fa-fw"></i> Cadastrar pedido
+	                          <i class="fa fa-shopping-cart fa-fw"></i> Solicitar pedido
 	                    </h2> 
                 </div>
                 <!-- /.col-lg-12 -->
@@ -148,7 +128,7 @@
                         </div>
                         <div class="panel-body">
                             <div class="row">                               
-                                    <form method="POST" action="cadastroPedidoController.jsp?acao=cadastrarPedido">
+                                    <form method="POST" action="funcionarioCadastroPedidoController.jsp?acao=cadastrarPedido">
                                     	<div class="col-lg-6">
 	                                        <div class="form-group col-lg-7">
 	                                            <label>Nome do pedido</label>

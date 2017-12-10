@@ -1,4 +1,3 @@
-<%@ page import="br.com.SISLIC.model.Gerente"%>
 <%@ page import="br.com.SISLIC.model.Funcionario"%>
 <%@ page import="br.com.SISLIC.model.Pedido"%>
 <%@ page import="java.util.ArrayList"%>
@@ -9,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>SISLIC - Funcionário</title>
+<title>SISLIC - Cadastro</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="sbAdmin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -30,12 +29,7 @@
     <link href="sbAdmin/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 	
    <script>
-   function confirma(mensagem, id){
-	   if(window.confirm("Tem certeza que deseja "+mensagem+" o fornecedor?")){
-		   location.href="gerenteFuncionariosController.jsp?acao="+mensagem+"&id="+id;
-	   }
-   }
-		function validarSenha(){ 
+   	function validarSenha(){ 
 			var senha = document.formulario.novasenha.value;		
 			var senhaRepetida = document.formulario.novasenhaAlt.value;
 			if (senha != senhaRepetida){
@@ -58,14 +52,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="gerentePedidosController.jsp?acao=pedidosaberto">SISLIC - Sistema de Compras e Licitações</a>
+                <a class="navbar-brand" href="funcionarioPedidosController.jsp?acao=pedidosaberto">SISLIC - Sistema de Compras e Licitações</a>
             </div>            
                 <!-- ícone do Usuario (cabeçalho)-->
                 <ul class="nav navbar-top-links navbar-right">
                 <li class="dropdown">
-                	<% Gerente ger = ((Gerente) request.getSession().getAttribute("gerAutenticado"));            	
-					out.print("<a href=gerenteCadastroController.jsp >"+ger.getNome()+"</a>");
-					Funcionario funcionario = (Funcionario) session.getAttribute("funcionario");
+                	<% Funcionario funcionario = ((Funcionario) request.getSession().getAttribute("funAutenticado"));            	
+					out.print("<a href=funcionarioCadastroController.jsp >"+funcionario.getNome()+"</a>");
 					ArrayList<Pedido> pedidos = (ArrayList<Pedido>) session.getAttribute("pedidosFun");
 					%>
                     <li><a href="loginController.jsp"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
@@ -80,46 +73,27 @@
                         <a href="#"><i class="fa fa-shopping-cart fa-fw"></i> Pedidos<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="gerentePedidosController.jsp?acao=pedidosaberto"> Pedidos em aberto</a>
+                                    <a href="funcionarioPedidosController.jsp?acao=pedidosabertos"> Pedidos em aberto</a>
                                 </li>
                                 <li>
-                                    <a href="gerentePedidosController.jsp?acao=pedidospendentes"> Pedidos pendentes</a>
+                                    <a href="funcionarioPedidosController.jsp?acao=pedidospendentes"> Pedidos pendentes</a>
                                 </li>
                                 <li>
-                                    <a href="gerentePedidosController.jsp?acao=pedidosfechados"> Pedidos finalizados</a>
+                                    <a href="funcionarioPedidosController.jsp?acao=pedidosfechados"> Pedidos finalizados</a>
                                 </li>
                                 <li>
-                                    <a href="cadastroPedidoController.jsp"> Cadastrar pedido</a>
+                                    <a href="funcionarioCadastroPedidoController.jsp"> Solicitar pedido</a>
                                 </li>
                             </ul>
                         </li>                                               
                         <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-users"></i> Fornecedores<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="gerenteFornecedoresController.jsp?acao=fornPendentes"> Fornecedores pendentes</a>
-                                </li>
-                                <li>
-                                    <a href="gerenteFornecedoresController.jsp?acao=fornCadastrados"> Fornecedores cadastrados</a>
-                                </li>
-                            </ul>
-                        </li>
+                            <a href="funcionarioFornecedoresController.jsp?acao=fornCadastrados"><i class="fa fa-bar-chart-o fa-users"></i> Fornecedores</a>
+                       </li>
                         <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-users"></i> Funcionários<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="gerenteFuncionariosController.jsp?"> Funcionários cadastrados</a>
-                                </li>
-                                <li>
-                                    <a href="gerenteFuncionariosController.jsp?acao=formCadastro"> Cadastrar Funcionário</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                        	<a href="gerenteLancesController.jsp?acao=lances"> <i class="fa fa-legal fa-fw"></i> Lances</a>
+                        	<a href="funcionarioLancesController.jsp?acao=lances"> <i class="fa fa-legal fa-fw"></i> Lances</a>
                         </li>
                          <li>
-                            <a href="gerenteCadastroController.jsp"><i class="fa fa-user fa-fw"></i> Cadastro</a>
+                            <a href="funcionarioCadastroController.jsp"><i class="fa fa-user fa-fw"></i> Cadastro</a>
                         </li>
                         <li>
                             <a href="sobreController.jsp"><i class="fa fa-info-circle fa-fw"></i> Sobre</a>
@@ -135,13 +109,14 @@
             <div class="row">
 	            <div class="col-lg-12">
 	                    <h2 class="page-header">
-	                                <i class="fa fa-shopping-cart fa-users"></i> Funcionário
-	                                <small class="pull-right">Cadastro</small>
-	                            </h2>                            
+	                                <i class="fa fa-user fa-fw"></i>Meu cadastro
+	                                <small class="pull-right"><a type="button" class="btn btn-primary pull-right btn-block" data-toggle="modal" data-target="#myModal">Editar</a> 
+           							</small>
+	                    </h2>                            
 	            </div><!-- /.col -->
             </div>
             <!-- info row -->
-            <div class="col-xs-12 row invoice-info">
+            <div class="row invoice-info col-xs-12">
             	<div class="col-sm-6 invoice-col">                            
                     <address>
                         <strong>Informaçãoes gerais</strong><br>
@@ -159,7 +134,7 @@
                	</div>
           </div>           
              <div class="col-xs-12 table-responsive">
-                        <h1>Lances</h1>
+                        <h2>Pedidos</h2>
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
@@ -172,7 +147,7 @@
                                 <tbody>
                                 	<%
 	                                for(Pedido p: pedidos){
-	        							out.print("<tr onclick= location.href=\"gerentePedidosController.jsp?acao=pedido&id="+p.getId()+"\" style=\"cursor: pointer;\" title=\"Ver detalhes\">");
+	        							out.print("<tr onclick= location.href=\"funcionarioPedidosController.jsp?acao=pedido&id="+p.getId()+"\" style=\"cursor: pointer;\" title=\"Ver detalhes\">");
 	                                	out.print("<td>"+p.getNome()+"</td>");
 	                                	out.print("<td>"+p.getDescricao()+"</td>");
 	                                	out.print("<td>"+p.getDataLancamento()+"</td>");
@@ -185,11 +160,7 @@
                  </div><!-- /.col -->                         
                          <!-- Modal -->
                   <div class="col-lg-6">	
-           				<a type="button" class="btn btn-primary pull-right btn-block" data-toggle="modal" data-target="#myModal">Editar</a> 
-           			</div>
-           			<div class="col-lg-6">	
-          				<a type="button" class="btn btn-warning btn-block" href="javascript:confirma('excluirCadastro',<%=funcionario.getCodFunc()%>)">Excluir</a>  
-           			</div>
+           				</div>
                             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -198,7 +169,7 @@
                                             <h4 class="modal-title" id="myModalLabel">Editar Cadastro</h4>
                                         </div>
                                         <div class="modal-body">
-                                            <form name="formulario" action="gerenteFuncionariosController.jsp?acao=alterarCadastro&id=<%=funcionario.getCodFunc()%>" method="POST">                                    
+                                            <form name="formulario" action="funcionarioCadastroController.jsp?acao=alterarCadastro" method="POST">                                    
 	                                    		<div class="form-group col-lg-6">
 	                                            	<label>Nome</label>
 	                                                <input class="form-control" name="nome" type="text" value="<%=funcionario.getNome()%>" required>
