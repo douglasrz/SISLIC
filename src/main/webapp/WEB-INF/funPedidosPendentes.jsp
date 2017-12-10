@@ -77,7 +77,7 @@
                                     <a href="funcionarioController.jsp">Pedidos em aberto</a>
                                 </li>
                                 <li>
-                                    <a href="#">Pedidos solicitados</a>
+                                    <a href="funcionarioController.jsp?acao=pedidosPendentes">Pedidos solicitados</a>
                                 </li>
                                 <li>
                                     <a href="#">Solicitar pedido</a>

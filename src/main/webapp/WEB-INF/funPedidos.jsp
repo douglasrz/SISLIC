@@ -74,10 +74,10 @@
                         <a href="#"><i class="fa fa-shopping-cart fa-fw"></i>Pedidos<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="funcionarioController.jsp?acao=pedidosPendentes">Pedidos em aberto</a>
+                                    <a href="funcionarioController.jsp">Pedidos em aberto</a>
                                 </li>
                                 <li>
-                                    <a href="#">Pedidos solicitados</a>
+                                    <a href="funcionarioController.jsp?acao=pedidosPendentes">Pedidos solicitados</a>
                                 </li>
                                 <li>
                                     <a href="#">Solicitar pedido</a>
@@ -113,6 +113,7 @@
             <!-- /.row -->
             <div class="row">
                 <% for(Pedido p: pedidos){
+                	if(!p.isAutorizado()) continue;
                 	//PEDIDO
 					out.print("<div class=\"col-lg-4\">");
 					out.print("<div class=\"panel panel-default\">");
