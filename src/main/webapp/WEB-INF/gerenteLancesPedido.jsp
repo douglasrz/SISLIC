@@ -108,7 +108,7 @@
                         	<a href="gerenteLancesController.jsp?acao=lances"> <i class="fa fa-legal fa-fw"></i> Lances</a>
                         </li>
                          <li>
-                            <a href="CadastroController.jsp"><i class="fa fa-user fa-fw"></i> Cadastro</a>
+                            <a href="gerenteCadastroController.jsp"><i class="fa fa-user fa-fw"></i> Cadastro</a>
                         </li>
                         <li>
                             <a href="sobreController.jsp"><i class="fa fa-info-circle fa-fw"></i> Sobre</a>
@@ -122,7 +122,9 @@
         <div id="page-wrapper">
         	<div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Lances</h1>
+                    <h2 class="page-header">
+	                <i class="fa fa-legal fa-fw"></i> Lances<small> (do pedido)</small>
+	                </h2>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>

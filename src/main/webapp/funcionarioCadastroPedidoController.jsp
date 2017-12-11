@@ -47,7 +47,7 @@
 				}
 				pedido.setProdutos(produtos);
 				
-				pedido.setAutorizado(false);
+				pedido.setAutorizado(false);//SETO COMO FALSE POIS O GERENTE PRECISA AUTORIZAR
 				pedido.setId_funcionario(((Funcionario) request.getSession().getAttribute("funAutenticado")).getCodFunc());
 				pedido.setIdSetor(((Funcionario) request.getSession().getAttribute("funAutenticado")).getSetor().getId());
 								

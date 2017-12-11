@@ -26,6 +26,7 @@ public class CategoriaDAO {
 			preparar.setInt(1, id);
 			preparar.execute();
 			preparar.close();
+			con.close();
 			return true;
 			
 		}catch(SQLException e) {

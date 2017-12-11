@@ -44,7 +44,7 @@
                 <li class="dropdown">                
                 	<% Gerente ger = ((Gerente) request.getSession().getAttribute("gerAutenticado"));                	
 					out.print("<a href=gerenteCadastroController.jsp >"+ger.getNome()+"</a>");%>
-                    <li><a href="logincontroller.do"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+                    <li><a href="loginController.jsp"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                 </li>
                 </ul>
             <!-- /.navbar-top-links -->

@@ -170,8 +170,8 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Quantidade</th>
-                                        <th>Produto</th>
+                                        <th width="15%">Quantidade</th>
+                                        <th width="25%">Produto</th>
                                         <th>Descrição</th>
                                     </tr>                                    
                                 </thead>
