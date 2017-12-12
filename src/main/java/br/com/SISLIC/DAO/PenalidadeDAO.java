@@ -12,10 +12,10 @@ import br.com.SISLIC.model.Produto;
 
 public class PenalidadeDAO {
 	
-	private Connection con;
+	//private Connection con;
 	
 	public ArrayList<Penalidade> buscarForn(int id) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		ArrayList<Penalidade> lista= new ArrayList<Penalidade>();	
 		String sql = "SELECT *FROM log_penalidade WHERE id_fornecedor=?";
 		try(PreparedStatement prepara = con.prepareStatement(sql)){
@@ -38,15 +38,22 @@ public class PenalidadeDAO {
 				//Adicionando na lista
 				lista.add(penalidade);
 			}	
-			con.close();
+			//con.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return lista;
 	}
 	
 	public boolean atribuirNoLog(int valor, String motivo, String descricao, int idFornecedor, int idFuncionario, String pedido) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "INSERT INTO log_penalidade(id_fornecedor, id_funcionario, descricao, valor, motivo, data_penal, nome_pedido) VALUES(?,?,?,?,?,?,?)";
 		
 		java.util.Date dataUtil = new java.util.Date();
@@ -64,11 +71,18 @@ public class PenalidadeDAO {
 			preparar.execute();
 			
 			preparar.close();
-			con.close();
+			//con.close();
 			return true;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return false;
 	}

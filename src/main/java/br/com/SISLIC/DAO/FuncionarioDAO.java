@@ -16,10 +16,10 @@ import br.com.SISLIC.model.Produto;
 public class FuncionarioDAO {
 
 	
-	private Connection con;
+	//private Connection con;
 	
 	public Funcionario autenticar(String login, String senha) {
-			con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 			String sql = "SELECT *FROM funcionario WHERE login=? and senha=?";
 			
 			try(PreparedStatement prepara = con.prepareStatement(sql)){
@@ -40,18 +40,25 @@ public class FuncionarioDAO {
 					//PEGAR O SETOR E OS PEDIDOS DELE
 					SetorDAO setorDAO = new SetorDAO();		
 					funcionario.setSetor(setorDAO.buscarPorId(resultado.getInt("id_setor")));
-					con.close();
+					//con.close();
 					return funcionario;
 				}
-				con.close();
+				//con.close();
 			}catch(SQLException e) {
 				e.printStackTrace();			
+			}finally {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			
 			return null;
 	}
 	public Funcionario buscarPorId(int id) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM funcionario WHERE id_funcionario=?";
 		
 		try(PreparedStatement prepara = con.prepareStatement(sql)){
@@ -71,16 +78,23 @@ public class FuncionarioDAO {
 				//PEGAR O SETOR
 				SetorDAO setorDAO = new SetorDAO();		
 				funcionario.setSetor(setorDAO.buscarSomenteOsetor(resultado.getInt("id_setor")));
-				con.close();
+				//con.close();
 				return funcionario;
 			}			
 		}catch(SQLException e) {
 			e.printStackTrace();			
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
 	public ArrayList<Funcionario> buscarTodosExcetoGerente(){
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		ArrayList<Funcionario> funcionarios = new ArrayList<Funcionario>();
 		String sql = "SELECT *FROM funcionario WHERE cargo!='gerente'";		
 		
@@ -103,15 +117,22 @@ public class FuncionarioDAO {
 				funcionarios.add(funcionario);
 			}	
 			preparar.close();
-			con.close();
+			//con.close();
 			return funcionarios;
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return funcionarios;
 	}
 	public boolean update(Funcionario fun) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "UPDATE funcionario SET nome=?, telefone=?, senha=?, cargo=?, id_setor=? WHERE id_funcionario=?";
 		//md5 criptografa a senha
 		try {
@@ -128,16 +149,23 @@ public class FuncionarioDAO {
 			preparar.execute();
 			//fechanco a conexao com o banco
 			preparar.close();
-			con.close();
+			//con.close();
 			return true;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	public boolean excluirCadastro(int id) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "DELETE FROM funcionario WHERE id_funcionario = ?";
 		
 		try {
@@ -145,16 +173,23 @@ public class FuncionarioDAO {
 			preparar.setInt(1, id);
 			preparar.execute();
 			preparar.close();
-			con.close();
+			//con.close();
 			return true;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	public boolean cadastrar(Funcionario fun) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "INSERT INTO funcionario(login,nome,telefone,cargo,id_setor,senha) VALUES(?,?,?,?,?,?)";
 		try {
 			if(buscarLogin(fun.getLogin())) {
@@ -172,28 +207,42 @@ public class FuncionarioDAO {
 			preparar.execute();
 			//fechanco a conexao com o banco
 			preparar.close();
-			con.close();
+			//con.close();
 			return true;
 		}catch(SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	public boolean buscarLogin(String login) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM funcionario WHERE login=?";		
 		try(PreparedStatement prepara = con.prepareStatement(sql)){
 			prepara.setString(1, login);
 			ResultSet resultado = prepara.executeQuery();
 			
 			if(resultado.next()) {	
-				con.close();
+				//con.close();
 				return true;
 			}		
-			con.close();	
+			//con.close();	
 		}catch(SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return false;
 	}

@@ -10,10 +10,10 @@ import br.com.SISLIC.model.Gerente;
 
 public class GerenteDAO {
 
-	private Connection con;
+	//private Connection con;
 	
 	public Gerente autenticar(String login, String senha) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 			String sql = "SELECT *FROM funcionario WHERE login=? and senha=?";
 			
 			try(PreparedStatement prepara = con.prepareStatement(sql)){
@@ -42,17 +42,24 @@ public class GerenteDAO {
 					SetorDAO setorDAO = new SetorDAO();		
 					gerente.setSetor(setorDAO.buscarSomenteOsetor(resultado.getInt("id_setor")));
 					prepara.close();
-					con.close();
+					//con.close();
 					if(gerente.getCargo().equals("gerente"))
 						return gerente;
 				}			
 			}catch(SQLException e) {
 				e.printStackTrace();			
+			}finally {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			return null;
 	}
 	public boolean update(Gerente ger) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "UPDATE funcionario SET nome=?, telefone=?, senha=?, cargo=?, id_setor=? WHERE id_funcionario=?";
 		//md5 criptografa a senha
 		try {
@@ -69,12 +76,19 @@ public class GerenteDAO {
 			preparar.execute();
 			//fechanco a conexao com o banco
 			preparar.close();
-			con.close();
+			//con.close();
 			return true;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }

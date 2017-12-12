@@ -10,11 +10,11 @@ import br.com.SISLIC.model.Produto;
 
 public class ProdutoDAO {
 	
-	private Connection con;
+	//private Connection con;
 
 	
 	public Produto buscarProduto(int id) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM produto WHERE id_produto=?";		
 		
 		try(PreparedStatement preparar = con.prepareStatement(sql)){	
@@ -32,17 +32,24 @@ public class ProdutoDAO {
 				
 				//QUANTIDADE E PREÇO PEGO SOMENTE SER FOR UM ITEMPEDIDO
 				preparar.close();
-				con.close();
+				//con.close();
 				return produtoRetorno;
 			}				
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
 	//MÉTODO USADO SOMENTE QUANDO O PRODUTO FOR DE UM LANCE JÁ EFETUADO
 	public Produto buscaPrecoProduto(Produto produto) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 			String sql = "SELECT *FROM lance_item_pedido WHERE id_item_pedido=?";
 			try(PreparedStatement preparar = con.prepareStatement(sql)){	
 				preparar.setInt(1, produto.getIdItemPedido());
@@ -54,9 +61,16 @@ public class ProdutoDAO {
 					return produto;
 				}
 				preparar.close();
-				con.close();
+				//con.close();
 			}catch(SQLException e) {
 				e.printStackTrace();
+			}finally {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			
 			return produto;
@@ -69,7 +83,7 @@ public class ProdutoDAO {
 		if(id != 0){
 			return id;
 		}
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "INSERT INTO produto(nome, descricao, id_categoria) VALUES(?,?,?)";
 		
 		try {
@@ -83,17 +97,24 @@ public class ProdutoDAO {
 			    id = rs.getInt("id_produto");
 			}
 			preparar.close();
-			con.close();
+			//con.close();
 			return id;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return 0;
 	}
 	
 	private int buscaIdProduto(String nome) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM produto WHERE nome=?";
 		try(PreparedStatement preparar = con.prepareStatement(sql)){	
 			preparar.setString(1, nome);
@@ -105,9 +126,16 @@ public class ProdutoDAO {
 				return retorno;
 			}
 			preparar.close();
-			con.close();
+			//con.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return 0;
 	}

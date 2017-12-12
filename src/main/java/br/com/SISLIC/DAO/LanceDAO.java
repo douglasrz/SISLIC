@@ -13,10 +13,10 @@ import br.com.SISLIC.model.Produto;
 
 public class LanceDAO {
 	
-private Connection con;
+//private Connection con;
 	
 	public boolean cadastrar(Lance lance) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "INSERT INTO lance(valor_total, id_pedido, id_fornecedor, data, taxa_entrega) VALUES(?,?,?,?,?)";		
 		
 		try {
@@ -39,16 +39,23 @@ private Connection con;
 			cadastrarItensLance(lance);
 			//fechanco a conexao com o banco
 			preparar.close();
-			con.close();
+			//con.close();
 			return true;
 		}catch(SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
 	public void cadastrarItensLance(Lance lance) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "INSERT INTO lance_item_pedido(id_lance, id_item_pedido, valor) VALUES(?,?,?)";
 		
 		try {
@@ -65,15 +72,22 @@ private Connection con;
 			
 			//fechanco a conexao com o banco
 			preparar.close();
-			con.close();
+			//con.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 	}
 	public ArrayList<Lance>	lancesFornId(int idForn){
 		
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		ArrayList<Lance> lista = new ArrayList<Lance>();
 		String sql = "SELECT *FROM lance WHERE id_fornecedor=?";
 		
@@ -96,16 +110,23 @@ private Connection con;
 				lista.add(retorno);
 			}
 			preparar.close();
-			con.close();
+			//con.close();
 			return lista;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return lista;
 	}
 	public Lance buscarPorId(int id) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "SELECT * FROM lance WHERE id_lance = ?";
 		try (PreparedStatement preparar = con.prepareStatement(sql)){
 			preparar.setInt(1, id);
@@ -134,11 +155,18 @@ private Connection con;
 					pedido.setProdutos(produtos);
 					lance.setPedido(pedido);
 					preparar.close();
-					con.close();
+					//con.close();
 					return lance;
 				}				
 			}catch(SQLException e) {
 				e.printStackTrace();
+			}finally {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			return null;
 	}
@@ -147,35 +175,49 @@ private Connection con;
 		if(!deleteLanceItens(idLance)) {//APAGO LOGO OS ITENS DO LANCE (lance_item_pedido)
 			return false;//se não conseguiu apagar os itens então já retorno sem apagar o lance
 		}
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "DELETE FROM lance WHERE id_lance = ?";
 		try(PreparedStatement prepara = con.prepareStatement(sql)){
 			prepara.setInt(1, idLance);	
 			prepara.execute();
 			prepara.close();
-			con.close();
+			//con.close();
 			return true;
 		} catch (SQLException e) {			
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	private boolean deleteLanceItens(int idLance) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "DELETE FROM lance_item_pedido WHERE id_lance = ?";
 		try(PreparedStatement prepara = con.prepareStatement(sql)){
 			prepara.setInt(1, idLance);			
 			prepara.execute(); 
 			prepara.close();
-			con.close();
+			//con.close();
 			return true;
 		} catch (SQLException e) {			
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	public ArrayList<Lance>	buscarPorIdPedido(int idPedido){
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		ArrayList<Lance> lista = new ArrayList<Lance>();
 		String sql = "SELECT *FROM lance WHERE id_pedido=?";
 		
@@ -197,16 +239,23 @@ private Connection con;
 				lista.add(retorno);
 			}
 			preparar.close();
-			con.close();
+			//con.close();
 			return lista;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return lista;
 	}
 	public ArrayList<Lance>	todosLances(){
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		ArrayList<Lance> lista = new ArrayList<Lance>();
 		String sql = "SELECT *FROM lance";
 		
@@ -229,26 +278,40 @@ private Connection con;
 				lista.add(retorno);
 			}
 			preparar.close();
-			con.close();
+			//con.close();
 			return lista;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return lista;
 	}
 	public boolean deletetodossLancesDoForn(int idForn) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "DELETE FROM lance WHERE id_fornecedor = ?";
 		try(PreparedStatement prepara = con.prepareStatement(sql)){
 			prepara.setInt(1, idForn);	
 			prepara.execute();
 			prepara.close();
-			con.close();
+			//con.close();
 			return true;
 		} catch (SQLException e) {			
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	

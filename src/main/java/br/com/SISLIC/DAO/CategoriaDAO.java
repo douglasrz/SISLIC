@@ -15,29 +15,36 @@ import br.com.SISLIC.model.Fornecedor;
 
 public class CategoriaDAO {
 	
-	private Connection con;
+	///private Connection con;
 	
 	//EXCLUIR CATEGORIA
 	public boolean excluir(int id) {
-		con =  ConexaoFactory.getConnection();
+		Connection con =  ConexaoFactory.getConnection();
 		String sql = "DELETE FROM categoria_fornecedor WHERE id_categoria=?";
 		try {
 			PreparedStatement preparar = con.prepareStatement(sql);	
 			preparar.setInt(1, id);
 			preparar.execute();
 			preparar.close();
-			con.close();
+			
 			return true;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return false;
 	}
 	
 	//BUSCAR TODAS AS CATEGORIAS DE UM FORNECEDOR
 	public ArrayList<Categoria> buscarPorForn(int idFornecedor){
-		con =  ConexaoFactory.getConnection();
+		Connection con =  ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM categoria_fornecedor WHERE id_fornecedor=?";
 		ArrayList<Integer> lista = new ArrayList<Integer>();
 		
@@ -67,9 +74,16 @@ public class CategoriaDAO {
 				}
 			}
 			prepara.close();
-			con.close();
+			//con.close();
 		}catch(SQLException e) {
 			e.printStackTrace();			
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		return categorias;
@@ -90,7 +104,7 @@ public class CategoriaDAO {
 		}
 		if(catExistente) {			
 			if(resul == null) {
-				con =  ConexaoFactory.getConnection();
+				Connection con =  ConexaoFactory.getConnection();
 				String sql = "INSERT INTO categoria (nome,descricao) VALUES(?,?)";
 				try {
 					PreparedStatement preparar = con.prepareStatement(sql);				
@@ -99,11 +113,18 @@ public class CategoriaDAO {
 					preparar.execute();
 					preparar.close();
 					Categoria categoriaBuscaId = buscaPeloNome(categoria.getNome());
-					con.close();
+					//con.close();
 					return cadCategoriaForn(categoriaBuscaId.getCod(), categoria.getIdFornecedor());
 					
 				}catch(SQLException e) {
 					e.printStackTrace();
+				}finally {
+					try {
+						con.close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 			return cadCategoriaForn(resul.getCod(), categoria.getIdFornecedor());
@@ -113,7 +134,7 @@ public class CategoriaDAO {
 	
 	
 	public Categoria buscaPeloNome(String nome) {
-		con =  ConexaoFactory.getConnection();
+		Connection con =  ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM categoria WHERE nome=?";
 		try {
 			PreparedStatement preparar = con.prepareStatement(sql);				
@@ -128,17 +149,24 @@ public class CategoriaDAO {
 				con.close();
 				return categoria;
 			}
-			con.close();
+			//con.close();
 			return null;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
 	
 	public boolean cadCategoriaForn(int id_categoria, int id_fornecedor) {
-		con =  ConexaoFactory.getConnection();
+		Connection con =  ConexaoFactory.getConnection();
 		String sql = "INSERT INTO categoria_fornecedor(id_categoria,id_fornecedor) VALUES(?,?)";
 		try {
 			PreparedStatement preparar = con.prepareStatement(sql);
@@ -146,16 +174,23 @@ public class CategoriaDAO {
 			preparar.setInt(2, id_fornecedor);
 			preparar.execute();
 			preparar.close();
-			con.close();
+			//con.close();
 			return true;
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return false;
 	}
 	
 	public Categoria buscaPeloId(int id) {
-		con =  ConexaoFactory.getConnection();
+		Connection con =  ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM categoria WHERE id_categoria=?";
 		try {
 			PreparedStatement preparar = con.prepareStatement(sql);				
@@ -167,22 +202,29 @@ public class CategoriaDAO {
 				categoria.setNome(resultado.getString("nome"));
 				categoria.setDescricao(resultado.getString("descricao"));
 				preparar.close();
-				con.close();
+				//con.close();
 				return categoria;
 			}
 			//fechanco a conexao com o banco
 			preparar.close();
-			con.close();
+			//con.close();
 			return null;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
 	
 	public ArrayList<Categoria> buscarTodasEForn(){
-		con =  ConexaoFactory.getConnection();
+		Connection con =  ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM categoria";
 		ArrayList<Categoria> lista = new ArrayList<Categoria>();
 		
@@ -199,15 +241,22 @@ public class CategoriaDAO {
 				lista.add(cat);
 			}	
 			prepara.close();
-			con.close();
+			//con.close();
 			return lista;
 		}catch(SQLException e) {
 			e.printStackTrace();			
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
 	public ArrayList<Fornecedor> buscarFornPelaCategoria(int idCategoria){
-		con =  ConexaoFactory.getConnection();
+		Connection con =  ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM categoria_fornecedor WHERE id_categoria=?";
 		ArrayList<Fornecedor> lista = new ArrayList<Fornecedor>();
 		FornecedorDAO fornDAO = new FornecedorDAO();
@@ -221,10 +270,17 @@ public class CategoriaDAO {
 					lista.add(forn);
 			}	
 			prepara.close();
-			con.close();
+			//con.close();
 			return lista;
 		}catch(SQLException e) {
 			e.printStackTrace();			
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
@@ -232,7 +288,7 @@ public class CategoriaDAO {
 	public boolean cadastrarCat(Categoria categoria) {
 		
 		if(buscaPeloNome(categoria.getNome()) == null){
-			con =  ConexaoFactory.getConnection();
+			Connection con =  ConexaoFactory.getConnection();
 			String sql = "INSERT INTO categoria (nome,descricao) VALUES(?,?)";
 			try {
 				PreparedStatement preparar = con.prepareStatement(sql);				
@@ -240,18 +296,25 @@ public class CategoriaDAO {
 				preparar.setString(2, categoria.getDescricao());
 				preparar.execute();
 				preparar.close();
-				con.close();
+				//con.close();
 				return true;
 			
 			}catch(SQLException e) {
 				e.printStackTrace();
+			}finally {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		return false;
 	}
 public ArrayList<Categoria> buscarTodas(){
 		
-		con =  ConexaoFactory.getConnection();
+		Connection con =  ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM categoria";
 		ArrayList<Categoria> lista = new ArrayList<Categoria>();
 		
@@ -267,10 +330,17 @@ public ArrayList<Categoria> buscarTodas(){
 				lista.add(cat);
 			}	
 			prepara.close();
-			con.close();
+			//con.close();
 			return lista;
 		}catch(SQLException e) {
 			e.printStackTrace();			
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}

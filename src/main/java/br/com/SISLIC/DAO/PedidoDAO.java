@@ -25,11 +25,11 @@ import br.com.SISLIC.model.Produto;
 
 public class PedidoDAO {
 	
-	private Connection con;
+	//private Connection con;
 
 		
 	public Pedido buscarPedido(int id) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM pedido WHERE id_pedido=?";		
 		try(PreparedStatement preparar = con.prepareStatement(sql)){	
 			preparar.setInt(1, id);
@@ -50,21 +50,28 @@ public class PedidoDAO {
 				pedidoRetorno.setProdutos(lista);
 				if(pedidoRetorno.isAutorizado()) {
 					preparar.close();
-					con.close();
+					//con.close();
 					return pedidoRetorno;
 				}else {
-					con.close();
+					//con.close();
 					return null;
 				}
 			}				
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
 	
 	public Pedido buscarPedidoAberto(int id) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 			String sql = "SELECT *FROM pedido WHERE id_pedido=?";		
 			try(PreparedStatement preparar = con.prepareStatement(sql)){	
 				preparar.setInt(1, id);
@@ -85,21 +92,28 @@ public class PedidoDAO {
 					pedidoRetorno.setProdutos(lista);
 					if(pedidoRetorno.isAutorizado() && pedidoRetorno.isStatusAberto()) {
 						preparar.close();
-						con.close();
+						//con.close();
 						return pedidoRetorno;
 					}else {
-						con.close();
+						//con.close();
 						preparar.close();
 						return null;
 					}
 				}				
 			}catch(SQLException e) {
 				e.printStackTrace();
+			}finally {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			return null;
 	}
 	public ArrayList<Pedido> buscarTodosPedidosAberto(){
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
 		String sql = "SELECT *FROM pedido";		
 		
@@ -124,16 +138,23 @@ public class PedidoDAO {
 					pedidos.add(pedidoRetorno);
 			}	
 			preparar.close();
-			con.close();
+			//con.close();
 			return pedidos;
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return pedidos;
 	}
 	
 	public ArrayList<Pedido> buscarTodosPedidos() {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 			ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
 			String sql = "SELECT *FROM pedido";		
 			
@@ -158,17 +179,24 @@ public class PedidoDAO {
 						pedidos.add(pedidoRetorno);
 				}	
 				preparar.close();
-				con.close();
+				//con.close();
 				return pedidos;
 			}catch(SQLException e) {
 				e.printStackTrace();
+			}finally {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			return pedidos;
 		}
 	
 
 	public ArrayList<Produto> buscaItemPedido(int idPedido){
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		ArrayList<Produto> lista = new ArrayList<Produto>();
 		String sql = "SELECT *FROM item_pedido WHERE id_pedido=?";
 		
@@ -191,16 +219,23 @@ public class PedidoDAO {
 				lista.add(retorno);	
 			}
 			preparar.close();
-			con.close();
+			//con.close();
 			return lista;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return lista;
 	}
 	public ArrayList<Pedido> buscarPorSetor(int idSetor){
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		ArrayList<Pedido> lista = new ArrayList<Pedido>();
 		String sql = "SELECT *FROM pedido WHERE id_setor=?";
 		
@@ -227,17 +262,24 @@ public class PedidoDAO {
 					lista.add(pedidoRetorno);
 			}
 			preparar.close();
-			con.close();
+			//con.close();
 			return lista;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return lista;
 	}
 	
 	public ArrayList<Pedido> buscarPedentesSetor(int idSetor){
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		ArrayList<Pedido> lista = new ArrayList<Pedido>();
 		String sql = "SELECT *FROM pedido WHERE id_setor=?";
 		
@@ -264,16 +306,23 @@ public class PedidoDAO {
 					lista.add(pedidoRetorno);
 			}
 			preparar.close();
-			con.close();
+			//con.close();
 			return lista;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return lista;
 	}
 	public ArrayList<Pedido> buscarTodosPedidosFechados() {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
 		String sql = "SELECT *FROM pedido";		
 		
@@ -298,17 +347,24 @@ public class PedidoDAO {
 					pedidos.add(pedidoRetorno);
 			}	
 			preparar.close();
-			con.close();
+			//con.close();
 			return pedidos;
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return pedidos;
 	}
 	
 	public ArrayList<Pedido> buscarTodosPedidosPendentes() {
 		
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
 		String sql = "SELECT *FROM pedido WHERE autorizado = false ";		
 		
@@ -331,16 +387,23 @@ public class PedidoDAO {
 				pedidos.add(pedidoRetorno);
 			}	
 			preparar.close();
-			con.close();
+			//con.close();
 			return pedidos;
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return pedidos;
 	}
 	//ESTE MÉTODO PEGA O PEDIDO FECHADO, ABERTO OU PEDENTE, DEPENDE SOMENTE DO ID
 	public Pedido buscarPedidoSemRestrição(int id) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "SELECT *FROM pedido WHERE id_pedido=?";		
 		try(PreparedStatement preparar = con.prepareStatement(sql)){	
 			preparar.setInt(1, id);
@@ -365,11 +428,18 @@ public class PedidoDAO {
 			}				
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
 	public boolean autorizarPedido(int id) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "UPDATE pedido SET autorizado = true WHERE id_pedido=?";
 		//md5 criptografa a senha
 		try {
@@ -380,11 +450,18 @@ public class PedidoDAO {
 			preparar.execute();
 			//fechanco a conexao com o banco
 			preparar.close();
-			con.close();
+			//con.close();
 			return true;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return false;
 		
@@ -415,24 +492,31 @@ public class PedidoDAO {
 		if(!apagarItensPedido(id)) {
 			return false;
 		}	
-		con = ConexaoFactory.getConnection();	
+		Connection con = ConexaoFactory.getConnection();	
 		String sql = "DELETE FROM pedido WHERE id_pedido=?";		
 		try {
 			PreparedStatement preparar = con.prepareStatement(sql);	
 			preparar.setInt(1, id);
 			preparar.execute();
 			preparar.close();
-			con.close();
+			//con.close();
 			return true;			
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return false;
 	}
 	
 	private boolean apagarItensPedido(int idPedido) {
 		
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "DELETE FROM item_pedido WHERE id_pedido=?";
 		
 		try {
@@ -440,17 +524,24 @@ public class PedidoDAO {
 			preparar.setInt(1, idPedido);
 			preparar.execute();
 			preparar.close();
-			con.close();
+			//con.close();
 			return true;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return false;
 	}
 	public boolean cadastrarPedidoProdutoItensPedido(Pedido pedido, String dataLimite) {	
 		
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		//CADASTRAR OS PRODUTOS
 		ProdutoDAO prodDAO = new ProdutoDAO();
 		int idProduto;
@@ -477,7 +568,7 @@ public class PedidoDAO {
 	
 	public boolean cadastrarTodosItemPedido(Pedido pedido) {
 		
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		String sql = "INSERT INTO item_pedido(quantidade, id_produto, id_pedido) VALUES(?,?,?)";
 		
 		try {
@@ -489,16 +580,23 @@ public class PedidoDAO {
 				preparar.execute();
 			}
 			preparar.close();
-			con.close();
+			//con.close();
 			return true;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return false;
 	}
 	public ArrayList<Pedido> buscarPorIdFun(int id){
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
 		String sql = "SELECT *FROM pedido WHERE id_funcionario =? ";		
 		
@@ -522,15 +620,22 @@ public class PedidoDAO {
 				pedidos.add(pedidoRetorno);
 			}	
 			preparar.close();
-			con.close();
+			//con.close();
 			return pedidos;
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return pedidos;
 	}
 	private int cadastrarSomentePedidoEretornaId(Pedido pedido, String dataLimite) {
-		con = ConexaoFactory.getConnection();
+		Connection con = ConexaoFactory.getConnection();
 		//PEGAR DATA ATUAL
 		java.util.Date dataUtil = new java.util.Date();
 		java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime());
@@ -564,12 +669,19 @@ public class PedidoDAO {
 			    id = rs.getInt("id_pedido");
 			}
 			preparar.close();
-			con.close();
+			//con.close();
 			return id;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
 			return 0;
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }
